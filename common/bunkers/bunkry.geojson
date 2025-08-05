@@ -1,0 +1,407 @@
+{
+  "type": "FeatureCollection",
+  "generator": "patrik-geojson-generator-thing",
+  "copyright": "MIT licence",
+  "timestamp": "2025-08-04T17:37:44Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/251",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-S 2",
+        "secret_name": " Na kótě",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=5854832802992352296499",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.8186946,
+          50.1225353
+        ]
+      },
+      "id": "opevneni/251"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/252",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-S 3",
+        "secret_name": " U lesa",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=8139790589889697358761",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.8170987,
+          50.1205062
+        ]
+      },
+      "id": "opevneni/252"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/253",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-S 4",
+        "secret_name": " U cesty",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=5930455035923321025337",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.8143147,
+          50.115674
+        ]
+      },
+      "id": "opevneni/253"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/254",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-S 5",
+        "secret_name": " U potoka",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=3518600578198881689847",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.8075213,
+          50.1100098
+        ]
+      },
+      "id": "opevneni/254"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/255",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-S 6",
+        "secret_name": " U kapličky",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=0194822014325769911191",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.7969219,
+          50.1078262
+        ]
+      },
+      "id": "opevneni/255"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/256",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-S 7",
+        "secret_name": " U vesnice",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=1376255172979077418656",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.7929711,
+          50.1070412
+        ]
+      },
+      "id": "opevneni/256"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/257",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-S 8",
+        "secret_name": " U nádraží",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=5661587504988000244799",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.7818028,
+          50.1050869
+        ]
+      },
+      "id": "opevneni/257"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/258",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-S 9",
+        "secret_name": " Mezi lesíky",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=4762915416337419014349",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.7781942,
+          50.1011152
+        ]
+      },
+      "id": "opevneni/258"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/259",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-Bg-S 10",
+        "secret_name": " U boží muky",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=2452590972972236127659",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.7702335,
+          50.0974472
+        ]
+      },
+      "id": "opevneni/259"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/260",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-Bg-S 11",
+        "secret_name": " Na svahu",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=4687161826086743111403",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.7695111,
+          50.0947066
+        ]
+      },
+      "id": "opevneni/260"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/263",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-Bg-S 12b",
+        "secret_name": " Utržený",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=1321833060080165889266",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.7877249,
+          50.0957172
+        ]
+      },
+      "id": "opevneni/263"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/262",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-Bg-S 12a",
+        "secret_name": " U rybníčka",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=1432800649223486417645",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.769598,
+          50.088337
+        ]
+      },
+      "id": "opevneni/262"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/261",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-Bg-S 12",
+        "secret_name": " Na kotě",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=3832249547656753079913",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.7678179,
+          50.0956928
+        ]
+      },
+      "id": "opevneni/261"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/264",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-Bg-S 13",
+        "secret_name": " U lomu",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=8264033801252400119894",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.7667236,
+          50.0962943
+        ]
+      },
+      "id": "opevneni/264"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/265",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-S 14",
+        "secret_name": " U cihelny",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=6818459572863365180026",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.7552263,
+          50.0957728
+        ]
+      },
+      "id": "opevneni/265"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/266",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-S 15",
+        "secret_name": " U lípy",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=1565791850588942880092",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.7456157,
+          50.0915039
+        ]
+      },
+      "id": "opevneni/266"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/267",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-S 16",
+        "secret_name": " U dráhy",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=6730497559099944794791",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.737069,
+          50.0864791
+        ]
+      },
+      "id": "opevneni/267"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/268",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-S 17",
+        "secret_name": " U továrny",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=0274019459538865991401",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.7260952,
+          50.0826787
+        ]
+      },
+      "id": "opevneni/268"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "opevneni/269",
+        "building": "yes",
+        "military": "bunker",
+        "name": "K-S 18",
+        "secret_name": " U kostela",
+        "source": "opevneni.cz",
+        "website": "http://www.opevneni.cz/?l=6119041890550214335455",
+        "@geometry": "center"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.7124262,
+          50.0794045
+        ]
+      },
+      "id": "opevneni/269"
+    }
+  ]
+}

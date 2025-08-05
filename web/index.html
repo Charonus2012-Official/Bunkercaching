@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Bunkercaching</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<div id="page">
+    <div id="sidebar">
+        <div id="sidetop">
+            <h1 id="bunker-name" class="center"></h1>
+            <h2 id="secret-bunker-name" class="center"></h2>
+            <p class="center"><a href="" id="bunker-site">Více na:</a></p>
+        </div>
+        <div id="sidebottom">
+            <button id="logButton" title="Mark as visited">
+                <i class="fa-solid fa-check"></i>
+            </button>
+        </div>
+    </div>
+    <div id="map"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="map.js"></script>
+<script src="obj_listing.js"></script>
+</body>
+</html>
