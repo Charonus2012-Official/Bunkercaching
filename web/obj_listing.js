@@ -3,12 +3,14 @@ window.addEventListener("OnRopikyClickEvent", (e) => {
     const bunker_name = document.getElementById("bunker-name")
     document.getElementById("secret-bunker-name").textContent = "";
     const bunker_site = document.getElementById("bunker-site")
+    const sidebottom = document.getElementById("sidebottom");
     if (data.properties.name === bunker_name.textContent) return;
 
     bunker_name.textContent = data.properties.name;
     bunker_site.setAttribute("href", data.properties.website);
     bunker_site.textContent = "Více na: ropiky.cz";
     bunker_site.style.display = "block";
+    sidebottom.style.display = "inline";
 
 
 
@@ -19,6 +21,7 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
     const bunker_name = document.getElementById("bunker-name");
     const secret_bunker_name = document.getElementById("secret-bunker-name");
     const bunker_site = document.getElementById("bunker-site")
+    const sidebottom = document.getElementById("sidebottom");
     if (data.properties.name === bunker_name.textContent) return;
 
     bunker_name.textContent = data.properties.name;
@@ -26,6 +29,7 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
     bunker_site.setAttribute("href", data.properties.website);
     bunker_site.textContent = "Více na: opevneni.cz";
     bunker_site.style.display = "block";
+    sidebottom.style.display = "inline";
 
 });
 
