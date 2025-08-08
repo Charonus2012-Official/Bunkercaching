@@ -1,7 +1,7 @@
 // Settings
 const COMMON = "../common"; // NO SLASH AT THE END
 
-const ropikyZoomLevel = 13;
+const ropikyZoomLevel = 12;
 const bunkryZoomLevel = 10;
 
 const MAPY_COM_API_KEY = 'Vtuv43i3ze9T5MzXJC-eWCNRSDYz4ucQnaQGg8PIA0k';
@@ -48,7 +48,7 @@ async function loadRopikyLayer() {
     const response = await fetch(`${COMMON}/bunkers/ropiky.geojson`);
     const data = await response.json();
     ropikyLayer = L.geoJSON(data, {
-        pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 4, color: 'red' }),
+        pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 3, color: 'red' }),
         onEachFeature: (feature, layer) => {
             layer.on("click", function (e) {
                 const event = new CustomEvent("OnRopikyClickEvent", { detail: feature });
