@@ -13,24 +13,34 @@
     <!-- Signup -->
     <div class="side signup">
         <h1>Registrace</h1>
-        <form action="" method="post">
-            <input type="text" name="username" placeholder="Uživatelské jméno" required>
-            <input type="email" name="email" placeholder="E-mail" required>
-            <input type="password" name="password" placeholder="Heslo" required>
-            <input type="password" name="confirm_password" placeholder="Potvrdit heslo" required>
+        <form id="signupForm">
+            <input class="signlog" type="text" name="username" placeholder="Uživatelské jméno" required>
+            <input class="signlog" type="email" name="email" placeholder="E-mail" required>
+            <input class="signlog" type="password" name="password" placeholder="Heslo" required>
+            <input class="signlog" type="password" name="confirm_password" placeholder="Potvrdit heslo" required>
             <button type="submit">Registrovat</button>
         </form>
+
     </div>
 
     <!-- Login -->
     <div class="side login">
         <h1>Přihlášení</h1>
-        <form action="" method="post">
-            <input type="text" name="username" placeholder="Uživatelské jméno nebo e-mail" required>
-            <input type="password" name="password" placeholder="Heslo" required>
+        <form id="loginForm">
+            <input class="signlog" type="text" name="username" placeholder="Uživatelské jméno" required>
+            <input class="signlog" type="password" name="password" placeholder="Heslo" required>
             <button type="submit">Přihlásit se</button>
         </form>
     </div>
 </div>
+<div class="split">
+    <div class="side login">
+        <h2 id="err_signup" class=""></h2>
+    </div>
+    <div class="side login" >
+        <h2 id="err_login" class=""></h2>
+    </div>
+</div>
+<script src="auth.js"></script>
 </body>
 </html>

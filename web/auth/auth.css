@@ -82,3 +82,16 @@ button {
         flex-direction: column;
     }
 }
+
+#err_signup, #err_login {
+    text-align: center;
+
+}
+
+.err {
+    color: #e12222;
+}
+
+.scs {
+    color: #4CAF50;
+}
