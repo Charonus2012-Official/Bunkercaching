@@ -4,6 +4,7 @@ window.addEventListener("OnRopikyClickEvent", (e) => {
     document.getElementById("secret-bunker-name").textContent = "";
     const bunker_site = document.getElementById("bunker-site")
     const sidebottom = document.getElementById("sidebottom");
+    const bunker_form_id = document.getElementById("bunker_id")
     if (data.properties.name === bunker_name.textContent) return;
 
     bunker_name.textContent = data.properties.name;
@@ -11,6 +12,7 @@ window.addEventListener("OnRopikyClickEvent", (e) => {
     bunker_site.textContent = "Více na: ropiky.cz";
     bunker_site.style.display = "block";
     sidebottom.style.display = "inline";
+    bunker_form_id.setAttribute("value", data.properties.name)
 
 
 
@@ -22,6 +24,7 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
     const secret_bunker_name = document.getElementById("secret-bunker-name");
     const bunker_site = document.getElementById("bunker-site")
     const sidebottom = document.getElementById("sidebottom");
+    const bunker_form_id = document.getElementById("bunker_id")
     if (data.properties.name === bunker_name.textContent) return;
 
     bunker_name.textContent = data.properties.name;
@@ -30,14 +33,6 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
     bunker_site.textContent = "Více na: opevneni.cz";
     bunker_site.style.display = "block";
     sidebottom.style.display = "inline";
+    bunker_form_id.setAttribute("value", data.properties.name)
 
-});
-
-
-document.addEventListener("DOMContentLoaded", () => {
-    const button = document.getElementById("logButton");
-    const visited = button.classList.toggle("visited");
-    button.addEventListener("click", () => {
-        const visited = button.classList.toggle("visited");
-    });
 });

@@ -1,5 +1,5 @@
 // Settings
-const COMMON = "../common"; // NO SLASH AT THE END
+const COMMON = "../../common"; // NO SLASH AT THE END
 
 const ropikyZoomLevel = 12;
 const bunkryZoomLevel = 10;

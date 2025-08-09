@@ -2,11 +2,10 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <title>Bunkercaching</title>
+    <title>Bunkercaching — Mapa</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css" />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&family=Staatliches&display=swap" rel="stylesheet">
 
 </head>
@@ -16,10 +15,13 @@
         <div id="sidetop">
             <h1 id="bunker-name" class="center"></h1>
             <h2 id="secret-bunker-name" class="center"></h2>
-            <p class="center"><a href="" id="bunker-site">Více na:</a></p>
+            <p class="center"><a href="" id="bunker-site" class="mlink">Více na:</a></p>
         </div>
         <div id="sidebottom">
-            <button>Logovat</button>
+            <form action="", method="get"> <!-- Need to add link to log page -->
+                <input type="hidden" name="bunker_id" id="bunker_id" value="">
+                <input type="submit" value="Logovat">
+            </form>
         </div>
     </div>
     <div id="map"></div>

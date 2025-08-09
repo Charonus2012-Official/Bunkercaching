@@ -1,0 +1,84 @@
+.split {
+    display: flex;
+    width: 100%;
+}
+
+.side {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #f5f5f5;
+}
+
+.side.signup {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.side.login {
+    background-color: #ffffff;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.side.signup input {
+    border: 1px solid #ddd;
+}
+
+.side.login input {
+    border: 1px solid #ccc;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #333;
+    color: white;
+    cursor: pointer;
+}
+
+.side.signup button {
+    background-color: white;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.side.signup button:hover {
+    background-color: #f0f0f0;
+}
+
+.side.login button {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+.side.login button:hover {
+    background-color: #45a049;
+}
+
+/* Mobilní zobrazení - stacked */
+@media (max-width: 768px) {
+    .split {
+        flex-direction: column;
+    }
+}

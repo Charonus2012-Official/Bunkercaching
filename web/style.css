@@ -38,8 +38,7 @@ h1, h2, h3 {
 
 #sidebottom {
     background-color: #ffff;
-    height: 200px;
-    padding: 15px;
+    padding: 10px;
     border: black solid 1px;
     border-radius: 3%;
     text-align: center;
@@ -53,23 +52,53 @@ h1, h2, h3 {
     display: none;
 }
 
-#logButton {
-    font-size: 24px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-#logButton:hover {
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button,
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
     background-color: #45a049;
 }
 
-#logButton.visited {
-    background-color: #888;
+.mlink {
+    text-align: center;
+    display: block;
+    font-size: 14px;
+    margin-top: 10px;
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.mlink:hover {
+    text-decoration: underline;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
