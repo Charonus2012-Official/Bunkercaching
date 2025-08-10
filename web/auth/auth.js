@@ -30,9 +30,13 @@ document.getElementById("loginForm").addEventListener("submit", async function (
         body: formData
     });
 
-    const result = await response.json();
 
-    const h2 = document.getElementById("err_login");
-    h2.setAttribute("class", result.type);
-    h2.textContent = result.msg;
+    const result = await response.json();
+    if (result.type === "scs" && result.msg === "success") {
+
+    } else {
+        const h2 = document.getElementById("err_login");
+        h2.setAttribute("class", result.type);
+        h2.textContent = result.msg;
+    }
 });

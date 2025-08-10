@@ -1,10 +1,11 @@
 import mariadb
 import hashlib
-from fastapi import FastAPI, Form
+from fastapi import FastAPI, Form, Response, Depends
 from fastapi.responses import HTMLResponse
 from starlette.middleware.cors import CORSMiddleware
 
 from dbh import create_connection
+from tokens import create_access_token, get_current_user
 
 app = FastAPI()
 
@@ -36,6 +37,7 @@ def read_root():
 
 @app.post("/login")
 def login(
+response: Response,
 username: str = Form(...),
 password: str = Form(...)
 ):
@@ -52,6 +54,14 @@ password: str = Form(...)
             cur.close()
             conn.close()
             if hash_password(password) == upwd:
+                token = create_access_token({"sub": username})
+                response.set_cookie(
+                    key="token",
+                    value=token,
+                    httponly=True,
+                    secure=False,
+                    samesite="lax"
+                )
                 return {"type": "scs", "msg": "success"}
             else:
                 return {"type": "err", "msg": "Špatné uživatelské jméno nebo heslo"}
@@ -100,4 +110,8 @@ def signup(
         conn.close()
         return {"type": "scs", "msg": "Podařilo se, můžete se přihlásit"}
     return {"type": "err", "msg": "Chyba připojení do databáze"}
+
+@app.post("/me")
+def read_me(username: str = Depends(get_current_user)):
+    pass
 
