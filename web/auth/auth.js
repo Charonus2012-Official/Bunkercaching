@@ -1,9 +1,33 @@
+
+
+window.onload = function() {
+    fetch("http://localhost:8000/me", {
+        method: "POST",
+        credentials: "include" // důležité pro poslání cookie
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Nejste přihlášen");
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Přihlášen jako:", data.username);
+            document.getElementById("status").innerText = "Přihlášen: " + data.username;
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById("status").innerText = "Nepřihlášen";
+        });
+};
+
+
 document.getElementById("signupForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const formData = new FormData(this);
 
-    const response = await fetch("http://127.0.0.1:8000/signup", {
+    const response = await fetch("http://localhost:8000/signup", {
         method: "POST",
         body: formData
     });
@@ -25,7 +49,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 
     const formData = new FormData(this);
 
-    const response = await fetch("http://127.0.0.1:8000/login", {
+    const response = await fetch("http://localhost:8000/login", {
         method: "POST",
         body: formData
     });
@@ -33,7 +57,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 
     const result = await response.json();
     if (result.type === "scs" && result.msg === "success") {
-
+        console.log(result.msg);
     } else {
         const h2 = document.getElementById("err_login");
         h2.setAttribute("class", result.type);

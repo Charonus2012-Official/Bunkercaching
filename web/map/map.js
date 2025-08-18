@@ -1,5 +1,5 @@
 // Settings
-const COMMON = "../../common"; // NO SLASH AT THE END
+const GEODATA = "../data/geodata"; // NO SLASH AT THE END
 
 const ropikyZoomLevel = 12;
 const bunkryZoomLevel = 10;
@@ -45,7 +45,7 @@ let ropikyLayer = null;
 let loaded = false;
 
 async function loadRopikyLayer() {
-    const response = await fetch(`${COMMON}/bunkers/ropiky.geojson`);
+    const response = await fetch(`${GEODATA}/ropiky.geojson`);
     const data = await response.json();
     ropikyLayer = L.geoJSON(data, {
         pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 3, color: 'red' }),
@@ -60,7 +60,7 @@ async function loadRopikyLayer() {
 }
 
 async function loadBunkryLayer() {
-    const response = await fetch(`${COMMON}/bunkers/bunkry.geojson`);
+    const response = await fetch(`${GEODATA}/bunkry.geojson`);
     const data = await response.json();
     bunkryLayer = L.geoJSON(data, {
         pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 5, color: 'blue' }),

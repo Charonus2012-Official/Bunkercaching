@@ -1,7 +1,7 @@
 window.addEventListener("OnRopikyClickEvent", (e) => {
     const data = e.detail;
-    const bunker_name = document.getElementById("bunker-name")
-    document.getElementById("secret-bunker-name").textContent = "";
+    const bunker_name = document.getElementById("secret-bunker-name")
+    document.getElementById("bunker-name").textContent = "";
     const bunker_site = document.getElementById("bunker-site")
     const sidebottom = document.getElementById("sidebottom");
     const bunker_form_id = document.getElementById("bunker_id")

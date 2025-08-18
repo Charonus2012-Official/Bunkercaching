@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunkercaching</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="data/logo/bunkercaching_pure_logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&family=Staatliches&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+    <div class="logo">
+        <a href="/">
+            <img src="data/logo/bunkercaching_pure_logo.png" alt="Bunkercaching" height="40">
+        </a>
+    </div>
+    <ul id="menu">
+      <li><a href="/map">Mapa</a></li>
+      <li><a href="/about">O projektu</a></li>
+      <li><a href="/auth">Přihlášení</a></li>
+    </ul>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </nav>
+  <script>
+    function toggleMenu() {
+      document.getElementById("menu").classList.toggle("show");
+    }
+  </script>
+</body>
+</html>

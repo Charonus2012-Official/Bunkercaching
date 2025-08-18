@@ -9,9 +9,11 @@ from tokens import create_access_token, get_current_user
 
 app = FastAPI()
 
+origins = ["http://localhost:63342", "http://127.0.0.1:63342", "http://localhost:80"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Sem můžeš dát třeba ["http://localhost:5500"]
+    allow_origins=origins,  # Sem můžeš dát třeba ["http://localhost:5500"]
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -60,7 +62,8 @@ password: str = Form(...)
                     value=token,
                     httponly=True,
                     secure=False,
-                    samesite="lax"
+                    samesite="lax",
+                    expires=3600*2
                 )
                 return {"type": "scs", "msg": "success"}
             else:
@@ -112,6 +115,11 @@ def signup(
     return {"type": "err", "msg": "Chyba připojení do databáze"}
 
 @app.post("/me")
-def read_me(username: str = Depends(get_current_user)):
-    pass
+def me(user: dict = Depends(get_current_user)):
+    return {"username": user["username"]}
+
+@app.post("/logout")
+def logout(response: Response):
+    response.delete_cookie("tokens")
+    return {"message": "Logged out"}
 
