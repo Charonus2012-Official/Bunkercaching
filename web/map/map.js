@@ -1,8 +1,8 @@
 // Settings
 const GEODATA = "../data/geodata"; // NO SLASH AT THE END
 
-const ropikyZoomLevel = 12;
-const bunkryZoomLevel = 10;
+const ropikyZoomLevel = 10;
+const bunkryZoomLevel = 8;
 
 const MAPY_COM_API_KEY = 'Vtuv43i3ze9T5MzXJC-eWCNRSDYz4ucQnaQGg8PIA0k';
 

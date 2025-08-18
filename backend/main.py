@@ -9,11 +9,11 @@ from tokens import create_access_token, get_current_user
 
 app = FastAPI()
 
-origins = ["http://localhost:63342", "http://127.0.0.1:63342", "http://localhost:80"]
+origins = ["http://localhost:63342", "http://127.0.0.1:63342", "http://localhost:80", "http://127.0.0.1:5500"]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # Sem můžeš dát třeba ["http://localhost:5500"]
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -57,12 +57,14 @@ password: str = Form(...)
             conn.close()
             if hash_password(password) == upwd:
                 token = create_access_token({"sub": username})
+                print(token)
                 response.set_cookie(
                     key="token",
                     value=token,
                     httponly=True,
                     secure=False,
                     samesite="lax",
+                    max_age=3600*2,
                     expires=3600*2
                 )
                 return {"type": "scs", "msg": "success"}
