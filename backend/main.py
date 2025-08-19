@@ -57,7 +57,6 @@ password: str = Form(...)
             conn.close()
             if hash_password(password) == upwd:
                 token = create_access_token({"sub": username})
-                print(token)
                 response.set_cookie(
                     key="token",
                     value=token,

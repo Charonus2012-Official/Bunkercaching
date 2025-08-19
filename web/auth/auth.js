@@ -14,10 +14,6 @@ window.onload = function() {
         .then(data => {
             console.log("Přihlášen jako:", data.username);
             document.getElementById("status").innerText = "Přihlášen: " + data.username;
-        })
-        .catch(err => {
-            console.error(err);
-            document.getElementById("status").innerText = "Nepřihlášen";
         });
 };
 
@@ -58,7 +54,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 
     const result = await response.json();
     if (result.type === "scs" && result.msg === "success") {
-        console.log(result.msg);
+        window.location.href = "/"
     } else {
         const h2 = document.getElementById("err_login");
         h2.setAttribute("class", result.type);
