@@ -41,7 +41,8 @@ def read_root():
 def login(
 response: Response,
 username: str = Form(...),
-password: str = Form(...)
+password: str = Form(...),
+remember: str = Form(...)
 ):
     conn = create_connection()
     if conn:
@@ -56,16 +57,25 @@ password: str = Form(...)
             cur.close()
             conn.close()
             if hash_password(password) == upwd:
-                token = create_access_token({"sub": username})
-                response.set_cookie(
-                    key="token",
-                    value=token,
-                    httponly=True,
-                    secure=False,
-                    samesite="lax",
-                    max_age=3600*2,
-                    expires=3600*2
-                )
+                token = create_access_token({"sub": username}, remember=remember)
+                if remember:
+                    response.set_cookie(
+                        key="token",
+                        value=token,
+                        httponly=True,
+                        secure=False,
+                        samesite="lax",
+                        max_age=3600*2,
+                        expires=3600*2
+                    )
+                else:
+                    response.set_cookie(
+                        key="token",
+                        value=token,
+                        httponly=True,
+                        secure=False,
+                        samesite="lax",
+                    )
                 return {"type": "scs", "msg": "success"}
             else:
                 return {"type": "err", "msg": "Špatné uživatelské jméno nebo heslo"}

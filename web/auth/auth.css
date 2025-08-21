@@ -95,3 +95,10 @@ button {
 .scs {
     color: #4CAF50;
 }
+
+.checkb {
+    display: block;
+}
+.checkb input[type="checkbox"] {
+    accent-color: #4CAF50;
+}

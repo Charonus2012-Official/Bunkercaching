@@ -154,6 +154,10 @@ nav ul li a:hover {
 
 /* Mobile */
 @media (max-width: 768px) {
+  #sidebar {
+    display: none;
+  }
+
   nav ul {
     display: none;
     flex-direction: column;
