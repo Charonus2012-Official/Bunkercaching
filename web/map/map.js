@@ -48,7 +48,7 @@ async function loadRopikyLayer() {
     const response = await fetch(`${GEODATA}/ropiky.geojson`);
     const data = await response.json();
     ropikyLayer = L.geoJSON(data, {
-        pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 3, color: 'red' }),
+        pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 6, color: 'red' }),
         onEachFeature: (feature, layer) => {
             layer.on("click", function (e) {
                 const event = new CustomEvent("OnRopikyClickEvent", { detail: feature });
@@ -63,7 +63,7 @@ async function loadBunkryLayer() {
     const response = await fetch(`${GEODATA}/bunkry.geojson`);
     const data = await response.json();
     bunkryLayer = L.geoJSON(data, {
-        pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 5, color: 'blue' }),
+        pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 8, color: 'blue' }),
         onEachFeature: (feature, layer) => {
             layer.on("click", function (e) {
                 const event = new CustomEvent("OnBunkryClickEvent", { detail: feature });
@@ -138,5 +138,11 @@ map_com_icon();
 map.on('baselayerchange', function(e) {
     console.log('Přepnuto na vrstvu:', e.name);
     map_com_icon(e.name);
+});
+
+document.addEventListener("map_resize_leaf", function(e) {
+    setTimeout(() => {
+        map.invalidateSize();
+    }, 200);
 });
 

@@ -5,6 +5,13 @@ window.addEventListener("OnRopikyClickEvent", (e) => {
     const bunker_site = document.getElementById("bunker-site")
     const sidebottom = document.getElementById("sidebottom");
     const bunker_form_id = document.getElementById("bunker_id")
+    const sidebar = document.getElementById("sidebar")
+    const screenWidth = window.innerWidth;
+    if (screenWidth < 729) {
+        const map = document.getElementById("map");
+        map.style.display = "none";
+    }
+    sidebar.style.display = "flex";
     if (data.properties.name === bunker_name.textContent) return;
 
     bunker_name.textContent = data.properties.name;
@@ -25,6 +32,13 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
     const bunker_site = document.getElementById("bunker-site")
     const sidebottom = document.getElementById("sidebottom");
     const bunker_form_id = document.getElementById("bunker_id")
+    const sidebar = document.getElementById("sidebar")
+    const screenWidth = window.innerWidth;
+    if (screenWidth < 729) {
+        const map = document.getElementById("map");
+        map.style.display = "none";
+    }
+    sidebar.style.display = "flex";
     if (data.properties.name === bunker_name.textContent) return;
 
     bunker_name.textContent = data.properties.name;
@@ -35,4 +49,22 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
     sidebottom.style.display = "inline";
     bunker_form_id.setAttribute("value", data.properties.name)
 
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const sidebar = document.getElementById("sidebar");
+    const map = document.getElementById("map");
+    const closeBtn = document.getElementById("close");
+
+    closeBtn.addEventListener("click", () => {
+        // Skrýt sidebar a roztáhnout mapu
+        sidebar.style.display = "none"; // nebo sidebar.style.width = "0";
+        const screenWidth = window.innerWidth;
+        if (screenWidth < 729) {
+            const map = document.getElementById("map");
+            map.style.display = "block";
+        }
+        const event = new CustomEvent("map_resize_leaf");
+        window.dispatchEvent(event);
+    });
 });

@@ -9,6 +9,11 @@ h1, h2, h3 {
     text-transform: uppercase;
 }
 
+#close {
+    margin: 10px;
+    background-color: #ff1e1c
+}
+
 #map {
     flex: 1 1 auto;
     min-height: 0
@@ -24,7 +29,7 @@ h1, h2, h3 {
 #sidebar {
     background-color: #eceff3;
     border: 1px solid black;
-    display: flex;
+    display: none;
     flex-direction: column;
     flex: 0 0 225px;
     min-height: 0;
@@ -153,10 +158,18 @@ nav ul li a:hover {
 }
 
 /* Mobile */
-@media (max-width: 768px) {
-  #sidebar {
-    display: none;
-  }
+@media (max-width: 728px) {
+    #map {
+        display: block;
+    }
+    #sidebar {
+        width: 100vw;           /* celá šířka */
+        margin: 0;
+        border: 1px solid black; /* border stále viditelný */
+        flex: 1 1 auto;
+        display: none;
+        flex-direction: column;
+    }
 
   nav ul {
     display: none;
