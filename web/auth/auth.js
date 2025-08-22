@@ -1,7 +1,7 @@
-
+const link = "http://192.168.1.10:8000"
 
 window.onload = function() {
-    fetch("http://127.0.0.1:8000/me", {
+    fetch(`${link}/me`, {
         method: "POST",
         credentials: "include" // důležité pro poslání cookie
     })
@@ -23,7 +23,7 @@ document.getElementById("signupForm").addEventListener("submit", async function 
 
     const formData = new FormData(this);
 
-    const response = await fetch("http://127.0.0.1:8000/signup", {
+    const response = await fetch(`${link}/signup`, {
         method: "POST",
         body: formData
     });
@@ -45,7 +45,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 
     const formData = new FormData(this);
 
-    const response = await fetch("http://127.0.0.1:8000/login", {
+    const response = await fetch(`${link}/login`, {
         method: "POST",
         credentials: 'include',
         body: formData

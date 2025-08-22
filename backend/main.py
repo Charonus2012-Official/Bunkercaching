@@ -9,7 +9,7 @@ from tokens import create_access_token, get_current_user
 
 app = FastAPI()
 
-origins = ["http://localhost:63342", "http://127.0.0.1:63342", "http://localhost:80", "http://127.0.0.1:5500"]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
