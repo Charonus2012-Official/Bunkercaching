@@ -32,9 +32,13 @@
             <input class="signlog" type="text" name="username" placeholder="Uživatelské jméno" required>
             <input class="signlog" type="password" name="password" placeholder="Heslo" required>
             <div class="checkb">
-                <input type="checkbox" name="remember">
+                <label>
+                    <input type="checkbox" name="remember" value="true">
+                </label>
                 Pamatuj si mě
             </div>
+            <!-- OR -->
+            <input type="hidden" name="remember" value="false">
             <button type="submit">Přihlásit se</button>
         </form>
     </div>

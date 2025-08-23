@@ -6,10 +6,37 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&family=Staatliches&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="../../data/logo/bunkercaching_pure_logo.png">
     <link rel="stylesheet" href="../../style.css">
-    <title id=""></title>
+    <link rel="stylesheet" href="log.css">
+    <title id="tit"></title>
 </head>
 <body>
 <nav id="navbar"></nav>
 <script src="../../navbar.js"></script>
+<script src="log.js"></script>
+<h1 id="bi"></h1>
+<form id="logForm" action="" method="get">
+    <input type="hidden" name="bunker_id" value="K-Bg-S 12">
+    <label for="log_text"></label>
+    <textarea
+            name="log_text"
+            id="log_text"
+            rows="6"
+            placeholder="Text Logu"
+            required
+    ></textarea>
+    <div class="radio-button-group">
+        <input type="radio" class="green" id="pristupny" name="condition" value="Y" checked>
+        <label for="pristupny">Vnitřek přístupný</label>
+
+        <input type="radio" class="red" id="nepristupny" name="condition" value="N">
+        <label for="nepristupny">Vnitřek uzavřený</label>
+    </div>
+    <div class="checkbox-container">
+        <input type="checkbox" name="concept" id="ios-checkbox" class="ios-checkbox">
+        <label for="ios-checkbox" class="ios-label">Koncept</label>
+        <input type="submit" value="Logovat nebo uložit koncept">
+    </div>
+
+</form>
 </body>
 </html>

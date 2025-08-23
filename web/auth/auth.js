@@ -1,4 +1,4 @@
-const link = "http://192.168.1.10:8000"
+const link = "http://127.0.0.1:8000"
 
 window.onload = function() {
     fetch(`${link}/me`, {
@@ -54,7 +54,8 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 
     const result = await response.json();
     if (result.type === "scs" && result.msg === "success") {
-        window.location.href = "/"
+        // window.location.href = "/"
+        console.log("Good")
     } else {
         const h2 = document.getElementById("err_login");
         h2.setAttribute("class", result.type);

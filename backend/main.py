@@ -2,14 +2,14 @@ import mariadb
 import hashlib
 from fastapi import FastAPI, Form, Response, Depends
 from fastapi.responses import HTMLResponse
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
 from dbh import create_connection
 from tokens import create_access_token, get_current_user
 
 app = FastAPI()
 
-origins = ["*"]
+origins = ["http://localhost:56852"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -74,7 +74,7 @@ remember: str = Form(...)
                         value=token,
                         httponly=True,
                         secure=False,
-                        samesite="lax",
+                        samesite="lax"
                     )
                 return {"type": "scs", "msg": "success"}
             else:
@@ -131,6 +131,6 @@ def me(user: dict = Depends(get_current_user)):
 
 @app.post("/logout")
 def logout(response: Response):
-    response.delete_cookie("tokens")
+    response.delete_cookie("token")
     return {"message": "Logged out"}
 
