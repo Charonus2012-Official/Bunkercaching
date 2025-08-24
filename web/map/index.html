@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&family=Staatliches&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="../data/logo/bunkercaching_pure_logo.png">
     <link rel="stylesheet" href="map.css">
+    <link rel="stylesheet" href="search.css">
 </head>
 <body>
 <div id="app">
@@ -38,13 +39,15 @@
             </form>
         </div>
     </div>
+    <div id="searchContainer"><input type="text" id="searchInput" placeholder="Hledej"><div id="searchResults"></div></div>
     <div id="map"></div>
 </div>
 </div>
+
+<script src="BunkerPlaceSearch.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="map.js"></script>
 <script src="obj_listing.js"></script>
-<script src="BunkerPlaceSearch.js"></script>
 <style>
 html, body {
     margin: 0;

@@ -146,3 +146,6 @@ document.addEventListener("map_resize_leaf", function(e) {
     }, 200);
 });
 
+setTimeout(() => {
+    window.exportedMap = map;
+}, 100);

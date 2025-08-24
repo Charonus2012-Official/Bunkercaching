@@ -1,10 +1,10 @@
 class BunkerPlaceSearch {
-    constructor(bunkerData) {
-        // this.map = map;
+    constructor(map, bunkerData) {
+        this.map = map;
         this.bunkerData = bunkerData;
         this.searchInput = document.getElementById('searchInput');
         this.resultsDiv = document.getElementById('searchResults');
-        // this.setupEventListeners()
+        this.setupEventListeners()
     }
     setupEventListeners() {
         // Hledá výstup po 300ms neaktivnosti
@@ -13,12 +13,6 @@ class BunkerPlaceSearch {
             this.searchTimeout = setTimeout(() => {
                 this.search(e.target.value);
             }, 300);
-        });
-        // Skryje výstup když klikne někde vedle
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.search-container')) {
-                this.hideResults();
-            }
         });
     }
 
@@ -40,7 +34,7 @@ class BunkerPlaceSearch {
         const params = new URLSearchParams({
             format: 'json',
             q: query,
-            limit: 8,
+            limit: 3,
             countrycodes: 'cz',
             'accept-language': 'cs,en'
         });
@@ -54,15 +48,32 @@ class BunkerPlaceSearch {
     }
 
     displayResults(results) {
+        this.resultsDiv.innerHTML = '';
         for (const result of results) {
-            console.log(result.name)
+            const lat = parseFloat(result.lat);
+            const lon = parseFloat(result.lon);
+            const button = document.createElement("button");
+            button.className = "searchResult";
+            button.textContent = result.display_name;
+
+            button.onclick = function () {
+                window.exportedMap.setView([lat, lon], 13);
+
+                document.getElementById('searchResults').innerHTML = '';
+                document.getElementById('searchInput').value = '';
+            }
+
+
+            this.resultsDiv.appendChild(button);
         }
-    }
-
-    hideResults() {
-
     }
 }
 
-let search = new BunkerPlaceSearch({});
-search.search("Praha");
+let bd;
+fetch('../data/geodata/bunkry.geojson')
+    .then(response => response.json())
+    .then(data => bd = data.features);
+
+setTimeout(() => {
+    let search = new BunkerPlaceSearch(window.exportedMap, bd);
+}, 200);
