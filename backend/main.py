@@ -9,7 +9,7 @@ from tokens import create_access_token, get_current_user
 
 app = FastAPI()
 
-origins = ["http://localhost:56852"]
+origins = ["http://localhost:63664"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -133,4 +133,38 @@ def me(user: dict = Depends(get_current_user)):
 def logout(response: Response):
     response.delete_cookie("token")
     return {"message": "Logged out"}
+
+@app.get("/ropiky")
+def get_ropiky(lat_one: float, lng_one: float, lat_two: float, lng_two: float):
+    conn = create_connection()
+    if conn:
+        cur = conn.cursor()
+        try:
+            cur.execute("SELECT * FROM ropiky WHERE latitude <= ? AND latitude >= ? AND longitude >= ? AND longitude <= ?;", (lat_one, lat_two, lng_one, lng_two,))
+            ropiky: list = []
+            for row in cur:
+                ropiky.append(row)
+            return {"ropiky": ropiky}
+        except mariadb.Error as e:
+            return {"message": e}
+    return None
+
+@app.get("/bunkry")
+def get_bunkry(lat_one: float, lng_one: float, lat_two: float, lng_two: float):
+    conn = create_connection()
+    if conn:
+        cur = conn.cursor()
+        try:
+            cur.execute("SELECT * FROM bunkry WHERE latitude <= ? AND latitude >= ? AND longitude >= ? AND longitude <= ?;", (lat_one, lat_two, lng_one, lng_two,))
+            ropiky: list = []
+            for row in cur:
+                ropiky.append(row)
+            return {"bunkry": ropiky}
+        except mariadb.Error as e:
+            return {"message": e}
+    return None
+
+@app.post("/log")
+def log():
+    pass
 

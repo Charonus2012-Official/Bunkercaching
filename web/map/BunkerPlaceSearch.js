@@ -1,7 +1,7 @@
 class BunkerPlaceSearch {
     constructor(map, bunkerData) {
         this.map = map;
-        this.bunkerData = bunkerData;
+        this.bunkers = bunkerData;
         this.searchInput = document.getElementById('searchInput');
         this.resultsDiv = document.getElementById('searchResults');
         this.setupEventListeners()
@@ -26,7 +26,21 @@ class BunkerPlaceSearch {
     }
 
     searchBunkers(query) {
-        return [];
+        const q = query.toLowerCase();
+
+        const feature = this.bunkers.find(feature => {
+            const name = feature.properties?.name?.toLowerCase() || "";
+            return name === q;  // přesná shoda
+        });
+
+        if (!feature) return [];
+
+        const coords = feature.geometry?.coordinates || [];
+        return [{
+            display_name: "Bunkr: " + feature.properties?.name + ' "' + feature.properties?.secret_name.slice(1) + '"' || "",
+            lon: coords[0] || null,
+            lat: coords[1] || null
+        }];
     }
 
     async searchPlaces(query) {
@@ -34,7 +48,7 @@ class BunkerPlaceSearch {
         const params = new URLSearchParams({
             format: 'json',
             q: query,
-            limit: 3,
+            limit: 4,
             countrycodes: 'cz',
             'accept-language': 'cs,en'
         });
@@ -68,12 +82,11 @@ class BunkerPlaceSearch {
         }
     }
 }
-
-let bd;
-fetch('../data/geodata/bunkry.geojson')
-    .then(response => response.json())
-    .then(data => bd = data.features);
-
-setTimeout(() => {
-    let search = new BunkerPlaceSearch(window.exportedMap, bd);
-}, 200);
+async function loadSearch() {
+    const response = await fetch("../data/geodata/bunkry.geojson");
+    const data = await response.json();
+    setTimeout(function() {
+        let search = new BunkerPlaceSearch(window.exportedMap, data.features)
+    }, 200);
+}
+loadSearch();

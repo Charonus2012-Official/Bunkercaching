@@ -12,14 +12,14 @@ window.addEventListener("OnRopikyClickEvent", (e) => {
         map.style.display = "none";
     }
     sidebar.style.display = "flex";
-    if (data.properties.name === bunker_name.textContent) return;
+    if (data.name === bunker_name.textContent) return;
 
-    bunker_name.textContent = data.properties.name;
-    bunker_site.setAttribute("href", data.properties.website);
+    bunker_name.textContent = data.name;
+    bunker_site.setAttribute("href", data.website);
     bunker_site.textContent = "Více na: ropiky.cz";
     bunker_site.style.display = "block";
     sidebottom.style.display = "inline";
-    bunker_form_id.setAttribute("value", data.properties.name)
+    bunker_form_id.setAttribute("value", data.name)
 
 
 
@@ -39,15 +39,15 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
         map.style.display = "none";
     }
     sidebar.style.display = "flex";
-    if (data.properties.name === bunker_name.textContent) return;
+    if (data.name === bunker_name.textContent) return;
 
-    bunker_name.textContent = data.properties.name;
-    secret_bunker_name.textContent = data.properties.secret_name;
-    bunker_site.setAttribute("href", data.properties.website);
+    bunker_name.textContent = data.name;
+    secret_bunker_name.textContent = data.secret_name;
+    bunker_site.setAttribute("href", data.website);
     bunker_site.textContent = "Více na: opevneni.cz";
     bunker_site.style.display = "block";
     sidebottom.style.display = "inline";
-    bunker_form_id.setAttribute("value", data.properties.name)
+    bunker_form_id.setAttribute("value", data.name)
 
 });
 
