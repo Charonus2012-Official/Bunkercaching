@@ -9,7 +9,7 @@ from tokens import create_access_token, get_current_user
 
 app = FastAPI()
 
-origins = ["http://localhost:63664"]
+origins = ["http://localhost:62556"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -163,6 +163,21 @@ def get_bunkry(lat_one: float, lng_one: float, lat_two: float, lng_two: float):
         except mariadb.Error as e:
             return {"message": e}
     return None
+
+@app.get("/search")
+def search(prompt: str):
+    conn = create_connection()
+    if conn:
+        cur = conn.cursor()
+        try:
+            cur.execute("SELECT name, latitude, longitude FROM bunkry WHERE name = ?", (prompt,))
+            searches: list = []
+            for row in cur:
+                searches.append(row)
+            return {"output": searches[0]}
+        except mariadb.Error as e:
+            return {"message": e}
+
 
 @app.post("/log")
 def log():

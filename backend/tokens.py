@@ -27,3 +27,8 @@ def get_current_user(token: str = Cookie(None)):
         return {"username": username}
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
+
+
+if __name__ == "__main__":
+    t = create_access_token({"sub": "Charonus2012"})
+    print(t)

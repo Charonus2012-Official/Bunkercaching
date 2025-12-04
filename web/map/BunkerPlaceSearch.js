@@ -1,7 +1,6 @@
 class BunkerPlaceSearch {
-    constructor(map, bunkerData) {
+    constructor(map) {
         this.map = map;
-        this.bunkers = bunkerData;
         this.searchInput = document.getElementById('searchInput');
         this.resultsDiv = document.getElementById('searchResults');
         this.setupEventListeners()
@@ -26,12 +25,7 @@ class BunkerPlaceSearch {
     }
 
     searchBunkers(query) {
-        const q = query.toLowerCase();
-
-        const feature = this.bunkers.find(feature => {
-            const name = feature.properties?.name?.toLowerCase() || "";
-            return name === q;  // přesná shoda
-        });
+        const q = query.toUpperCase();
 
         if (!feature) return [];
 
@@ -83,10 +77,8 @@ class BunkerPlaceSearch {
     }
 }
 async function loadSearch() {
-    const response = await fetch("../data/geodata/bunkry.geojson");
-    const data = await response.json();
     setTimeout(function() {
-        let search = new BunkerPlaceSearch(window.exportedMap, data.features)
+        let search = new BunkerPlaceSearch(window.exportedMap)
     }, 200);
 }
 loadSearch();
