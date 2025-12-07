@@ -3,7 +3,7 @@ window.onload = function() {
     navbar = document.getElementById("navbar");
     navbar.innerHTML = navbar_inner;
     const prof = document.getElementById("nav-profile");
-    fetch("http://127.0.0.1:8000/me", {
+    fetch("http://localhost:8000/me", {
         method: "POST",
         credentials: "include", // důležité pro poslání cookie
         headers: {

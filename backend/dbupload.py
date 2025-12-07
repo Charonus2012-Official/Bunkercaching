@@ -3,7 +3,7 @@ import mariadb
 
 
 def ropiky():
-    with open("../web/data/geodata/coords.json", "r") as f:
+    with open("../web/data/geodata/ropiky.geojson", "r") as f:
         ropikygeo: dict = eval(f.read())
 
     features = ropikygeo["features"]
@@ -49,5 +49,4 @@ def bunkry():
         conn.commit()
 
 if __name__ == "__main__":
-    # ropiky()
-    bunkry()
+    ropiky()

@@ -1,4 +1,4 @@
-const link = "http://127.0.0.1:8000"
+const link = "http://localhost:8000"
 
 window.onload = function() {
     fetch(`${link}/me`, {
