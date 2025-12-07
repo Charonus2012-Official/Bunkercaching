@@ -93,6 +93,13 @@ var bunkrIcon = L.icon({
     popupAnchor: [0, -16]    // kde se otevře popup
 });
 
+var bunkrIcon_not = L.icon({
+    iconUrl: '../data/images/bunkr_not_built.png',   // obrázek (může být i URL)
+    iconSize: [32, 32],      // velikost obrázku
+    iconAnchor: [16, 32],    // kotva (střed ikony)
+    popupAnchor: [0, -16]    // kde se otevře popup
+});
+
 async function getRopiky() {
     var bounds = map.getBounds();
     var topLeft = bounds.getNorthWest();
@@ -168,22 +175,27 @@ async function getBunkry() {
 
 
         data.bunkry.forEach(r => {
-            const id = r[0]
-            const op_id = r[1]
-            const name = r[2]
-            const secret_name = r[3]
+            const id = r[0];
+            const op_id = r[1];
+            const name = r[2];
+            const secret_name = r[3];
             const website = r[4];
-            const museum = r[5];
-            const lat = r[6];
-            const lng = r[7];
-
-            const marker = L.marker([lat, lng], {icon: bunkrIcon});
+            const state = r[5];
+            const museum = r[6];
+            const lat = r[7];
+            const lng = r[8];
+            if (state == "postaven") {
+                var marker = L.marker([lat, lng], {icon: bunkrIcon});
+            } else {
+                var marker = L.marker([lat, lng], {icon: bunkrIcon_not});
+            }
             marker.addTo(map);
             marker.on("click", function(e) {
                 const bunkryEvent = new CustomEvent("OnBunkryClickEvent", { detail: {
                         name: name,
                         secret_name: secret_name,
-                        website: website
+                        website: website,
+                        state: state
                     }});
                 window.dispatchEvent(bunkryEvent);
             });

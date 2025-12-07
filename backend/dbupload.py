@@ -27,21 +27,27 @@ def ropiky():
         print("Problem")
 
 def bunkry():
-    with open("../web/data/geodata/coords.json", "r") as f:
+    with open("./bunkers.json", "r") as f:
         features: dict = eval(f.read())
     conn = create_connection()
     if conn:
         cur = conn.cursor()
-        for f in features["urls"]:
+        for f in features:
             try:
                 name = f["name"]
                 lat, lng = f["coords"]
                 website = f["link"]
-                secret_name = ""
+                try:
+                    secret_name = f["secret_name"]
+                    state = f["state"]
+                except KeyError:
+                    secret_name = ""
+                    state = ""
+
                 op_id = f["id"]
                 try:
-                    cur.execute("INSERT INTO bunkry (opevneni_id, name, secret_name, website, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)",
-                                (op_id, name, secret_name, website, lat, lng,))
+                    cur.execute("INSERT INTO bunkry (opevneni_id, name, secret_name, website, state, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                                (op_id, name, secret_name, website, state, lat, lng,))
                 except mariadb.Error as e:
                     print(e)
             except mariadb.Error as e:
@@ -49,4 +55,4 @@ def bunkry():
         conn.commit()
 
 if __name__ == "__main__":
-    ropiky()
+    bunkry()
