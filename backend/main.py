@@ -1,23 +1,55 @@
 import mariadb
 import hashlib
+import os
 from fastapi import FastAPI, Form, Response, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 
 from dbh import create_connection
 from tokens import create_access_token, get_current_user
 
+load_dotenv("../.env")
+
 app = FastAPI()
 
-origins = ["http://localhost:63342"]
+# CORS configuration via environment variables
+#
+# CORS_ALLOW_ORIGINS: comma-separated list of origins
+# CORS_ALLOW_ORIGIN_REGEX: regex pattern for allowed origins (overrides list when set)
+# CORS_ALLOW_CREDENTIALS: "true"/"false" (defaults to true)
+# CORS_ALLOW_METHODS: comma-separated HTTP methods or *
+# CORS_ALLOW_HEADERS: comma-separated headers or *
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+def _get_list(env_name: str, default: str):
+    raw = os.getenv(env_name, default)
+    if raw.strip() == "*":
+        return ["*"]
+    return [item.strip() for item in raw.split(",") if item.strip()]
+
+cors_allow_origins = _get_list("CORS_ALLOW_ORIGINS", "http://localhost:63342")
+cors_allow_origin_regex = os.getenv("CORS_ALLOW_ORIGIN_REGEX", "").strip() or None
+cors_allow_credentials = os.getenv("CORS_ALLOW_CREDENTIALS", "true").lower() == "true"
+cors_allow_methods = _get_list("CORS_ALLOW_METHODS", "*")
+cors_allow_headers = _get_list("CORS_ALLOW_HEADERS", "*")
+
+cors_kwargs = dict(
+    allow_credentials=cors_allow_credentials,
+    allow_methods=cors_allow_methods,
+    allow_headers=cors_allow_headers,
 )
+
+if cors_allow_origin_regex:
+    cors_kwargs.update({
+        "allow_origins": [],  # use regex instead
+        "allow_origin_regex": cors_allow_origin_regex,
+    })
+else:
+    cors_kwargs.update({
+        "allow_origins": cors_allow_origins,
+    })
+
+app.add_middleware(CORSMiddleware, **cors_kwargs)
 
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode("utf-8")).hexdigest()

@@ -96,7 +96,7 @@ source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
 pip install -r requirements.txt
 ```
 
-2) Create a `.env` file in the project root (or in `backend/`) with DB credentials:
+2) Create a `.env` file in the project root with DB credentials:
 
 ```
 DB_USER=your_user
@@ -118,7 +118,7 @@ export DB_NAME=your_database
 4) Start the backend API server (FastAPI app is defined in `backend/main.py` as `app`):
 
 ```
-uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn backend.main:app --reload --host localhost --port 8000
 ```
 
 5) Open the frontend:
@@ -129,7 +129,35 @@ uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 python -m http.server 8080 -d web
 ```
 
-By default, CORS in `backend/main.py` allows origin `http://localhost:63342` (JetBrains IDE). Adjust or extend `origins` as needed during development.
+By default, CORS is configurable via environment variables. If you do nothing, it allows `http://localhost:63342` (JetBrains IDE). See CORS configuration below.
+
+### CORS configuration
+
+The API enables CORS via FastAPI's `CORSMiddleware`. Configure allowed origins by environment variables (loaded from `.env`):
+
+- `CORS_ALLOW_ORIGINS` — comma‑separated list of exact origins (default: `http://localhost:63342`)
+- `CORS_ALLOW_ORIGIN_REGEX` — optional regex to match origins; if set, it overrides the list
+- `CORS_ALLOW_CREDENTIALS` — `true`/`false` (default: `true`) to allow cookies/auth headers
+- `CORS_ALLOW_METHODS` — comma‑separated HTTP methods or `*` (default: `*`)
+- `CORS_ALLOW_HEADERS` — comma‑separated headers or `*` (default: `*`)
+
+Examples:
+
+1) Allow a couple of sites during development:
+
+```
+CORS_ALLOW_ORIGINS=http://localhost:63342,http://127.0.0.1:8080,https://example.com
+```
+
+2) Allow requests from any http/https origin that is a public IP (optionally with a port):
+
+```
+CORS_ALLOW_ORIGIN_REGEX=^https?://(\d{1,3}\.){3}\d{1,3}(:\d+)?$
+```
+
+Security notes:
+- When `allow_credentials` is true (cookies), you cannot use `*` for origins; prefer explicit lists or a carefully crafted regex.
+- A very permissive regex can expose your API to the public internet. Use with caution and consider authentication and rate limiting.
 
 ## API Overview (selected endpoints)
 

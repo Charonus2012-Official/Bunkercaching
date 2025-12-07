@@ -2,7 +2,7 @@ import mariadb
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv("../.env")
 
 def create_connection():
     try:
@@ -17,7 +17,6 @@ def create_connection():
     except mariadb.Error as e:
         print(f"Chyba připojení: {e}")
         exit(1)
-        return None
 
 if __name__ == "__main__":
     db = create_connection()
