@@ -38,14 +38,13 @@ This README documents the current state of the project, how to run it locally, a
 
 - Python 3.10+ (tested version not documented; 3.10/3.11 recommended)
 - MariaDB server 10.x+
-- Python packages:
-  - `fastapi`
-  - `uvicorn` (for local dev server)
-  - `mariadb` (Python MariaDB connector)
-  - `python-dotenv`
-  - `python-jose[cryptography]`
+- Python packages: see `requirements.txt`
 
-Note: There is currently no `requirements.txt` in the repo.
+Install with:
+
+```
+pip install -r requirements.txt
+```
 
 ## Environment Variables
 
@@ -58,7 +57,15 @@ DB_HOST=localhost
 DB_NAME=
 ```
 
-JWT configuration in `backend/tokens.py` currently uses a hardcoded `SECRET_KEY`. For production, this should be moved to environment variables. See TODOs.
+JWT configuration in `backend/tokens.py` is configurable via environment variables:
+
+```
+JWT_SECRET=
+JWT_ALGORITHM=HS256
+JWT_EXPIRE_MINUTES=120
+```
+
+An example file is provided as `.env.example`.
 
 ## Database
 
@@ -86,7 +93,7 @@ There is also a helper script `backend/dbupload.py` that can populate tables fro
 ```
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
-pip install fastapi uvicorn mariadb python-dotenv "python-jose[cryptography]"
+pip install -r requirements.txt
 ```
 
 2) Create a `.env` file in the project root (or in `backend/`) with DB credentials:
@@ -99,6 +106,14 @@ DB_NAME=your_database
 ```
 
 3) Initialize the database using the SQL files in the repo (see Database section).
+   Alternatively, you can use the helper script:
+
+```
+export DB_USER=your_user
+export DB_PASSWORD=your_password
+export DB_NAME=your_database
+./scripts/db_init.sh
+```
 
 4) Start the backend API server (FastAPI app is defined in `backend/main.py` as `app`):
 
@@ -139,7 +154,15 @@ By default, CORS in `backend/main.py` allows origin `http://localhost:63342` (Je
 
 ## Tests
 
-No tests were found in the repository. TODO: add unit tests and/or integration tests for API endpoints and DB access.
+Basic tests are provided using `pytest`.
+
+Run locally:
+
+```
+pytest -q
+```
+
+Continuous Integration: A minimal GitHub Actions workflow runs tests on push/PR. See `.github/workflows/ci.yml`.
 
 ## Development Notes
 
@@ -149,14 +172,14 @@ No tests were found in the repository. TODO: add unit tests and/or integration t
 
 ## TODOs / Open Questions
 
-- Create `requirements.txt` (or `pyproject.toml`) with exact versions of dependencies.
-- Move JWT `SECRET_KEY`, algorithm, and expiry to environment variables; do not hardcode secrets.
-- Confirm supported Python version(s) and document them.
-- Provide instructions or scripts to provision the DB schema automatically (migrations, etc.).
+- Confirm tested Python version(s) on your environment and document them.
+- Consider adding migrations (e.g., Alembic) for DB schema management.
 - Clarify deployment approach (production server, reverse proxy, static hosting for `web/`).
-- Add tests and a CI workflow.
-- Add a license file (see next section).
+- Expand test coverage and integration tests for API and DB.
 
 ## License
 
-No license file was found. If you intend to open source this project, add a `LICENSE` file (e.g., MIT, Apache-2.0) and update this section accordingly.
+This project is licensed under the GNU General Public License v3.0 (GPL-3.0).
+
+- See the `LICENSE` file for the full text.
+- If you contribute, you agree that your contributions will be licensed under GPL-3.0.

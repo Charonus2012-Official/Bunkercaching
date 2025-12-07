@@ -2,11 +2,17 @@ from fastapi import HTTPException, Cookie
 from datetime import timedelta
 import datetime
 from jose import jwt, JWTError
+import os
+from dotenv import load_dotenv
 
 
-SECRET_KEY = "cachingBuNkEr__--51384524..-CbBc"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 120
+# Load environment variables from .env if present
+load_dotenv()
+
+# Fallbacks keep current behavior if env is not configured
+SECRET_KEY = os.getenv("JWT_SECRET", "cachingBuNkEr__--51384524..-CbBc")
+ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "120"))
 
 
 def create_access_token(data: dict, expires_delta: timedelta = None, remember: bool = False):

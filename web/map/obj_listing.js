@@ -6,6 +6,7 @@ window.addEventListener("OnRopikyClickEvent", (e) => {
     const sidebottom = document.getElementById("sidebottom");
     const bunker_form_id = document.getElementById("bunker_id")
     const sidebar = document.getElementById("sidebar")
+    const state = document.getElementById("state");
     const screenWidth = window.innerWidth;
     if (screenWidth < 729) {
         const map = document.getElementById("map");
@@ -15,6 +16,7 @@ window.addEventListener("OnRopikyClickEvent", (e) => {
     if (data.name === bunker_name.textContent) return;
 
     bunker_name.textContent = data.name;
+    state.textContent = "";
     bunker_site.setAttribute("href", data.website);
     bunker_site.textContent = "Více na: ropiky.cz";
     bunker_site.style.display = "block";
@@ -33,6 +35,7 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
     const sidebottom = document.getElementById("sidebottom");
     const bunker_form_id = document.getElementById("bunker_id")
     const sidebar = document.getElementById("sidebar")
+    const state = document.getElementById("state");
     const screenWidth = window.innerWidth;
     if (screenWidth < 729) {
         const map = document.getElementById("map");
@@ -41,6 +44,7 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
     sidebar.style.display = "flex";
     if (data.name === bunker_name.textContent) return;
 
+    state.textContent = displ(data.state);
     bunker_name.textContent = data.name;
     secret_bunker_name.textContent = data.secret_name;
     bunker_site.setAttribute("href", data.website);
@@ -50,6 +54,16 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
     bunker_form_id.setAttribute("value", data.name)
 
 });
+
+function displ(state) {
+    if (state === "") {
+        return "Stav: Neznámý"
+    } else {
+        return "Stav objektu: " + state.charAt(0).toUpperCase() + state.slice(1);
+    }
+}
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const sidebar = document.getElementById("sidebar");
