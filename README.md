@@ -10,9 +10,6 @@ This README documents the current state of the project, how to run it locally, a
 - Auth: Cookie-based JWT via `python-jose`
 - Config: `.env` loaded via `python-dotenv`
 - Frontend: Static HTML/CSS/JS, Leaflet map library
-- Package manager(s):
-  - Python: No `requirements.txt` or `pyproject.toml` found (see TODO)
-  - Frontend: No `package.json` found; frontend appears to be vanilla JS with CDN dependencies
 
 ## Project Structure
 
@@ -201,9 +198,7 @@ Continuous Integration: A minimal GitHub Actions workflow runs tests on push/PR.
 ## TODOs / Open Questions
 
 - Confirm tested Python version(s) on your environment and document them.
-- Consider adding migrations (e.g., Alembic) for DB schema management.
 - Clarify deployment approach (production server, reverse proxy, static hosting for `web/`).
-- Expand test coverage and integration tests for API and DB.
 
 ## License
 
