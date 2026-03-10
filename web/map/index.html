@@ -15,7 +15,7 @@
 <div id="app">
     <nav id="navbar"></nav>
     <script src="../navbar.js"></script>
-  <script>
+  <script> // Set the navbar to static so it doesn't stick!
     document.addEventListener("DOMContentLoaded", () => {
         const navbar = document.getElementById("navbar");
         navbar.style.position = "static"; // default
@@ -34,8 +34,9 @@
             <p class="center"><a href="" id="bunker-site" class="mlink">Více na:</a></p>
         </div>
         <div id="sidebottom">
-            <form action="/Bunkercaching/logs/log/", method="get">
+            <form action="/logs/log/", method="get">
                 <input type="hidden" name="bunker_id" id="bunker_id" value="">
+                <input type="hidden" name="type" id="bunker_type" value="">
                 <input type="submit" value="Logovat">
             </form>
         </div>

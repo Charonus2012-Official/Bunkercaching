@@ -215,3 +215,29 @@ def search(prompt: str):
 def log():
     pass
 
+
+@app.get("/id")
+def get_by_id(id: int, type: str):
+    conn = create_connection()
+    if conn:
+        cur = conn.cursor()
+        if type == "lo":
+            try:
+                cur.execute("SELECT id, name, web, latitude, longitude FROM ropiky WHERE id = ?", (id,))
+                searches: list = []
+                for row in cur:
+                    searches.append(row)
+                return {"output": searches[0]}
+            except mariadb.Error as e:
+                return {"message": e}
+        elif type == "to":
+            try:
+                cur.execute("SELECT id, name, secret_name, website, state, latitude, longitude FROM bunkry WHERE id = ?", (id,))
+                searches: list = []
+                for row in cur:
+                    searches.append(row)
+                return {"output": searches[0]}
+            except mariadb.Error as e:
+                return {"message": e}
+        else:
+            return {"message": "Wrong type!"}

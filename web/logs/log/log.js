@@ -1,16 +1,36 @@
-document.addEventListener("DOMContentLoaded", function() {
+window.onload = function() {
+    console.log("DOMContentLoaded");
+
+
+
     const title = document.getElementById("tit");
-    const title2 = document.getElementById("bi");
+    const bi = document.getElementById("bi");
     const urlParams = new URLSearchParams(window.location.search);
     let bunkerID;
+
     bunkerID = urlParams.get("bunker_id");
     if (bunkerID === null) {
-        window.location.href = "/Bunkercaching/logs"
+        window.location.href = "/logs/"
     } else {
         title.textContent = "Bunkercaching — " + bunkerID;
         bi.textContent = bunkerID;
     }
-});
+    fetch("http://localhost:8000/me", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            return {"good": response.ok}
+        })
+        .then(data => {
+            if (!data.good) {
+                window.location.href = "/auth/"
+            }
+        })
+};
 
 const stars = document.querySelectorAll('.star');
 const ratingText = document.getElementById('ratingText');

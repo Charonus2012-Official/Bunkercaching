@@ -7,6 +7,7 @@ window.addEventListener("OnRopikyClickEvent", (e) => {
     const bunker_form_id = document.getElementById("bunker_id")
     const sidebar = document.getElementById("sidebar")
     const state = document.getElementById("state");
+    const bunker_type = document.getElementById("bunker_type");
     const screenWidth = window.innerWidth;
     if (screenWidth < 729) {
         const map = document.getElementById("map");
@@ -18,10 +19,11 @@ window.addEventListener("OnRopikyClickEvent", (e) => {
     bunker_name.textContent = data.name;
     state.textContent = "";
     bunker_site.setAttribute("href", data.website);
-    bunker_site.textContent = "Více na: ropiky.cz";
+    bunker_site.textContent = "Více na: ropiky.net";
     bunker_site.style.display = "block";
     sidebottom.style.display = "inline";
-    bunker_form_id.setAttribute("value", data.name)
+    bunker_form_id.setAttribute("value", data.id);
+    bunker_type.setAttribute("value", "lo");
 
 
 
@@ -36,6 +38,7 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
     const bunker_form_id = document.getElementById("bunker_id")
     const sidebar = document.getElementById("sidebar")
     const state = document.getElementById("state");
+    const bunker_type = document.getElementById("bunker_type");
     const screenWidth = window.innerWidth;
     if (screenWidth < 729) {
         const map = document.getElementById("map");
@@ -51,7 +54,8 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
     bunker_site.textContent = "Více na: opevneni.cz";
     bunker_site.style.display = "block";
     sidebottom.style.display = "inline";
-    bunker_form_id.setAttribute("value", data.name)
+    bunker_form_id.setAttribute("value", data.id);
+    bunker_type.setAttribute("value", "to");
 
 });
 

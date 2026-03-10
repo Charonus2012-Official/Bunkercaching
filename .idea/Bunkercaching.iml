@@ -2,7 +2,7 @@
 <module type="WEB_MODULE" version="4">
   <component name="FacetManager">
     <facet type="Python" name="Python facet">
-      <configuration sdkName="Python 3.13 (.venv)" />
+      <configuration sdkName="uv (Bunkercaching)" />
     </facet>
   </component>
   <component name="NewModuleRootManager">
@@ -21,7 +21,7 @@
     <orderEntry type="library" name="leaflet" level="application" />
     <orderEntry type="library" name="font-awesome" level="application" />
     <orderEntry type="library" name="leaflet" level="application" />
-    <orderEntry type="library" name="Python 3.13 (.venv) interpreter library" level="application" />
     <orderEntry type="library" name="leaflet" level="application" />
+    <orderEntry type="library" name="uv (Bunkercaching) interpreter library" level="application" />
   </component>
 </module>

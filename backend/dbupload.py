@@ -1,33 +1,51 @@
-from backend.dbh import create_connection
+from dbh import create_connection
 import mariadb
+import json
 
 
 def ropiky():
-    with open("../web/data/geodata/ropiky.geojson", "r") as f:
-        ropikygeo: dict = eval(f.read())
+    with open("./ropiky.json", "r", encoding="UTF-8") as f:
+        ropikygeo = json.load(f)
 
-    features = ropikygeo["features"]
+    ropiks = ropikygeo["ropiky"]
     conn = create_connection()
     if conn:
         cur = conn.cursor()
-        for f in features:
+        for r in ropiks:
+            d = r["data"]
+            c = r["coords"]
             try:
-                properties = f["properties"]
-                name = properties["name"]
-                lat, lng = f["geometry"]["coordinates"]
-                web = properties["website"]
-            except:
-                continue
-            try:
-                cur.execute("INSERT INTO ropiky (name, web, museum, latitude, longitude) VALUES (?, ?, ?, ?, ?)", (name, web, 0, lng, lat))
-            except:
-                print("Duplicate entry")
+                cur.execute("""
+                INSERT INTO ropiky (ropiky_id, vz36, name, sbor, úsek, řop, typ, odolnost, mnm, betonáž, krychelná, stav_1938, stav_dnes, latitude, longitude)
+                VALUES
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    r["id"],
+                    r["vz36"],
+                    r["name"],
+                    d["sbor"],
+                    d["úsek"],
+                    d["číslování"]["řop"],
+                    d["typ"],
+                    d["odolnost"],
+                    d["nadmořská_výska"],
+                    d["datum_betonáže"],
+                    d["krychelná_pevnost"],
+                    d["stav_1938"],
+                    d["stav_dnes"],
+                    c["latitude"],
+                    c["longitude"]
+                )
+                )
+            except Exception as e:
+                print(e)
         conn.commit()
     else:
         print("Problem")
 
 def bunkry():
-    with open("./bunkers.json", "r") as f:
+    with open("bunkers.json", "r", encoding="UTF-8") as f:
         features: dict = eval(f.read())
     conn = create_connection()
     if conn:
@@ -55,4 +73,4 @@ def bunkry():
         conn.commit()
 
 if __name__ == "__main__":
-    bunkry()
+    ropiky()

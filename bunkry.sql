@@ -1,4 +1,3 @@
-
 create table bunkry
 (
     id          bigint auto_increment

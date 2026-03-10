@@ -54,7 +54,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 
     const result = await response.json();
     if (result.type === "scs" && result.msg === "success") {
-        window.location.href = "/Bunkercaching/"
+        window.location.href = "/"
     } else {
         const h2 = document.getElementById("err_login");
         h2.setAttribute("class", result.type);

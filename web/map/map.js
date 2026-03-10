@@ -120,20 +120,39 @@ async function getRopiky() {
 
 
         data.ropiky.forEach(r => {
-            const id = r[0]
-            const name = r[1]
-            const website = r[2];
-            const museum = r[3];
-            const lat = r[4];
-            const lng = r[5];
+            const id = r[0];
+            const ropiky_id = r[1];
+            const vz36 = r[2];
+            const name = r[3];
+            const sbor = r[4];
+            const úsek = r[5];
+            const řop = r[6];
+            const typ = r[7];
+            const odolnost = r[8];
+            const mnm = r[9];
+            const betonáž = r[10];
+            const krychelná = r[11];
+            const stav_1938 = r[12];
+            const stav_dnes = r[13];
+            const lat = r[14];
+            const lng = r[15];
 
             const marker = L.marker([lat, lng], {icon: ropikIcon});
             marker.addTo(map);
             marker.on("click", function(e) {
 
                 const ropikyEvent = new CustomEvent("OnRopikyClickEvent", { detail: {
+                    id: ropiky_id,
                     name: name,
-                    website: website
+                    vz36: vz36,
+                    sbor: sbor,
+                    úsek: úsek,
+                    typ: typ,
+                    odolnost: odolnost,
+                    mnm: mnm,
+                    stav_1938: stav_1938,
+                    stav_dnes: stav_dnes,
+                    website: "https://ropiky.net/dbase_objekt.php?id=" + ropiky_id
                 }});
                 window.dispatchEvent(ropikyEvent);
             });
@@ -179,6 +198,7 @@ async function getBunkry() {
             const museum = r[6];
             const lat = r[7];
             const lng = r[8];
+
             if (state == "postaven") {
                 var marker = L.marker([lat, lng], {icon: bunkrIcon});
             } else {
@@ -187,6 +207,7 @@ async function getBunkry() {
             marker.addTo(map);
             marker.on("click", function(e) {
                 const bunkryEvent = new CustomEvent("OnBunkryClickEvent", { detail: {
+                        id: op_id,
                         name: name,
                         secret_name: secret_name,
                         website: website,
