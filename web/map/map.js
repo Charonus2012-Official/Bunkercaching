@@ -1,6 +1,4 @@
 // Settings
-const GEODATA = "../data/geodata"; // NO SLASH AT THE END
-
 const ropikyZoomLevel = 10;
 const bunkryZoomLevel = 8;
 
