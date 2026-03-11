@@ -11,8 +11,7 @@ This README documents the current state of the project, how to run it locally, a
 - Config: `.env` loaded via `python-dotenv`
 - Frontend: Static HTML/CSS/JS, Leaflet map library
 - Package manager(s):
-  - Python: No `requirements.txt` or `pyproject.toml` found (see TODO)
-  - Frontend: No `package.json` found; frontend appears to be vanilla JS with CDN dependencies
+  - Python: `requirements.txt` or `pyproject.toml` for uv
 
 ## Project Structure
 
@@ -28,8 +27,7 @@ This README documents the current state of the project, how to run it locally, a
 │  ├─ auth/                # Authentication-related JS
 │  ├─ about/               # Static content
 │  └─ data/                # Static data (images, logos, geodata)
-├─ common/                 # Domain data (e.g., bunkers)
-├─ data/                   # MariaDB data directories (local DB files) — not needed for deployment
+├─ logo                    # Contains logos
 ├─ *.sql                   # SQL schema/data files (bunkry.sql, ropiky.sql, users.sql, logs.sql)
 └─ README.md
 ```
@@ -40,10 +38,15 @@ This README documents the current state of the project, how to run it locally, a
 - MariaDB server 10.x+
 - Python packages: see `requirements.txt`
 
-Install with:
+Install with pip:
 
 ```
 pip install -r requirements.txt
+```
+
+Install with uv:
+```
+uv add -r requirements.txt
 ```
 
 ## Environment Variables
@@ -90,10 +93,17 @@ There is also a helper script `backend/dbupload.py` that can populate tables fro
 
 1) Create and populate a Python virtual environment, then install dependencies:
 
+With python virtualvenv
 ```
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
 pip install -r requirements.txt
+```
+With uv:
+```
+uv venv
+source .venv/bin/activate # Windows: .venv\Scripts\activate
+uv add -r requirements.txt
 ```
 
 2) Create a `.env` file in the project root with DB credentials:
@@ -118,7 +128,7 @@ export DB_NAME=your_database
 4) Start the backend API server (FastAPI app is defined in `backend/main.py` as `app`):
 
 ```
-uvicorn backend.main:app --reload --host localhost --port 8000
+python -m uvicorn backend.main:app --reload --host localhost --port 8000
 ```
 
 5) Open the frontend:
@@ -173,37 +183,15 @@ Security notes:
 ## Scripts and Utilities
 
 - `backend/dbupload.py`
-  - `bunkry()` — imports items from `backend/bunkers.json` into `bunkry` table
-  - `ropiky()` — imports from `web/data/geodata/ropiky.geojson` into `ropiky` table
-  - Run as a script to execute `bunkry()` by default:
+  - After having the db setup you can run this to load the database with bunkers:
     ```
     python -m backend.dbupload
     ```
-
-## Tests
-
-Basic tests are provided using `pytest`.
-
-Run locally:
-
-```
-pytest -q
-```
-
-Continuous Integration: A minimal GitHub Actions workflow runs tests on push/PR. See `.github/workflows/ci.yml`.
-
 ## Development Notes
 
 - Frontend depends on CDN links for Leaflet and Google Fonts in `web/map/index.html`.
 - Authentication uses JWT stored in an `HttpOnly` cookie.
-- The CORS `origins` list is currently limited to `http://localhost:63342`.
-
-## TODOs / Open Questions
-
-- Confirm tested Python version(s) on your environment and document them.
-- Consider adding migrations (e.g., Alembic) for DB schema management.
-- Clarify deployment approach (production server, reverse proxy, static hosting for `web/`).
-- Expand test coverage and integration tests for API and DB.
+- The CORS `origins` list is currently limited to `http://localhost:8080`.
 
 ## License
 

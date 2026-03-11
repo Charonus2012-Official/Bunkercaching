@@ -74,3 +74,4 @@ def bunkry():
 
 if __name__ == "__main__":
     ropiky()
+    bunkry()
