@@ -179,6 +179,7 @@ Security notes:
 - `GET /ropiky?lat_one=...&lng_one=...&lat_two=...&lng_two=...` — returns ropíky in a bounding box
 - `GET /bunkry?lat_one=...&lng_one=...&lat_two=...&lng_two=...` — returns bunkry in a bounding box
 - `GET /search?prompt=<name>` — returns one bunker by exact name
+- `GET /id?id=<opevneni_id(to)/ropiky_id(lo)>&type=<type "lo/to">` — returns the entire row from DB
 
 ## Scripts and Utilities
 
