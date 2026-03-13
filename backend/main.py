@@ -223,18 +223,18 @@ def get_by_id(id: int, type: str):
         cur = conn.cursor()
         if type == "lo":
             try:
-                cur.execute("SELECT id, name, web, latitude, longitude FROM ropiky WHERE id = ?", (id,))
+                cur.execute("SELECT * FROM ropiky WHERE ropiky_id = ?", (id,))
                 searches: list = []
-                for row in cur:
+                for row in cur.fetchall():
                     searches.append(row)
                 return {"output": searches[0]}
             except mariadb.Error as e:
                 return {"message": e}
         elif type == "to":
             try:
-                cur.execute("SELECT id, name, secret_name, website, state, latitude, longitude FROM bunkry WHERE id = ?", (id,))
+                cur.execute("SELECT * FROM bunkry WHERE opevneni_id = ?", (id,))
                 searches: list = []
-                for row in cur:
+                for row in cur.fetchall():
                     searches.append(row)
                 return {"output": searches[0]}
             except mariadb.Error as e:
