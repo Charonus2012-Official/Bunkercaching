@@ -13,7 +13,8 @@
 <nav id="navbar"></nav>
 <h1 id="bi"></h1>
 <form id="logForm">
-    <input type="hidden" name="bunker_id" value="K-Bg-S 12">
+    <input type="hidden" name="bunker_id" id="bunker_id">
+    <input type="hidden" name="type" id="type">
     <label for="log_text"></label>
     <textarea
             name="log_text"
@@ -23,8 +24,13 @@
             required
     ></textarea>
     <div class="checkbox-container">
-        <input type="checkbox" name="concept" id="ios-checkbox" class="ios-checkbox">
-        <label for="ios-checkbox" class="ios-label">Koncept</label>
+        <div class="checkb">
+            <label>
+                <input type="checkbox" name="concept" value="true">
+            </label>
+            Koncept
+        </div>
+        <br>
         <input type="submit" value="Logovat nebo uložit koncept">
     </div>
 

@@ -1,4 +1,4 @@
-window.onload = function() {
+window.addEventListener("load", function() {
 
 
     const title = document.getElementById("tit");
@@ -46,9 +46,32 @@ window.onload = function() {
         if (bunkerType === "lo") {
             bunkerName = data["output"][3];
         } else {
-            bunkerName = data["output"][1] + " - " + data["output"][2];
+            bunkerName = data["output"][2] + " — " + data["output"][3];
         }
         title.textContent = "Bunkercaching — " + bunkerName;
         bi.textContent = bunkerName;
     });
-};
+
+    document.getElementById("bunker_id").value = bunkerID;
+    document.getElementById("type").value = bunkerType;
+
+});
+
+document.getElementById("logForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const data = new FormData(this);
+    fetch("http://localhost:8000/log", {
+        method: "POST",
+        credentials: "include",
+        body: data
+    }).then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+    }).then(data => {
+        if (data.message === "log put in") {
+            window.location.href = "/logs/"
+        }
+    })
+});

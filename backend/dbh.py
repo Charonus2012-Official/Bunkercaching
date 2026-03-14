@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv("../.env")
 
+
 def create_connection():
     try:
         conn = mariadb.connect(
@@ -11,12 +12,13 @@ def create_connection():
             password=os.getenv("DB_PASSWORD"),
             host=os.getenv("DB_HOST"),
             port=3306,
-            database=os.getenv("DB_NAME")
+            database=os.getenv("DB_NAME"),
         )
         return conn
     except mariadb.Error as e:
         print(f"Chyba připojení: {e}")
         exit(1)
+
 
 if __name__ == "__main__":
     db = create_connection()
@@ -28,4 +30,3 @@ if __name__ == "__main__":
 
         cur.close()
         db.close()
-

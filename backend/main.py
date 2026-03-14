@@ -21,11 +21,13 @@ app = FastAPI()
 # CORS_ALLOW_METHODS: comma-separated HTTP methods or *
 # CORS_ALLOW_HEADERS: comma-separated headers or *
 
+
 def _get_list(env_name: str, default: str):
     raw = os.getenv(env_name, default)
     if raw.strip() == "*":
         return ["*"]
     return [item.strip() for item in raw.split(",") if item.strip()]
+
 
 cors_allow_origins = _get_list("CORS_ALLOW_ORIGINS", "http://localhost:63342")
 cors_allow_origin_regex = os.getenv("CORS_ALLOW_ORIGIN_REGEX", "").strip() or None
@@ -40,19 +42,25 @@ cors_kwargs = dict(
 )
 
 if cors_allow_origin_regex:
-    cors_kwargs.update({
-        "allow_origins": [],  # use regex instead
-        "allow_origin_regex": cors_allow_origin_regex,
-    })
+    cors_kwargs.update(
+        {
+            "allow_origins": [],  # use regex instead
+            "allow_origin_regex": cors_allow_origin_regex,
+        }
+    )
 else:
-    cors_kwargs.update({
-        "allow_origins": cors_allow_origins,
-    })
+    cors_kwargs.update(
+        {
+            "allow_origins": cors_allow_origins,
+        }
+    )
 
 app.add_middleware(CORSMiddleware, **cors_kwargs)
 
+
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
+
 
 @app.get("/", response_class=HTMLResponse)
 def read_root():
@@ -69,12 +77,13 @@ def read_root():
     """
     return html_content
 
+
 @app.post("/login")
 def login(
-response: Response,
-username: str = Form(...),
-password: str = Form(...),
-remember: str = Form(...)
+    response: Response,
+    username: str = Form(...),
+    password: str = Form(...),
+    remember: str = Form(...),
 ):
     conn = create_connection()
     if conn:
@@ -97,8 +106,8 @@ remember: str = Form(...)
                         httponly=True,
                         secure=False,
                         samesite="lax",
-                        max_age=3600*2,
-                        expires=3600*2
+                        max_age=3600 * 2,
+                        expires=3600 * 2,
                     )
                 else:
                     response.set_cookie(
@@ -106,7 +115,7 @@ remember: str = Form(...)
                         value=token,
                         httponly=True,
                         secure=False,
-                        samesite="lax"
+                        samesite="lax",
                     )
                 return {"type": "scs", "msg": "success"}
             else:
@@ -120,10 +129,10 @@ remember: str = Form(...)
 
 @app.post("/signup")
 def signup(
-        username: str = Form(...),
-        email: str = Form(...),
-        password: str = Form(...),
-        confirm_password: str = Form(...)
+    username: str = Form(...),
+    email: str = Form(...),
+    password: str = Form(...),
+    confirm_password: str = Form(...),
 ):
     if password != confirm_password:
         return {"type": "err", "msg": "Hesla se neshodují"}
@@ -146,7 +155,14 @@ def signup(
         except mariadb.Error as e:
             return {"type": "err", "msg": "Nevim co se stalo"}
         try:
-            cur.execute("INSERT INTO users SET username = ?, email = ?, pwd = ?", (username, email, hash_password(password),))
+            cur.execute(
+                "INSERT INTO users SET username = ?, email = ?, pwd = ?",
+                (
+                    username,
+                    email,
+                    hash_password(password),
+                ),
+            )
             conn.commit()
         except mariadb.Error as e:
             cur.close()
@@ -157,14 +173,17 @@ def signup(
         return {"type": "scs", "msg": "Podařilo se, můžete se přihlásit"}
     return {"type": "err", "msg": "Chyba připojení do databáze"}
 
+
 @app.post("/me")
 def me(user: dict = Depends(get_current_user)):
     return {"username": user["username"]}
+
 
 @app.post("/logout")
 def logout(response: Response):
     response.delete_cookie("token")
     return {"message": "Logged out"}
+
 
 @app.get("/ropiky")
 def get_ropiky(lat_one: float, lng_one: float, lat_two: float, lng_two: float):
@@ -172,7 +191,15 @@ def get_ropiky(lat_one: float, lng_one: float, lat_two: float, lng_two: float):
     if conn:
         cur = conn.cursor()
         try:
-            cur.execute("SELECT * FROM ropiky WHERE latitude <= ? AND latitude >= ? AND longitude >= ? AND longitude <= ?;", (lat_one, lat_two, lng_one, lng_two,))
+            cur.execute(
+                "SELECT * FROM ropiky WHERE latitude <= ? AND latitude >= ? AND longitude >= ? AND longitude <= ?;",
+                (
+                    lat_one,
+                    lat_two,
+                    lng_one,
+                    lng_two,
+                ),
+            )
             ropiky: list = []
             for row in cur:
                 ropiky.append(row)
@@ -181,13 +208,22 @@ def get_ropiky(lat_one: float, lng_one: float, lat_two: float, lng_two: float):
             return {"message": e}
     return None
 
+
 @app.get("/bunkry")
 def get_bunkry(lat_one: float, lng_one: float, lat_two: float, lng_two: float):
     conn = create_connection()
     if conn:
         cur = conn.cursor()
         try:
-            cur.execute("SELECT * FROM bunkry WHERE latitude <= ? AND latitude >= ? AND longitude >= ? AND longitude <= ?;", (lat_one, lat_two, lng_one, lng_two,))
+            cur.execute(
+                "SELECT * FROM bunkry WHERE latitude <= ? AND latitude >= ? AND longitude >= ? AND longitude <= ?;",
+                (
+                    lat_one,
+                    lat_two,
+                    lng_one,
+                    lng_two,
+                ),
+            )
             ropiky: list = []
             for row in cur:
                 ropiky.append(row)
@@ -196,13 +232,16 @@ def get_bunkry(lat_one: float, lng_one: float, lat_two: float, lng_two: float):
             return {"message": e}
     return None
 
+
 @app.get("/search")
 def search(prompt: str):
     conn = create_connection()
     if conn:
         cur = conn.cursor()
         try:
-            cur.execute("SELECT name, latitude, longitude FROM bunkry WHERE name = ?", (prompt,))
+            cur.execute(
+                "SELECT name, latitude, longitude FROM bunkry WHERE name = ?", (prompt,)
+            )
             searches: list = []
             for row in cur:
                 searches.append(row)
@@ -212,8 +251,31 @@ def search(prompt: str):
 
 
 @app.post("/log")
-def log():
-    pass
+def log(
+    bunker_id: int = Form(...),
+    type: str = Form(...),
+    log_text: str = Form(...),
+    concept: str = Form("false"),
+    user: dict = Depends(get_current_user),
+):
+    conn = create_connection()
+    if conn:
+        cur = conn.cursor()
+        try:
+            cur.execute("SELECT id FROM users WHERE username = ?", (user["username"],))
+            user_id = cur.fetchone()[0]
+        except mariadb.Error:
+            return {"message": e}
+        try:
+            cur.execute(
+                "INSERT INTO logs SET type = ?, bunker_id = ?, log_text = ?, user_id = ?, is_concept = ?",
+                (type, bunker_id, log_text, user_id, int(concept == "true")),
+            )
+            conn.commit()
+        except mariadb.Error as e:
+            return {"message": e}
+
+        return {"message": "log put in"}
 
 
 @app.get("/id")

@@ -15,34 +15,36 @@ def ropiky():
             d = r["data"]
             c = r["coords"]
             try:
-                cur.execute("""
+                cur.execute(
+                    """
                 INSERT INTO ropiky (ropiky_id, vz36, name, sbor, úsek, řop, typ, odolnost, mnm, betonáž, krychelná, stav_1938, stav_dnes, latitude, longitude)
                 VALUES
                 (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
-                (
-                    r["id"],
-                    r["vz36"],
-                    r["name"],
-                    d["sbor"],
-                    d["úsek"],
-                    d["číslování"]["řop"],
-                    d["typ"],
-                    d["odolnost"],
-                    d["nadmořská_výska"],
-                    d["datum_betonáže"],
-                    d["krychelná_pevnost"],
-                    d["stav_1938"],
-                    d["stav_dnes"],
-                    c["latitude"],
-                    c["longitude"]
-                )
+                    (
+                        r["id"],
+                        r["vz36"],
+                        r["name"],
+                        d["sbor"],
+                        d["úsek"],
+                        d["číslování"]["řop"],
+                        d["typ"],
+                        d["odolnost"],
+                        d["nadmořská_výska"],
+                        d["datum_betonáže"],
+                        d["krychelná_pevnost"],
+                        d["stav_1938"],
+                        d["stav_dnes"],
+                        c["latitude"],
+                        c["longitude"],
+                    ),
                 )
             except Exception as e:
                 print(e)
         conn.commit()
     else:
         print("Problem")
+
 
 def bunkry():
     with open("bunkers.json", "r", encoding="UTF-8") as f:
@@ -64,13 +66,24 @@ def bunkry():
 
                 op_id = f["id"]
                 try:
-                    cur.execute("INSERT INTO bunkry (opevneni_id, name, secret_name, website, state, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                                (op_id, name, secret_name, website, state, lat, lng,))
+                    cur.execute(
+                        "INSERT INTO bunkry (opevneni_id, name, secret_name, website, state, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                        (
+                            op_id,
+                            name,
+                            secret_name,
+                            website,
+                            state,
+                            lat,
+                            lng,
+                        ),
+                    )
                 except mariadb.Error as e:
                     print(e)
             except mariadb.Error as e:
                 return {"message": e}
         conn.commit()
+
 
 if __name__ == "__main__":
     ropiky()
