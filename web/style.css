@@ -192,7 +192,88 @@ nav ul li a:hover {
 }
 
 #about {
+  padding: 2rem;
+  background-color: #f4f7f6;
+  min-height: calc(100vh - 60px);
+  display: flex;
+  justify-content: center;
+}
+
+#about .content-wrapper {
+  max-width: 800px;
+  background: white;
+  padding: 3rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  text-align: left;
+}
+
+#about h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  color: #222;
   text-align: center;
+}
+
+#about .subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 2.5rem;
+  text-align: center;
+  font-style: italic;
+}
+
+#about h2 {
+  font-size: 1.8rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #4CAF50;
+  border-bottom: 2px solid #eef2ef;
+  padding-bottom: 0.5rem;
+}
+
+#about p {
+  line-height: 1.7;
+  color: #444;
+  margin-bottom: 1rem;
+}
+
+#about .feature-list {
+  list-style: none;
+  padding: 0;
+}
+
+#about .feature-list li {
+  padding: 0.8rem;
+  background: #f9f9f9;
+  margin-bottom: 0.8rem;
+  border-left: 4px solid #4CAF50;
+  border-radius: 4px;
+}
+
+#about .feature-list li strong {
+  color: #222;
+}
+
+#about footer {
+  margin-top: 3rem;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #999;
+}
+
+@media (max-width: 728px) {
+  #about {
+    padding: 1rem;
+  }
+  #about .content-wrapper {
+    padding: 1.5rem;
+  }
+  #about h1 {
+    font-size: 2.2rem;
+  }
 }
 
 
