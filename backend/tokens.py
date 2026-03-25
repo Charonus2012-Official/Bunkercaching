@@ -7,7 +7,8 @@ from dotenv import load_dotenv
 
 
 # Load environment variables from .env if present
-load_dotenv("../.env")
+env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
+load_dotenv(env_path)
 
 # Fallbacks keep current behavior if env is not configured
 SECRET_KEY = os.getenv("JWT_SECRET", "cachingBuNkEr__--51384524..-CbBc")

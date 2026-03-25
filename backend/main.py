@@ -6,10 +6,15 @@ from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
-from dbh import create_connection
-from tokens import create_access_token, get_current_user
+try:
+    from .dbh import create_connection
+    from .tokens import create_access_token, get_current_user
+except ImportError, ValueError:
+    from dbh import create_connection
+    from tokens import create_access_token, get_current_user
 
-load_dotenv("../.env")
+env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
+load_dotenv(env_path)
 
 app = FastAPI()
 
@@ -29,11 +34,11 @@ def _get_list(env_name: str, default: str):
     return [item.strip() for item in raw.split(",") if item.strip()]
 
 
-cors_allow_origins = _get_list("CORS_ALLOW_ORIGINS", "http://localhost:63342")
+cors_allow_origins = _get_list("CORS_ALLOW_ORIGINS", "http://localhost:8080")
 cors_allow_origin_regex = os.getenv("CORS_ALLOW_ORIGIN_REGEX", "").strip() or None
-cors_allow_credentials = os.getenv("CORS_ALLOW_CREDENTIALS", "true").lower() == "true"
-cors_allow_methods = _get_list("CORS_ALLOW_METHODS", "*")
-cors_allow_headers = _get_list("CORS_ALLOW_HEADERS", "*")
+cors_allow_credentials = True
+cors_allow_methods = "*"
+cors_allow_headers = "*"
 
 cors_kwargs = dict(
     allow_credentials=cors_allow_credentials,
@@ -264,7 +269,7 @@ def log(
         try:
             cur.execute("SELECT id FROM users WHERE username = ?", (user["username"],))
             user_id = cur.fetchone()[0]
-        except mariadb.Error:
+        except mariadb.Error as e:
             return {"message": e}
         try:
             cur.execute(
