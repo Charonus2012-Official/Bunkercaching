@@ -103,7 +103,7 @@ With uv:
 ```
 uv venv
 source .venv/bin/activate # Windows: .venv\Scripts\activate
-uv add -r requirements.txt
+uv sync
 ```
 
 2) Create a `.env` file in the project root with DB credentials:
