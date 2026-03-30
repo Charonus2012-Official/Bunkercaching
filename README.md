@@ -2,7 +2,7 @@
 
 Bunkercaching is a small web application for exploring and logging Czech bunkers/fortifications. It consists of a Python FastAPI backend connected to a MariaDB database and a static frontend built with plain HTML/CSS/JavaScript using Leaflet for maps.
 
-This README documents the current state of the project, how to run it locally, and what still needs to be clarified (see TODOs).
+This README documents the current state of the project, how to run it locally.
 
 ## Stack
 - Backend: Python, FastAPI
@@ -49,6 +49,7 @@ pip install -r requirements.txt        # Install the packages
 Install with uv:
 ```
 uv venv                                # Create the uv virtualenv
+uv sync                                # Download all of the dependencies
 ```
 
 ## Environment Variables
@@ -70,7 +71,7 @@ JWT_ALGORITHM=HS256
 JWT_EXPIRE_MINUTES=120
 ```
 
-An example file is provided as `.env.example`.
+An example file is provided as `example.env`.
 
 ## Database
 
@@ -129,7 +130,7 @@ With uv:
 ```
 uv venv
 source .venv/bin/activate # Windows: .venv\Scripts\activate
-uv add -r requirements.txt
+uv sync
 ```
 
 2) Create a `.env` file in the project root with DB credentials:
