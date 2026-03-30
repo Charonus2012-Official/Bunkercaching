@@ -6,7 +6,7 @@ This README documents the current state of the project, how to run it locally, a
 
 ## Stack
 - Backend: Python, FastAPI
-- Database: MariaDB (MySQL-compatible)
+- Database: MariaDB (MySQL-incompatible)
 - Auth: Cookie-based JWT via `python-jose`
 - Config: `.env` loaded via `python-dotenv`
 - Frontend: Static HTML/CSS/JS, Leaflet map library
@@ -20,7 +20,8 @@ This README documents the current state of the project, how to run it locally, a
 ├─ backend/
 │  ├─ main.py              # FastAPI application with auth and data endpoints
 │  ├─ dbh.py               # MariaDB connection using env vars via python-dotenv
-│  ├─ tokens.py            # JWT creation/validation (SECRET_KEY currently hardcoded)
+│  ├─ tokens.py            # JWT creation/validation
+│  ├─ generator.py         # 
 │  └─ dbupload.py          # Utility to import bunkers/ropíky into DB from data files
 ├─ web/
 │  ├─ map/                 # Map UI (Leaflet) — entry: web/map/index.html
@@ -41,12 +42,13 @@ This README documents the current state of the project, how to run it locally, a
 Install with pip:
 
 ```
-pip install -r requirements.txt
+python -m venv .venv                   # Create the virtualvenv
+pip install -r requirements.txt        # Install the packages
 ```
 
 Install with uv:
 ```
-uv add -r requirements.txt
+uv venv                                # Create the uv virtualenv
 ```
 
 ## Environment Variables
@@ -77,79 +79,23 @@ Schema/data files are provided in the project root:
 - `ropiky.sql`
 - `users.sql`
 - `logs.sql`
+There is also some data about `ropiky` and `bunkry`
+- `backend/ropiky.json`
+- `backend/bunkers.json`
 
-You can import them into your MariaDB instance, e.g.:
-
-```
-mysql -u <user> -p <db_name> < bunkry.sql
-mysql -u <user> -p <db_name> < ropiky.sql
-mysql -u <user> -p <db_name> < users.sql
-mysql -u <user> -p <db_name> < logs.sql
-```
-
-There is also a helper script `backend/dbupload.py` that can populate tables from JSON/GeoJSON files in the `web/data` directory. Review the script before running it.
-
-## Running Locally
-
-1) Create and populate a Python virtual environment, then install dependencies:
-
-With python virtualvenv
-```
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
-pip install -r requirements.txt
-```
-With uv:
-```
-uv venv
-source .venv/bin/activate # Windows: .venv\Scripts\activate
-uv sync
-```
-
-2) Create a `.env` file in the project root with DB credentials:
+You can import the schema and populate the data of your MariaDB instance, e.g.:
 
 ```
-DB_USER=your_user
-DB_PASSWORD=your_password
-DB_HOST=localhost
-DB_NAME=your_database
+python -m backend.full_db_init
 ```
-
-3) Initialize the database using the SQL files in the repo (see Database section).
-   Alternatively, you can use the helper script:
-
-```
-export DB_USER=your_user
-export DB_PASSWORD=your_password
-export DB_NAME=your_database
-./scripts/db_init.sh
-```
-
-4) Start the backend API server (FastAPI app is defined in `backend/main.py` as `app`):
-
-```
-python -m uvicorn backend.main:app --reload --host localhost --port 8000
-```
-
-5) Open the frontend:
-- Option A: Open `web/map/index.html` directly in a browser for static testing.
-- Option B: Serve the `web/` directory with a simple static server (prevents some CORS/file access issues), e.g.:
-
-```
-python -m http.server 8080 -d web
-```
-
-By default, CORS is configurable via environment variables. If you do nothing, it allows `http://localhost:63342` (JetBrains IDE). See CORS configuration below.
+*Note: This also creates a new database `bunkercaching`*
 
 ### CORS configuration
 
 The API enables CORS via FastAPI's `CORSMiddleware`. Configure allowed origins by environment variables (loaded from `.env`):
 
-- `CORS_ALLOW_ORIGINS` — comma‑separated list of exact origins (default: `http://localhost:63342`)
+- `CORS_ALLOW_ORIGINS` — comma‑separated list of exact origins (default: `http://localhost:8080`)
 - `CORS_ALLOW_ORIGIN_REGEX` — optional regex to match origins; if set, it overrides the list
-- `CORS_ALLOW_CREDENTIALS` — `true`/`false` (default: `true`) to allow cookies/auth headers
-- `CORS_ALLOW_METHODS` — comma‑separated HTTP methods or `*` (default: `*`)
-- `CORS_ALLOW_HEADERS` — comma‑separated headers or `*` (default: `*`)
 
 Examples:
 
@@ -166,10 +112,58 @@ CORS_ALLOW_ORIGIN_REGEX=^https?://(\d{1,3}\.){3}\d{1,3}(:\d+)?$
 ```
 
 Security notes:
-- When `allow_credentials` is true (cookies), you cannot use `*` for origins; prefer explicit lists or a carefully crafted regex.
+- You cannot use `*` for origins; prefer explicit lists or a carefully crafted regex.
 - A very permissive regex can expose your API to the public internet. Use with caution and consider authentication and rate limiting.
 
-## API Overview (selected endpoints)
+## Running Locally
+
+1) Create and populate a Python virtual environment, then install dependencies:
+
+With python virtualvenv
+```
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+With uv:
+```
+uv venv
+source .venv/bin/activate # Windows: .venv\Scripts\activate
+uv add -r requirements.txt
+```
+
+2) Create a `.env` file in the project root with DB credentials:
+
+```
+DB_USER=your_user
+DB_PASSWORD=your_password
+DB_HOST=localhost
+DB_NAME=your_database
+```
+
+3) Initialize the database using the `backend/full_db_init.py`:
+
+```
+python -m backend.full_db_init
+```
+
+4) Start the backend API server (FastAPI app is defined in `backend/main.py` as `app`):
+
+```
+python -m uvicorn backend.main:app --reload --host localhost --port 8000
+```
+
+5) Open the frontend:
+- Option A: Open `web/map/index.html` directly in a browser for static testing.
+- Option B: Serve the `web/` directory with a simple static server (prevents some CORS/file access issues), e.g.:
+
+```
+python -m http.server 8080 -d web
+```
+
+By default, CORS is configurable via environment variables. If you do nothing, it allows `http://localhost:8080`. See CORS configuration below.
+
+## API Overview of the `uvicorn` server
 
 - `GET /` — simple HTML landing page for the API
 - `POST /login` — form fields: `username`, `password`, `remember`; sets JWT cookie on success
@@ -188,11 +182,11 @@ Security notes:
     ```
     python -m backend.dbupload
     ```
+	*Note: The helper script automatically populates the data*
 ## Development Notes
 
 - Frontend depends on CDN links for Leaflet and Google Fonts in `web/map/index.html`.
 - Authentication uses JWT stored in an `HttpOnly` cookie.
-- The CORS `origins` list is currently limited to `http://localhost:8080`.
 
 ## License
 
