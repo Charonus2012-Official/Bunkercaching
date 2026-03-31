@@ -1,8 +1,8 @@
 window.addEventListener("OnRopikyClickEvent", (e) => {
     const data = e.detail;
     const screenWidth = window.innerWidth;
-    const sidebar = document.getElementById("sidebar")
-    const sidetop = document.getElementById("sidetop")
+    const sidebar = document.getElementById("sidebar");
+    const sidetop = document.getElementById("sidetop");
 
     if (screenWidth < 729) {
         const map = document.getElementById("map");
@@ -11,23 +11,31 @@ window.addEventListener("OnRopikyClickEvent", (e) => {
 
     sidebar.style.display = "flex";
 
-    sidetop.innerHTML = ""
+    sidetop.innerHTML = "";
 
-    const bunker_name = document.createElement("h2")
-    const type = document.createElement("h4")
-    const bunker_site = document.createElement("a")
-    const state = document.createElement("p")
-    const odolnost = document.createElement("p")
-    const sbor = document.createElement("p")
-    const usek = document.createElement("p")
+    const bunker_name = document.createElement("h2");
+    const type = document.createElement("h4");
+    const bunker_site = document.createElement("a");
+    const state = document.createElement("p");
+    const odolnost = document.createElement("p");
+    const sbor = document.createElement("p");
+    const usek = document.createElement("p");
 
     bunker_name.className = "center";
-    type.className = "center"
-    sbor.className = "center"
-    usek.className = "center"
-    odolnost.className = "center"
+    type.className = "center";
+    sbor.className = "center";
+    usek.className = "center";
+    odolnost.className = "center";
     bunker_site.className = "center mlink";
     state.className = "center";
+    bunker_site.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.open(
+            bunker_site.getAttribute("href"),
+            "popup",
+            "width=1200;height=600",
+        );
+    });
 
     sidetop.appendChild(bunker_name);
     sidetop.appendChild(type);
@@ -40,9 +48,6 @@ window.addEventListener("OnRopikyClickEvent", (e) => {
     const bunker_form_id = document.getElementById("bunker_id");
     const bunker_type = document.getElementById("bunker_type");
 
-
-
-
     if (data.name === bunker_name.textContent) return;
     bunker_name.textContent = data.name;
 
@@ -50,25 +55,24 @@ window.addEventListener("OnRopikyClickEvent", (e) => {
 
     usek.textContent = data.úsek;
 
-    type.textContent = "LO vz. " + (data.vz36 === 1 ? "36" : "37") + " " + data.typ;
+    type.textContent =
+        "LO vz. " + (data.vz36 === 1 ? "36" : "37") + " " + data.typ;
     if (data.odolnost !== "") {
         odolnost.textContent = "Odolnost: " + data.odolnost;
     }
-    state.textContent = "Stav objektu: " + data.stav_dnes.charAt(0).toUpperCase() + data.stav_dnes.slice(1);
-
+    state.textContent =
+        "Stav objektu: " +
+        data.stav_dnes.charAt(0).toUpperCase() +
+        data.stav_dnes.slice(1);
 
     bunker_site.setAttribute("href", data.website);
     bunker_site.textContent = "Více na: ropiky.net";
     bunker_site.style.display = "block";
 
-
     const sidebottom = document.getElementById("sidebottom");
     sidebottom.style.display = "inline";
     bunker_form_id.setAttribute("value", data.id);
     bunker_type.setAttribute("value", "lo");
-
-
-
 });
 
 window.addEventListener("OnBunkryClickEvent", (e) => {
@@ -76,10 +80,9 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
 
     const screenWidth = window.innerWidth;
 
-    const sidebar = document.getElementById("sidebar")
+    const sidebar = document.getElementById("sidebar");
     const sidebottom = document.getElementById("sidebottom");
     const sidetop = document.getElementById("sidetop");
-
 
     if (screenWidth < 729) {
         const map = document.getElementById("map");
@@ -88,15 +91,23 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
 
     sidetop.innerHTML = "";
 
-    const bunker_name = document.createElement("h1")
-    const secret_bunker_name = document.createElement("h2")
-    const state = document.createElement("p")
-    const bunker_site = document.createElement("a")
+    const bunker_name = document.createElement("h1");
+    const secret_bunker_name = document.createElement("h2");
+    const state = document.createElement("p");
+    const bunker_site = document.createElement("a");
 
     bunker_name.className = "center";
     secret_bunker_name.className = "center";
     state.className = "center";
     bunker_site.className = "center mlink";
+    bunker_site.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.open(
+            bunker_site.getAttribute("href"),
+            "popup",
+            "width=1200;height=600",
+        );
+    });
 
     sidetop.appendChild(bunker_name);
     sidetop.appendChild(secret_bunker_name);
@@ -104,7 +115,7 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
     sidetop.appendChild(bunker_site);
 
     const bunker_type = document.getElementById("bunker_type");
-    const bunker_form_id = document.getElementById("bunker_id")
+    const bunker_form_id = document.getElementById("bunker_id");
 
     sidebar.style.display = "flex";
     if (data.name === bunker_name.textContent) return;
@@ -118,18 +129,17 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
     sidebottom.style.display = "inline";
     bunker_form_id.setAttribute("value", data.id);
     bunker_type.setAttribute("value", "to");
-
 });
 
 function displ(state) {
     if (state === "") {
-        return "Stav: Neznámý"
+        return "Stav: Neznámý";
     } else {
-        return "Stav objektu: " + state.charAt(0).toUpperCase() + state.slice(1);
+        return (
+            "Stav objektu: " + state.charAt(0).toUpperCase() + state.slice(1)
+        );
     }
 }
-
-
 
 document.addEventListener("DOMContentLoaded", () => {
     const sidebar = document.getElementById("sidebar");
