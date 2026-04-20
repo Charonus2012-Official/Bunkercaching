@@ -1,31 +1,33 @@
-const link = "http://localhost:8000"
+const link = "/api";
 
-window.onload = function() {
-    fetch(`${link}/me`, {
-        method: "POST",
-        credentials: "include" // důležité pro poslání cookie
+window.onload = function () {
+  fetch(`${link}/me`, {
+    method: "POST",
+    credentials: "include", // důležité pro poslání cookie
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Nejste přihlášen");
+      }
+      return response.json();
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Nejste přihlášen");
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Přihlášen jako:", data.username);
-            document.getElementById("status").innerText = "Přihlášen: " + data.username;
-        });
+    .then((data) => {
+      console.log("Přihlášen jako:", data.username);
+      document.getElementById("status").innerText =
+        "Přihlášen: " + data.username;
+    });
 };
 
-
-document.getElementById("signupForm").addEventListener("submit", async function (e) {
+document
+  .getElementById("signupForm")
+  .addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const formData = new FormData(this);
 
     const response = await fetch(`${link}/signup`, {
-        method: "POST",
-        body: formData
+      method: "POST",
+      body: formData,
     });
 
     const result = await response.json();
@@ -33,31 +35,32 @@ document.getElementById("signupForm").addEventListener("submit", async function 
     const h2 = document.getElementById("err_signup");
     h2.setAttribute("class", result.type);
     if (result.type === "scs") {
-        document.querySelectorAll(".signlog").forEach(el => {
-            el.value = "";
-        });
+      document.querySelectorAll(".signlog").forEach((el) => {
+        el.value = "";
+      });
     }
     h2.textContent = result.msg;
-});
+  });
 
-document.getElementById("loginForm").addEventListener("submit", async function (e) {
+document
+  .getElementById("loginForm")
+  .addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const formData = new FormData(this);
 
     const response = await fetch(`${link}/login`, {
-        method: "POST",
-        credentials: 'include',
-        body: formData
+      method: "POST",
+      credentials: "include",
+      body: formData,
     });
-
 
     const result = await response.json();
     if (result.type === "scs" && result.msg === "success") {
-        window.location.href = "/"
+      window.location.href = "/";
     } else {
-        const h2 = document.getElementById("err_login");
-        h2.setAttribute("class", result.type);
-        h2.textContent = result.msg;
+      const h2 = document.getElementById("err_login");
+      h2.setAttribute("class", result.type);
+      h2.textContent = result.msg;
     }
-});
+  });

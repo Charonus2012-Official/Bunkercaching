@@ -35,9 +35,9 @@ This README documents the current state of the project, how to run it locally.
 
 ## Requirements
 
-- Python 3.10+ (tested version not documented; 3.10/3.11 recommended)
+- Python 3.10+
 - MariaDB server 10.x+
-- Python packages: see `requirements.txt`
+- Python packages: see `requirements.txt` or `pyproject.toml`
 
 Install with pip:
 
@@ -148,33 +148,25 @@ DB_NAME=your_database
 python -m backend.full_db_init
 ```
 
-4) Start the backend API server (FastAPI app is defined in `backend/main.py` as `app`):
+4) Start the server (FastAPI app is defined in `backend/main.py` as `app`):
 
 ```
-python -m uvicorn backend.main:app --reload --host localhost --port 8000
+python -m uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-5) Open the frontend:
-- Option A: Open `web/map/index.html` directly in a browser for static testing.
-- Option B: Serve the `web/` directory with a simple static server (prevents some CORS/file access issues), e.g.:
-
-```
-python -m http.server 8080 -d web
-```
-
-By default, CORS is configurable via environment variables. If you do nothing, it allows `http://localhost:8080`. See CORS configuration below.
+By default, CORS is configurable via environment variables. If you do nothing, it allows `http://localhost:8000`. See CORS configuration below.
 
 ## API Overview of the `uvicorn` server
-
-- `GET /` — simple HTML landing page for the API
-- `POST /login` — form fields: `username`, `password`, `remember`; sets JWT cookie on success
-- `POST /signup` — form fields: `username`, `email`, `password`, `confirm_password`
-- `POST /me` — returns current user (requires valid cookie token)
-- `POST /logout` — clears auth cookie
-- `GET /ropiky?lat_one=...&lng_one=...&lat_two=...&lng_two=...` — returns ropíky in a bounding box
-- `GET /bunkry?lat_one=...&lng_one=...&lat_two=...&lng_two=...` — returns bunkry in a bounding box
-- `GET /search?prompt=<name>` — returns one bunker by exact name
-- `GET /id?id=<opevneni_id(to)/ropiky_id(lo)>&type=<type "lo/to">` — returns the entire row from DB
+- `GET /` — Frontend
+- `GET /api/` — simple HTML landing page for the API
+- `POST /api/login` — form fields: `username`, `password`, `remember`; sets JWT cookie on success
+- `POST /api/signup` — form fields: `username`, `email`, `password`, `confirm_password`
+- `POST /api/me` — returns current user (requires valid cookie token)
+- `POST /api/logout` — clears auth cookie
+- `GET /api/ropiky?lat_one=...&lng_one=...&lat_two=...&lng_two=...` — returns ropíky in a bounding box
+- `GET /api/bunkry?lat_one=...&lng_one=...&lat_two=...&lng_two=...` — returns bunkry in a bounding box
+- `GET /api/search?prompt=<name>` — returns one bunker by exact name
+- `GET /api/id?id=<opevneni_id(to)/ropiky_id(lo)>&type=<type "lo/to">` — returns the entire row from DB
 
 ## Scripts and Utilities
 
@@ -183,7 +175,7 @@ By default, CORS is configurable via environment variables. If you do nothing, i
     ```
     python -m backend.dbupload
     ```
-	*Note: The helper script automatically populates the data*
+	*Note: The helper `full_db_init.py` script automatically populates the data, so if you ran that script dont run this one!*
 ## Development Notes
 
 - Frontend depends on CDN links for Leaflet and Google Fonts in `web/map/index.html`.

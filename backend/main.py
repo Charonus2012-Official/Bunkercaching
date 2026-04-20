@@ -1,10 +1,12 @@
-import mariadb
 import hashlib
 import os
-from fastapi import FastAPI, Form, Response, Depends
-from fastapi.responses import HTMLResponse
-from fastapi.middleware.cors import CORSMiddleware
+
+import mariadb
 from dotenv import load_dotenv
+from fastapi import Depends, FastAPI, Form, Response
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 try:
     from .dbh import create_connection
@@ -17,6 +19,7 @@ env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
 load_dotenv(env_path)
 
 app = FastAPI()
+
 
 # CORS configuration via environment variables
 #
@@ -34,7 +37,7 @@ def _get_list(env_name: str, default: str):
     return [item.strip() for item in raw.split(",") if item.strip()]
 
 
-cors_allow_origins = _get_list("CORS_ALLOW_ORIGINS", "http://localhost:8080")
+cors_allow_origins = _get_list("CORS_ALLOW_ORIGINS", "http://localhost:8000")
 cors_allow_origin_regex = os.getenv("CORS_ALLOW_ORIGIN_REGEX", "").strip() or None
 cors_allow_credentials = True
 cors_allow_methods = "*"
@@ -50,24 +53,24 @@ if cors_allow_origin_regex:
     cors_kwargs.update(
         {
             "allow_origins": [],  # use regex instead
-            "allow_origin_regex": cors_allow_origin_regex,
+            "allow_origin_regex": cors_allow_origin_regex,  # type: ignore
         }
-    )
+    )  # type: ignore
 else:
     cors_kwargs.update(
         {
-            "allow_origins": cors_allow_origins,
+            "allow_origins": cors_allow_origins,  # type: ignore
         }
-    )
+    )  # type: ignore
 
-app.add_middleware(CORSMiddleware, **cors_kwargs)
+app.add_middleware(CORSMiddleware, **cors_kwargs)  # type: ignore
 
 
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/api", response_class=HTMLResponse)
 def read_root():
     html_content = """
     <html>
@@ -83,7 +86,7 @@ def read_root():
     return html_content
 
 
-@app.post("/login")
+@app.post("/api/login")
 def login(
     response: Response,
     username: str = Form(...),
@@ -100,10 +103,13 @@ def login(
                     upwd = row[0]
             except:
                 return {"type": "err", "msg": "Špatné uživatelské jméno nebo heslo"}
+            upwd = ""
             cur.close()
             conn.close()
             if hash_password(password) == upwd:
-                token = create_access_token({"sub": username}, remember=remember)
+                token = create_access_token(
+                    {"sub": username}, remember=remember == "true"
+                )
                 if remember:
                     response.set_cookie(
                         key="token",
@@ -132,7 +138,7 @@ def login(
     return {"type": "err", "msg": "Chyba připojení do databáze"}
 
 
-@app.post("/signup")
+@app.post("/api/signup")
 def signup(
     username: str = Form(...),
     email: str = Form(...),
@@ -179,18 +185,18 @@ def signup(
     return {"type": "err", "msg": "Chyba připojení do databáze"}
 
 
-@app.post("/me")
+@app.post("/api/me")
 def me(user: dict = Depends(get_current_user)):
     return {"username": user["username"]}
 
 
-@app.post("/logout")
+@app.post("/api/logout")
 def logout(response: Response):
     response.delete_cookie("token")
     return {"message": "Logged out"}
 
 
-@app.get("/ropiky")
+@app.get("/api/ropiky")
 def get_ropiky(lat_one: float, lng_one: float, lat_two: float, lng_two: float):
     conn = create_connection()
     if conn:
@@ -214,7 +220,7 @@ def get_ropiky(lat_one: float, lng_one: float, lat_two: float, lng_two: float):
     return None
 
 
-@app.get("/bunkry")
+@app.get("/api/bunkry")
 def get_bunkry(lat_one: float, lng_one: float, lat_two: float, lng_two: float):
     conn = create_connection()
     if conn:
@@ -238,7 +244,7 @@ def get_bunkry(lat_one: float, lng_one: float, lat_two: float, lng_two: float):
     return None
 
 
-@app.get("/search")
+@app.get("/api/search")
 def search(prompt: str):
     conn = create_connection()
     if conn:
@@ -255,7 +261,7 @@ def search(prompt: str):
             return {"message": e}
 
 
-@app.post("/log")
+@app.post("/api/log")
 def log(
     bunker_id: int = Form(...),
     type: str = Form(...),
@@ -283,7 +289,7 @@ def log(
         return {"message": "log put in"}
 
 
-@app.get("/id")
+@app.get("/api/id")
 def get_by_id(id: int, type: str):
     conn = create_connection()
     if conn:
@@ -291,10 +297,10 @@ def get_by_id(id: int, type: str):
         if type == "lo":
             try:
                 cur.execute("SELECT * FROM ropiky WHERE ropiky_id = ?", (id,))
-                searches: list = []
+                searched: list = []
                 for row in cur.fetchall():
-                    searches.append(row)
-                return {"output": searches[0]}
+                    searched.append(row)
+                return {"output": searched[0]}
             except mariadb.Error as e:
                 return {"message": e}
         elif type == "to":
@@ -308,3 +314,9 @@ def get_by_id(id: int, type: str):
                 return {"message": e}
         else:
             return {"message": "Wrong type!"}
+
+
+try:
+    app.mount("/", StaticFiles(directory="./web", html=True), name="static")
+except RuntimeError:
+    app.mount("/", StaticFiles(directory="../web", html=True), name="static")

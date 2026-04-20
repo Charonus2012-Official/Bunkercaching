@@ -113,7 +113,7 @@ async function getRopiky() {
   lat_two = bottomRight.lat;
   lng_two = bottomRight.lng;
 
-  const url = `http://localhost:8000/ropiky?lat_one=${lat_one}&lng_one=${lng_one}&lat_two=${lat_two}&lng_two=${lng_two}`;
+  const url = `/api/ropiky?lat_one=${lat_one}&lng_one=${lng_one}&lat_two=${lat_two}&lng_two=${lng_two}`;
   try {
     const response = await fetch(url, { method: "GET" });
     if (!response.ok) {
@@ -184,7 +184,7 @@ async function getBunkry() {
   lat_two = bottomRight.lat;
   lng_two = bottomRight.lng;
 
-  const url = `http://localhost:8000/bunkry?lat_one=${lat_one}&lng_one=${lng_one}&lat_two=${lat_two}&lng_two=${lng_two}`;
+  const url = `/api/bunkry?lat_one=${lat_one}&lng_one=${lng_one}&lat_two=${lat_two}&lng_two=${lng_two}`;
   try {
     const response = await fetch(url, { method: "GET" });
     if (!response.ok) {
