@@ -1,6 +1,6 @@
 // Settings
-const ropikyZoomLevel = 10;
-const bunkryZoomLevel = 8;
+const ropikyZoomLevel = 14;
+const bunkryZoomLevel = 12;
 
 const MAPY_COM_API_KEY = "Vtuv43i3ze9T5MzXJC-eWCNRSDYz4ucQnaQGg8PIA0k";
 var markers = [];
@@ -62,7 +62,7 @@ const LogoControl = L.Control.extend({
 let mapy_com_icon = new LogoControl();
 
 async function map_com_icon(activeBase) {
-  if (activeBase == "Mapy.com" || activeBase == "Satellite Mapy.com") {
+  if (activeBase == "Mapy.com" || activeBase == "Satelitní Mapy.com") {
     mapy_com_icon.addTo(map);
   } else {
     map.removeControl(mapy_com_icon);
@@ -233,13 +233,19 @@ async function getBunkry() {
   }
 }
 
-map.on("moveend", function (e) {
-  if (map.getZoom() > 13) {
+async function detectBunkers() {
+  if (map.getZoom() >= ropikyZoomLevel) {
     getRopiky();
   }
-  if (map.getZoom() > 11) {
+  if (map.getZoom() >= bunkryZoomLevel) {
     getBunkry();
   }
+}
+
+detectBunkers();
+
+map.on("moveend", function (e) {
+  detectBunkers();
 });
 
 window.addEventListener("map_resize_leaf", function (e) {

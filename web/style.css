@@ -23,31 +23,109 @@ h1, h2, h3 {
 #page {
     display: flex;
     flex-direction: row;
-    height: 100vh;
+    height: calc(100vh - 70px);
 }
 
 #sidebar {
-    background-color: #eceff3;
-    border: 1px solid black;
+    background-color: #f8f9fa;
+    border-right: 1px solid #ddd;
     display: none;
     flex-direction: column;
-    flex: 0 0 225px;
+    flex: 0 0 320px;
     min-height: 0;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+    z-index: 1001;
+}
+
+#sidebar-header {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    border-bottom: 1px solid #eee;
+}
+
+#close {
+    margin: 0;
+    background-color: #6c757d;
+    padding: 5px 15px;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+#close:hover {
+    background-color: #5a6268;
 }
 
 #sidetop {
     flex: 1;
-    text-align: center;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+#sidetop h1, #sidetop h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #222;
+}
+
+#sidetop h4 {
+    color: #4CAF50;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.detail-row {
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: #666;
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.detail-value {
+    color: #333;
 }
 
 #sidebottom {
-    background-color: #ffff;
-    padding: 10px;
-    border: black solid 1px;
-    border-radius: 3%;
+    background-color: #fff;
+    padding: 20px;
+    border-top: 1px solid #eee;
     text-align: center;
-    margin: 20px 7px 7px;
     display: none;
+}
+
+#sidebottom form {
+    margin: 0;
+}
+
+#sidebottom input[type="submit"] {
+    width: 100%;
+    font-family: "Staatliches", sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+}
+
+.mlink {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    color: #4CAF50;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.mlink:hover {
+    background-color: #dee2e6;
+    text-decoration: none;
 }
 
 
@@ -109,51 +187,85 @@ button:hover {
 
 /* Navbar */
 nav {
-  background: #222;
+  background: #1a1a1a;
   color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.8rem 2rem;
+  padding: 0 2rem;
+  height: 70px;
   position: sticky;
   top: 0;
   z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 nav .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+nav .logo img {
+  height: 45px;
+  transition: transform 0.3s ease;
+}
+
+nav .logo img:hover {
+  transform: scale(1.05);
 }
 
 nav ul {
   list-style: none;
   display: flex;
-  gap: 1.5rem;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+nav ul li {
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 nav ul li a {
   text-decoration: none;
-  color: white;
-  font-size: 1rem;
-  transition: 0.3s;
+  color: #eee;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  font-family: "Staatliches", sans-serif;
+  letter-spacing: 0.5px;
 }
 
 nav ul li a:hover {
   color: #4CAF50;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+nav ul li a.active {
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
 }
 
 /* Hamburger button */
 .menu-toggle {
   display: none;
   flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
   cursor: pointer;
 }
 
 .menu-toggle span {
   height: 3px;
-  width: 25px;
+  width: 100%;
   background: white;
-  margin: 4px 0;
+  border-radius: 3px;
   transition: 0.3s;
 }
 
@@ -171,15 +283,33 @@ nav ul li a:hover {
         flex-direction: column;
     }
 
+  nav {
+    padding: 0 1.5rem;
+  }
+
   nav ul {
     display: none;
     flex-direction: column;
-    background: #222;
+    background: #1a1a1a;
     position: absolute;
-    top: 60px;
-    right: 0;
-    width: 200px;
-    padding: 1rem;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    height: auto;
+    padding: 1rem 0;
+    box-shadow: 0 10px 10px rgba(0,0,0,0.3);
+    z-index: 999;
+  }
+
+  nav ul li {
+    width: 100%;
+    height: auto;
+  }
+
+  nav ul li a {
+    width: 100%;
+    padding: 1rem 2rem;
+    border-radius: 0;
   }
 
   nav ul.show {
@@ -189,12 +319,23 @@ nav ul li a:hover {
   .menu-toggle {
     display: flex;
   }
+
+  /* Hamburger animation */
+  .menu-toggle.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+  }
+  .menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .menu-toggle.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+  }
 }
 
 #about {
   padding: 2rem;
   background-color: #f4f7f6;
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - 70px);
   display: flex;
   justify-content: center;
 }
@@ -277,3 +418,90 @@ nav ul li a:hover {
 }
 
 
+
+/* Hero Section */
+.hero {
+    height: calc(50vh - 70px);
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('data/logo/bunkercaching.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    max-width: 600px;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    text-decoration: none;
+    border-radius: 5px;
+    font-family: "Staatliches", sans-serif;
+    transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #45a049;
+}
+
+/* Features Section */
+.features {
+    display: flex;
+    justify-content: space-around;
+    padding: 50px 20px;
+    background-color: #fff;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.feature-card {
+    flex: 1;
+    min-width: 250px;
+    max-width: 350px;
+    text-align: center;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-card h3 {
+    color: #4CAF50;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.feature-card p {
+    color: #666;
+    line-height: 1.6;
+}
+
+@media (max-width: 728px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    .hero p {
+        font-size: 1.1rem;
+    }
+}

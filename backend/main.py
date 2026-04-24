@@ -96,6 +96,7 @@ def login(
     conn = create_connection()
     if conn:
         cur = conn.cursor()
+        upwd = ""
         try:
             cur.execute("SELECT pwd FROM users WHERE username = ?", (username,))
             try:
@@ -103,7 +104,6 @@ def login(
                     upwd = row[0]
             except:
                 return {"type": "err", "msg": "Špatné uživatelské jméno nebo heslo"}
-            upwd = ""
             cur.close()
             conn.close()
             if hash_password(password) == upwd:

@@ -11,30 +11,37 @@
 </head>
 <body>
 <nav id="navbar"></nav>
-<h1 id="bi"></h1>
-<form id="logForm">
-    <input type="hidden" name="bunker_id" id="bunker_id">
-    <input type="hidden" name="type" id="type">
-    <label for="log_text"></label>
-    <textarea
-            name="log_text"
-            id="log_text"
-            rows="8"
-            placeholder="Text Logu"
-            required
-    ></textarea>
-    <div class="checkbox-container">
-        <div class="checkb">
-            <label>
-                <input type="checkbox" name="concept" value="true">
-            </label>
-            Koncept
-        </div>
-        <br>
-        <input type="submit" value="Logovat nebo uložit koncept">
-    </div>
+<div id="log-page">
+    <div class="content-wrapper">
+        <h1 id="bi">Načítání...</h1>
+        <p class="subtitle">Zapište svou návštěvu nebo uložte koncept pro pozdější úpravy.</p>
+        
+        <form id="logForm">
+            <input type="hidden" name="bunker_id" id="bunker_id">
+            <input type="hidden" name="type" id="type">
+            
+            <div class="form-group">
+                <label for="log_text">Text záznamu</label>
+                <textarea
+                        name="log_text"
+                        id="log_text"
+                        rows="10"
+                        placeholder="Jaký byl váš zážitek z návštěvy?"
+                        required
+                ></textarea>
+            </div>
 
-</form>
+            <div class="form-footer">
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" name="concept" value="true">
+                    <span class="checkbox-text">Uložit jako koncept</span>
+                </label>
+                
+                <input type="submit" value="Odeslat záznam" class="submit-button">
+            </div>
+        </form>
+    </div>
+</div>
 <script src="log.js"></script>
 <script src="../../navbar.js"></script>
 </body>

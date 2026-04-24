@@ -27,7 +27,7 @@ window.addEventListener("load", function () {
       }
     });
 
-  fetch(`/api/id/?id=${bunkerID}&type=${bunkerType}`, {
+  fetch(`/api/id?id=${bunkerID}&type=${bunkerType}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
