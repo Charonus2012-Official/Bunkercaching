@@ -12,9 +12,14 @@ window.onload = function () {
       return response.json();
     })
     .then((data) => {
-      console.log("Přihlášen jako:", data.username);
-      document.getElementById("status").innerText =
-        "Přihlášen: " + data.username;
+      if (data && data.username) {
+        console.log("Přihlášen jako:", data.username);
+        // If user is already logged in, redirect to home
+        window.location.href = "/";
+      }
+    })
+    .catch((err) => {
+      console.log(err.message);
     });
 };
 

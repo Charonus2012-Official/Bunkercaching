@@ -8,15 +8,6 @@ var markers_bunkry = [];
 
 const map = L.map("map").setView([50.0956928, 16.7678179], 13);
 const tileLayers = {
-  OpenStreetMap: L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
-      minZoom: 3,
-      maxZoom: 18,
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    },
-  ),
   "Mapy.com": L.tileLayer(
     `https://api.mapy.com/v1/maptiles/outdoor/256/{z}/{x}/{y}?apikey=${MAPY_COM_API_KEY}`,
     {
@@ -26,7 +17,7 @@ const tileLayers = {
         '<a href="https://api.mapy.com/copyright" target="_blank">&copy; Seznam.cz a.s. a další</a>',
     },
   ),
-  "Satellite Mapy.com": L.tileLayer(
+  "Satelitní Mapy.com": L.tileLayer(
     `https://api.mapy.com/v1/maptiles/aerial/256/{z}/{x}/{y}?apikey=${MAPY_COM_API_KEY}`,
     {
       minZoom: 3,
@@ -35,9 +26,18 @@ const tileLayers = {
         '<a href="https://api.mapy.com/copyright" target="_blank">&copy; Seznam.cz a.s. a další</a>',
     },
   ),
+  OpenStreetMap: L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+      minZoom: 3,
+      maxZoom: 18,
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+  ),
 };
 
-tileLayers["OpenStreetMap"].addTo(map);
+tileLayers["Mapy.com"].addTo(map);
 
 L.control.layers(tileLayers).addTo(map);
 

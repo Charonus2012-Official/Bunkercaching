@@ -10,48 +10,50 @@
     <link rel="icon" type="image/png" href="../data/logo/bunkercaching_pure_logo.png">
 </head>
 <body>
-<nav id="navbar"></nav>
-<div class="split">
-    <!-- Signup -->
-    <div class="side signup">
-        <h1>Registrace</h1>
-        <form id="signupForm">
-            <input class="signlog" type="text" name="username" placeholder="Uživatelské jméno" required>
-            <input class="signlog" type="email" name="email" placeholder="E-mail" required>
-            <input class="signlog" type="password" name="password" placeholder="Heslo" required>
-            <input class="signlog" type="password" name="confirm_password" placeholder="Potvrdit heslo" required>
-            <button type="submit">Registrovat</button>
-        </form>
+    <nav id="navbar"></nav>
+    <div id="about">
+        <div class="content-wrapper">
+            <h1>Přihlášení & Registrace</h1>
+            <p class="subtitle">Připojte se k průzkumníkům betonu.</p>
 
-    </div>
+            <div class="auth-container">
+                <!-- Signup -->
+                <section class="auth-section">
+                    <h2>Registrace</h2>
+                    <form id="signupForm">
+                        <input class="signlog" type="text" name="username" placeholder="Uživatelské jméno" required>
+                        <input class="signlog" type="email" name="email" placeholder="E-mail" required>
+                        <input class="signlog" type="password" name="password" placeholder="Heslo" required>
+                        <input class="signlog" type="password" name="confirm_password" placeholder="Potvrdit heslo" required>
+                        <button type="submit">Registrovat</button>
+                    </form>
+                    <div id="err_signup" class=""></div>
+                </section>
 
-    <!-- Login -->
-    <div class="side login">
-        <h1>Přihlášení</h1>
-        <form id="loginForm">
-            <input class="signlog" type="text" name="username" placeholder="Uživatelské jméno" required>
-            <input class="signlog" type="password" name="password" placeholder="Heslo" required>
-            <div class="checkb">
-                <label>
-                    <input type="checkbox" name="remember" value="true">
-                </label>
-                Pamatuj si mě
+                <!-- Login -->
+                <section class="auth-section">
+                    <h2>Přihlášení</h2>
+                    <form id="loginForm">
+                        <input class="signlog" type="text" name="username" placeholder="Uživatelské jméno" required>
+                        <input class="signlog" type="password" name="password" placeholder="Heslo" required>
+                        <div class="checkb">
+                            <label>
+                                <input type="checkbox" name="remember" value="true"> Pamatuj si mě
+                            </label>
+                        </div>
+                        <input type="hidden" name="remember" value="false">
+                        <button type="submit">Přihlásit se</button>
+                    </form>
+                    <div id="err_login" class=""></div>
+                </section>
             </div>
-            <!-- OR -->
-            <input type="hidden" name="remember" value="false">
-            <button type="submit">Přihlásit se</button>
-        </form>
+
+            <footer>
+                <p>&copy; 2026 Bunkercaching. Šířeno pod licencí GNU GPL v3.</p>
+            </footer>
+        </div>
     </div>
-</div>
-<div class="split">
-    <div class="side login">
-        <h2 id="err_signup" class=""></h2>
-    </div>
-    <div class="side login" >
-        <h2 id="err_login" class=""></h2>
-    </div>
-</div>
-<script src="auth.js"></script>
-<script src="../navbar.js"></script>
+    <script src="auth.js"></script>
+    <script src="../navbar.js"></script>
 </body>
 </html>
