@@ -131,7 +131,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const map = document.getElementById("map");
     const closeBtn = document.getElementById("close");
 
-    closeBtn.addEventListener("click", () => {
+    closeBtn.addEventListener("click", (e) => {
+        L.DomEvent.stopPropagation(e);
         // Skrýt sidebar a roztáhnout mapu
         sidebar.style.display = "none"; // nebo sidebar.style.width = "0";
         const screenWidth = window.innerWidth;

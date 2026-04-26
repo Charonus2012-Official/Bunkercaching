@@ -91,7 +91,7 @@ def login(
     response: Response,
     username: str = Form(...),
     password: str = Form(...),
-    remember: str = Form(...),
+    remember: str = Form("false"),
 ):
     conn = create_connection()
     if conn:
@@ -107,18 +107,18 @@ def login(
             cur.close()
             conn.close()
             if hash_password(password) == upwd:
+                is_remember = remember == "true"
                 token = create_access_token(
-                    {"sub": username}, remember=remember == "true"
+                    {"sub": username}, remember=is_remember
                 )
-                if remember:
+                if is_remember:
                     response.set_cookie(
                         key="token",
                         value=token,
                         httponly=True,
                         secure=False,
                         samesite="lax",
-                        max_age=3600 * 2,
-                        expires=3600 * 2,
+                        max_age=3600 * 24 * 30,  # 30 days
                     )
                 else:
                     response.set_cookie(

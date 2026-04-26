@@ -58,14 +58,23 @@ button[type="submit"]:hover {
 }
 
 .checkb {
+    display: flex;
+    align-items: center;
     margin: 5px 0;
     font-size: 0.95rem;
     color: #444;
 }
 
+.checkb label {
+    cursor: pointer;
+}
+
 .checkb input[type="checkbox"] {
     accent-color: #4CAF50;
-    margin-right: 5px;
+    margin-right: 8px;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
 }
 
 #err_signup, #err_login {

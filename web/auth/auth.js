@@ -53,6 +53,9 @@ document
     e.preventDefault();
 
     const formData = new FormData(this);
+    if (!formData.has("remember")) {
+      formData.append("remember", "false");
+    }
 
     const response = await fetch(`${link}/login`, {
       method: "POST",

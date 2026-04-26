@@ -1,12 +1,13 @@
 // Settings
 const ropikyZoomLevel = 14;
-const bunkryZoomLevel = 12;
+const bunkryZoomLevel = 10;
 
 const MAPY_COM_API_KEY = "Vtuv43i3ze9T5MzXJC-eWCNRSDYz4ucQnaQGg8PIA0k";
 var markers = [];
 var markers_bunkry = [];
 
-const map = L.map("map").setView([50.0956928, 16.7678179], 13);
+const map = L.map("map", { zoomControl: false }).setView([50.0956928, 16.7678179], 11);
+L.control.zoom({ position: "topleft" }).addTo(map);
 const tileLayers = {
   "Mapy.com": L.tileLayer(
     `https://api.mapy.com/v1/maptiles/outdoor/256/{z}/{x}/{y}?apikey=${MAPY_COM_API_KEY}`,
@@ -39,7 +40,7 @@ const tileLayers = {
 
 tileLayers["Mapy.com"].addTo(map);
 
-L.control.layers(tileLayers).addTo(map);
+L.control.layers(tileLayers, {}, { position: "topright" }).addTo(map);
 
 const LogoControl = L.Control.extend({
   options: {
@@ -64,12 +65,12 @@ let mapy_com_icon = new LogoControl();
 async function map_com_icon(activeBase) {
   if (activeBase == "Mapy.com" || activeBase == "Satelitní Mapy.com") {
     mapy_com_icon.addTo(map);
-  } else {
+  } else if (mapy_com_icon._map) {
     map.removeControl(mapy_com_icon);
   }
 }
 
-map_com_icon();
+map_com_icon("Mapy.com");
 
 map.on("baselayerchange", function (e) {
   map_com_icon(e.name);
