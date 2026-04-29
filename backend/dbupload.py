@@ -1,20 +1,15 @@
-try:
-    from .dbh import create_connection
-except ImportError, ValueError:
-    from dbh import create_connection
 import mariadb
 import json
 import os
 
 
-def ropiky():
+def ropiky(conn: mariadb.Connection):
     base_dir = os.path.dirname(__file__)
     file_path = os.path.join(base_dir, "ropiky.json")
     with open(file_path, "r", encoding="UTF-8") as f:
         ropikygeo = json.load(f)
 
     ropiks = ropikygeo["ropiky"]
-    conn = create_connection()
     if conn:
         cur = conn.cursor()
         for r in ropiks:
@@ -52,12 +47,11 @@ def ropiky():
         print("Problem")
 
 
-def bunkry():
+def bunkry(conn: mariadb.Connection):
     base_dir = os.path.dirname(__file__)
     file_path = os.path.join(base_dir, "bunkers.json")
     with open(file_path, "r", encoding="UTF-8") as f:
         features: dict = eval(f.read())
-    conn = create_connection()
     if conn:
         cur = conn.cursor()
         for f in features:
@@ -94,5 +88,14 @@ def bunkry():
 
 
 if __name__ == "__main__":
-    ropiky()
-    bunkry()
+    try:
+        from .dbh import create_connection
+    except ImportError, ValueError:
+        from dbh import create_connection
+    
+    conn = create_connection()
+    
+    ropiky(conn)
+    bunkry(conn)
+    
+    conn.close()

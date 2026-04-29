@@ -1,12 +1,6 @@
 import os
 import mariadb
 
-try:
-    from .dbh import create_connection
-    from .dbupload import ropiky, bunkry
-except ImportError, ValueError:
-    from dbh import create_connection
-    from dbupload import ropiky, bunkry
 
 
 def run_sql_file(filename, cursor):
@@ -29,31 +23,37 @@ def run_sql_file(filename, cursor):
                 print(f"Error executing command in {filename}: {e}")
 
 
-def full_db_init():
-    try:
-        conn = create_connection()
-    except Exception as e:
-        print(f"Connection error: {e}")
-        return
+def full_db_init(conn: mariadb.Connection, dbupload: bool = True):
 
     if conn:
         cur = conn.cursor()
         sql_files = ["users.sql", "ropiky.sql", "bunkry.sql", "logs.sql"]
-
-        cur.execute("CREATE DATABASE bunkercaching")
-        conn.commit()
+        try:
+            cur.execute(f"CREATE DATABASE {os.getenv("DB_NAME", "bunkercaching")}")
+        except:
+            pass
+        cur.execute(f"USE {os.getenv("DB_NAME", "bunkercaching")}")
 
         for sql_file in sql_files:
+            print(sql_file)
             run_sql_file(sql_file, cur)
 
         conn.commit()
-        cur.close()
-        conn.close()
         print("SQL files executed. Populating data...")
 
+        if not dbupload:
+            cur.close()
+            conn.close()
+            return
+        
         try:
-            ropiky()
-            bunkry()
+            from .dbupload import ropiky, bunkry
+        except ImportError, ValueError:
+            from dbupload import ropiky, bunkry
+
+        try:
+            ropiky(conn)
+            bunkry(conn)
             print("Data population complete.")
         except Exception as e:
             print(f"Error during data population: {e}")
@@ -61,8 +61,17 @@ def full_db_init():
         print("Database initialization complete.")
     else:
         print("Failed to connect to the database.")
-        return
+    cur.close()
+    conn.close()
 
 
 if __name__ == "__main__":
-    full_db_init()
+    try:
+        from .dbh import create_connection
+    except ImportError, ValueError:
+        from dbh import create_connection
+    try:
+        conn = create_connection()
+        full_db_init(conn)
+    except Exception as e:
+        print(f"Connection error: {e}")
