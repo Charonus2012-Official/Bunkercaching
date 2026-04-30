@@ -30,6 +30,9 @@ This README documents the current state of the project, how to run it locally.
 │  └─ data/                # Static data (images, logos, geodata)
 ├─ logo                    # Contains logos
 ├─ *.sql                   # SQL schema/data files (bunkry.sql, ropiky.sql, users.sql, logs.sql)
+├─ Dockerfile
+├─ docker-compose.yml
+├─ docker.env              # Environment variables for Docker (not committed)
 └─ README.md
 ```
 
@@ -156,6 +159,50 @@ python -m uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 
 By default, CORS is configurable via environment variables. If you do nothing, it allows `http://localhost:8000`. See CORS configuration below.
 
+## Running with Docker
+
+Docker Compose runs both the app and a MariaDB container. The database is initialized automatically on first start via `backend/dbh.py`.
+
+### Setup
+
+1) Make sure you have docker running.
+
+2) Build and start:
+
+```
+docker compose up --build
+```
+
+The app will be available at `http://localhost:8000`.
+
+### Subsequent starts
+
+```
+docker compose up
+```
+
+### Stopping
+
+```
+docker compose down
+```
+
+> **Warning:** `docker compose down -v` will delete the MariaDB volume and all data including users.
+
+### Manual backup
+
+To back up the `users` and `logs` tables:
+
+```
+docker exec bunkercaching-db mariadb-dump -u root -pyour_root_password bunkercaching users logs > backup.sql
+```
+
+### Notes
+
+- `docker.env` is used exclusively by Docker and is not read by the Python app during local development.
+- `.env` is excluded from the Docker image via `.dockerignore`.
+- Database data is persisted in a named Docker volume (`mariadb_data`).
+
 ## API Overview of the `uvicorn` server
 - `GET /` — Frontend
 - `GET /api/` — simple HTML landing page for the API
@@ -176,6 +223,7 @@ By default, CORS is configurable via environment variables. If you do nothing, i
     python -m backend.dbupload
     ```
 	*Note: The helper `full_db_init.py` script automatically populates the data, so if you ran that script dont run this one!*
+
 ## Development Notes
 
 - Frontend depends on CDN links for Leaflet and Google Fonts in `web/map/index.html`.

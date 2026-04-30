@@ -1,0 +1,7 @@
+.idea
+.junie
+.git
+.venv
+__pycache__
+.gitignore
+.env
