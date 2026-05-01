@@ -56,6 +56,13 @@ window.addEventListener("OnRopikyClickEvent", (e) => {
     sidebottom.style.display = "block";
     bunker_form_id.setAttribute("value", data.id);
     bunker_type.setAttribute("value", "lo");
+
+    const submitBtn = sidebottom.querySelector('input[type="submit"]');
+    if (window.logging_deactivated) {
+        submitBtn.disabled = true;
+    } else {
+        submitBtn.disabled = false;
+    }
 });
 
 window.addEventListener("OnBunkryClickEvent", (e) => {
@@ -114,6 +121,13 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
     sidebottom.style.display = "block";
     bunker_form_id.setAttribute("value", data.id);
     bunker_type.setAttribute("value", "to");
+
+    const submitBtn = sidebottom.querySelector('input[type="submit"]');
+    if (window.logging_deactivated) {
+        submitBtn.disabled = true;
+    } else {
+        submitBtn.disabled = false;
+    }
 });
 
 function displ(state) {

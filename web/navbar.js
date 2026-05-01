@@ -1,6 +1,12 @@
+window.logging_deactivated = true;
+
 window.addEventListener("load", function () {
   const currentPath = window.location.pathname;
   const logoPath = "/data/logo/bunkercaching_pure_logo.png";
+
+  const logsLink = window.logging_deactivated 
+    ? `<a class="disabled">Logy</a>` 
+    : `<a href="/logs" class="${currentPath.startsWith("/logs") ? "active" : ""}">Logy</a>`;
 
   const navbarInner = `
     <div class="logo">
@@ -10,7 +16,7 @@ window.addEventListener("load", function () {
     </div>
     <ul id="menu">
       <li><a href="/map" class="${currentPath.startsWith("/map") ? "active" : ""}">Mapa</a></li>
-      <li><a href="/logs" class="${currentPath.startsWith("/logs") ? "active" : ""}">Logy</a></li>
+      <li>${logsLink}</li>
       <li><a href="/about" class="${currentPath.startsWith("/about") ? "active" : ""}">O projektu</a></li>
       <li><a href="/auth" id="nav-profile" class="${currentPath.startsWith("/auth") ? "active" : ""}">Přihlášení</a></li>
     </ul>

@@ -163,6 +163,13 @@ button:hover {
     background-color: #45a049;
 }
 
+button:disabled,
+input[type="submit"]:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+}
+
 .mlink {
     text-align: center;
     display: block;
@@ -252,6 +259,12 @@ nav ul li a:hover {
 nav ul li a.active {
   color: #4CAF50;
   background: rgba(76, 175, 80, 0.1);
+}
+
+nav ul li a.disabled {
+  color: #666;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 /* Hamburger button */
