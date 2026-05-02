@@ -1,18 +1,32 @@
-create table bunkry
+CREATE TABLE bunkry
 (
-    id          bigint auto_increment
-        primary key,
-    opevneni_id bigint               not null,
-    name        varchar(128)         not null,
-    secret_name varchar(128)         not null,
-    website     varchar(512)         not null,
-    state       varchar(64),
-    museum      tinyint(1) default 0 not null,
-    latitude    decimal(9, 6)        not null,
-    longitude   decimal(9, 6)        not null,
-    constraint name
-        unique (name),
-    constraint opevneni_id
-        unique (opevneni_id)
+    id           BIGINT         AUTO_INCREMENT PRIMARY KEY,
+    opevneni_id  BIGINT         NOT NULL UNIQUE,
+    name         VARCHAR(128)   NOT NULL UNIQUE,
+    secret_name  VARCHAR(128)   NOT NULL,
+    website      VARCHAR(512)   NOT NULL,
+    stav         VARCHAR(64),
+    usek         VARCHAR(64),
+    podusek      VARCHAR(64),
+    typ          VARCHAR(128),
+    odolnost     VARCHAR(32),
+    tvrz         VARCHAR(64),
+    other_secret VARCHAR(256),
+    lpv          VARCHAR(32),
+    ppv          VARCHAR(32),
+    azimut_l     VARCHAR(32),
+    azimut_p     VARCHAR(32),
+    teren        VARCHAR(32),
+    lomeni       VARCHAR(32),
+    nm_vyska     VARCHAR(32),
+    osadka       VARCHAR(32),
+    ventilace    VARCHAR(32),
+    filtry       VARCHAR(32),
+    bet_objem    VARCHAR(32),
+    studna       VARCHAR(64),
+    vykres       VARCHAR(64),
+    betonaz      VARCHAR(64),
+    firma        VARCHAR(256),
+    latitude     DECIMAL(9, 6)   NOT NULL,
+    longitude    DECIMAL(9, 6)   NOT NULL
 );
-

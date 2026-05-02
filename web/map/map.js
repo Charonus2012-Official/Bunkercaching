@@ -200,16 +200,26 @@ async function getBunkry() {
 
     data.bunkry.forEach((r) => {
       const id = r[0];
-      const op_id = r[1];
+      const opevneni_id = r[1];
       const name = r[2];
       const secret_name = r[3];
       const website = r[4];
-      const state = r[5];
-      const museum = r[6];
-      const lat = r[7];
-      const lng = r[8];
+      const stav = r[5];
+      const usek = r[6];
+      const podusek = r[7];
+      const typ = r[8];
+      const odolnost = r[9];
+      const tvrz = r[10];
+      const nm_vyska = r[18];
+      const osadka = r[19];
+      const studna = r[23];
+      const vykres = r[24];
+      const betonaz = r[25];
+      const firma = r[26];
+      const lat = r[27];
+      const lng = r[28];
 
-      if (state == "postaven") {
+      if (stav == "Postaven") {
         var marker = L.marker([lat, lng], { icon: bunkrIcon });
       } else {
         var marker = L.marker([lat, lng], { icon: bunkrIcon_not });
@@ -218,11 +228,22 @@ async function getBunkry() {
       marker.on("click", function (e) {
         const bunkryEvent = new CustomEvent("OnBunkryClickEvent", {
           detail: {
-            id: op_id,
+            id: opevneni_id,
             name: name,
             secret_name: secret_name,
             website: website,
-            state: state,
+            stav: stav,
+            usek: usek,
+            podusek: podusek,
+            typ: typ,
+            odolnost: odolnost,
+            tvrz: tvrz,
+            nm_vyska: nm_vyska,
+            osadka: osadka,
+            betonaz: betonaz,
+            studna: studna,
+            vykres: vykres,
+            firma: firma,
           },
         });
         window.dispatchEvent(bunkryEvent);

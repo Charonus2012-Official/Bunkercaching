@@ -51,39 +51,56 @@ def bunkry(conn: mariadb.Connection):
     base_dir = os.path.dirname(__file__)
     file_path = os.path.join(base_dir, "bunkers.json")
     with open(file_path, "r", encoding="UTF-8") as f:
-        features: dict = eval(f.read())
+        bunks = json.load(f)
     if conn:
         cur = conn.cursor()
-        for f in features:
+        for bunker in bunks:
             try:
-                name = f["name"]
-                lat, lng = f["coords"]
-                website = f["link"]
-                try:
-                    secret_name = f["secret_name"]
-                    state = f["state"]
-                except KeyError:
-                    secret_name = ""
-                    state = ""
+                cur.execute("""
+                            INSERT INTO bunkry (
+                                opevneni_id, name, secret_name, website, stav, usek, podusek,
+                                typ, odolnost, tvrz, other_secret, lpv, ppv, azimut_l, azimut_p,
+                                teren, lomeni, nm_vyska, osadka, ventilace, filtry, bet_objem,
+                                studna, vykres, betonaz, firma, latitude, longitude
+                            ) VALUES (
+                                         ?, ?, ?, ?, ?, ?, ?,
+                                         ?, ?, ?, ?, ?, ?, ?, ?,
+                                         ?, ?, ?, ?, ?, ?, ?,
+                                         ?, ?, ?, ?, ?, ?
+                                     )
+                            """, (
+                                bunker["id"],
+                                bunker["name"],
+                                bunker["secret_name"],
+                                bunker["link"],
+                                bunker["data"]["stav"],
+                                bunker["usek"],
+                                bunker["podusek"],
+                                bunker["data"]["typ"],
+                                bunker["data"]["odolnost"],
+                                bunker["data"]["tvrz"],
+                                bunker["data"]["jina_kryci_jmena"],
+                                bunker["data"]["LPV"],
+                                bunker["data"]["PPV"],
+                                bunker["data"]["azimut L"],
+                                bunker["data"]["azimut P"],
+                                bunker["data"]["teren"],
+                                bunker["data"]["lomeni"],
+                                bunker["data"]["nm_vyska"],
+                                bunker["data"]["osadka"],
+                                bunker["data"]["ventilace"],
+                                bunker["data"]["filtry"],
+                                bunker["data"]["bet_objem"],
+                                bunker["data"]["studna"],
+                                bunker["data"]["vykres"],
+                                bunker["data"]["betonaz"],
+                                bunker["data"]["firma"],
+                                bunker["geo"]["lat"],
+                                bunker["geo"]["lng"],
+                            ))
+            except Exception as e:
+                print("Error: " + str(e))
 
-                op_id = f["id"]
-                try:
-                    cur.execute(
-                        "INSERT INTO bunkry (opevneni_id, name, secret_name, website, state, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                        (
-                            op_id,
-                            name,
-                            secret_name,
-                            website,
-                            state,
-                            lat,
-                            lng,
-                        ),
-                    )
-                except mariadb.Error as e:
-                    print(e)
-            except mariadb.Error as e:
-                return {"message": e}
         conn.commit()
 
 

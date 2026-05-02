@@ -98,7 +98,18 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
         sidetop.appendChild(row);
     }
 
-    addDetail("Stav objektu", displ(data.state).replace("Stav objektu: ", "").replace("Stav: ", ""));
+    addDetail("Stav objektu", data.stav);
+    addDetail("Úsek", data.usek);
+    addDetail("Podúsek", data.podusek);
+    addDetail("Typ", data.typ);
+    addDetail("Odolnost", data.odolnost);
+    addDetail("Tvrz", data.tvrz);
+    addDetail("N. m. výška", data.nm_vyska);
+    addDetail("Osádka", data.osadka);
+    addDetail("Betonáž", data.betonaz);
+    addDetail("Studna", data.studna);
+    addDetail("Výkres", data.vykres);
+    addDetail("Firma", data.firma);
 
     const bunker_site = document.createElement("a");
     bunker_site.className = "center mlink";

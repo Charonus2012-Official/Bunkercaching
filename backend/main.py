@@ -310,8 +310,8 @@ def get_by_id(id: int, type: str):
                 for row in cur.fetchall():
                     searches.append(row)
                 return {"output": searches[0]}
-            except mariadb.Error as e:
-                return {"message": e}
+            except (mariadb.Error, IndexError) as e:
+                return {"message": str(e)}
         else:
             return {"message": "Wrong type!"}
 
