@@ -98,16 +98,21 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
         sidetop.appendChild(row);
     }
 
+    function capitalizeFirstLetter(string) {
+        if (!string) return string;
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     addDetail("Stav objektu", data.stav);
     addDetail("Úsek", data.usek);
     addDetail("Podúsek", data.podusek);
     addDetail("Typ", data.typ);
     addDetail("Odolnost", data.odolnost);
-    addDetail("Tvrz", data.tvrz);
-    addDetail("N. m. výška", data.nm_vyska);
-    addDetail("Osádka", data.osadka);
+    addDetail("Tvrz", capitalizeFirstLetter(data.tvrz));
+    addDetail("N. m. výška", data.nm_vyska + " m. n. m.");
+    addDetail("Osádka", data.osadka + " Lidí");
     addDetail("Betonáž", data.betonaz);
-    addDetail("Studna", data.studna);
+    addDetail("Studna", capitalizeFirstLetter(data.studna));
     addDetail("Výkres", data.vykres);
     addDetail("Firma", data.firma);
 
