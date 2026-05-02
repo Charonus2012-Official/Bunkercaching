@@ -1,45 +1,65 @@
 /* Main search container - fixed position overlay */
 #searchContainer {
     position: fixed;
-    top: 90px;
-    right: 100px;
-    width: 250px;
-    z-index: 1000; /* High z-index to overlay everything */
+    top: 80px;
+    right: 60px; /* Increased from 20px to avoid Leaflet layer control on large screens */
+    width: 300px;
+    z-index: 1000;
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    overflow: hidden; /* Prevents content from breaking the rounded corners */
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+#searchWrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 120px); /* Ensure it doesn't overflow screen */
+}
+
+#searchToggle {
+    display: none; /* Hidden by default */
+    background: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    color: #2e7d32;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
 }
 
 /* Search input field */
 #searchInput {
     width: 100%;
-    padding: 12px 16px;
+    padding: 14px 18px;
     border: none;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #f0f0f0;
     font-size: 16px;
     outline: none;
     box-sizing: border-box;
     background: white;
-    border-radius: 8px 8px 0 0; /* Rounded top corners only */
+    font-family: 'IBM Plex Sans', sans-serif;
 }
 
 /* Search input focus state */
 #searchInput:focus {
-    border-bottom-color: #1976d2;
+    border-bottom-color: #2e7d32; /* Changed to match a more 'bunker' green theme if applicable, or just a nice green */
 }
 
 /* Search results container */
 #searchResults {
     width: 100%;
-    max-height: 250px;
+    max-height: 60vh; /* Better for various screens */
     overflow-y: auto;
     background: white;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
     padding: 8px;
-    gap: 4px;
+    gap: 6px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -53,50 +73,95 @@
 /* Individual search result buttons */
 .searchResult {
     width: 100%;
-    padding: 10px 12px;
-    background: #ffffff;
-    border: 1px solid #d0d0d0;
-    border-radius: 6px;
+    padding: 12px 14px;
+    background: #f8f9fa;
+    border: 1px solid #eee;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
-    color: #333333;
+    color: #333;
     text-align: left;
-    transition: all 0.15s ease;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    transition: all 0.2s ease;
+    white-space: normal; /* Allow text wrapping for long names */
+    word-break: break-word;
     box-sizing: border-box;
+    font-family: 'IBM Plex Sans', sans-serif;
 }
 
 /* Search result hover state */
 .searchResult:hover {
-    background: #1976d2;
-    color: white;
-    border-color: #1565c0;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-color: #c8e6c9;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
 /* Search result active/clicked state */
 .searchResult:active {
-    background: #1565c0;
-    color: white;
+    background: #c8e6c9;
+    transform: translateY(0);
 }
 
-/* Custom scrollbar for search results (webkit browsers) */
+/* Custom scrollbar for search results */
 #searchResults::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
 }
 
 #searchResults::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 3px;
+    background: transparent;
 }
 
 #searchResults::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 3px;
+    background: #ccc;
+    border-radius: 10px;
 }
 
-#searchResults::-webkit-scrollbar-thumb:hover {
-    background: #a1a1a1;
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    #searchContainer {
+        top: 130px;
+        right: 12px;
+        left: auto;
+        width: auto;
+        background: transparent;
+        box-shadow: none;
+        overflow: visible;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    #searchToggle {
+        display: flex;
+    }
+
+    #searchWrapper {
+        display: none; /* Collapsed by default on mobile */
+        width: calc(100vw - 30px);
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        overflow: hidden;
+        margin-top: 10px;
+    }
+
+    #searchContainer.expanded #searchWrapper {
+        display: flex;
+    }
+
+    #searchContainer.expanded #searchToggle {
+        background: #f0f0f0;
+        color: #666;
+    }
+
+    #searchInput {
+        padding: 12px 15px;
+        font-size: 15px;
+    }
+
+    #searchResults {
+        max-height: 50vh;
+    }
 }

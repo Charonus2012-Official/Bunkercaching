@@ -250,15 +250,56 @@ def search(prompt: str):
     if conn:
         cur = conn.cursor()
         try:
+            # Normalize prompt: trim and handle common prefix without hyphen
+            # MariaDB with utf8mb4_unicode_ci is case-insensitive by default for '='
+            normalized_prompt = prompt.strip()
+            
+            # Simple normalization for 'ks' shorthand to 'K-S'
+            # If it starts with 'ks' (case-insensitive) and it's not 'k-s'
+            if normalized_prompt.lower().startswith("ks") and not normalized_prompt.lower().startswith("k-s"):
+                normalized_prompt = "K-S" + normalized_prompt[2:]
+
+            # Search in bunkry (exact match)
             cur.execute(
-                "SELECT name, latitude, longitude FROM bunkry WHERE name = ?", (prompt,)
+                "SELECT name, latitude, longitude, 'to' as type FROM bunkry WHERE name = ?",
+                (normalized_prompt,),
             )
-            searches: list = []
-            for row in cur:
-                searches.append(row)
-            return {"output": searches[0]}
+            bunkry_results = cur.fetchall()
+
+            # Search in ropiky (exact match)
+            cur.execute(
+                "SELECT name, latitude, longitude, 'lo' as type FROM ropiky WHERE name = ?",
+                (normalized_prompt,),
+            )
+            ropiky_results = cur.fetchall()
+
+            results = []
+            for row in bunkry_results:
+                results.append(
+                    {
+                        "name": row[0],
+                        "lat": float(row[1]),
+                        "lon": float(row[2]),
+                        "type": "Těžké opevnění",
+                    }
+                )
+            for row in ropiky_results:
+                results.append(
+                    {
+                        "name": row[0],
+                        "lat": float(row[1]),
+                        "lon": float(row[2]),
+                        "type": "Lehké opevnění",
+                    }
+                )
+
+            return {"output": results}
         except mariadb.Error as e:
-            return {"message": e}
+            return {"message": str(e)}
+        finally:
+            cur.close()
+            conn.close()
+    return {"output": []}
 
 
 @app.post("/api/log")

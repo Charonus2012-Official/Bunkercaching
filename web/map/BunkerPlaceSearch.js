@@ -1,11 +1,21 @@
 class BunkerPlaceSearch {
     constructor(map) {
         this.map = map;
+        this.container = document.getElementById('searchContainer');
+        this.toggleBtn = document.getElementById('searchToggle');
         this.searchInput = document.getElementById('searchInput');
         this.resultsDiv = document.getElementById('searchResults');
         this.setupEventListeners()
     }
     setupEventListeners() {
+        // Toggle search visibility on mobile
+        this.toggleBtn.addEventListener('click', () => {
+            this.container.classList.toggle('expanded');
+            if (this.container.classList.contains('expanded')) {
+                this.searchInput.focus();
+            }
+        });
+
         // Hledá výstup po 300ms neaktivnosti
         this.searchInput.addEventListener('input', (e) => {
             clearTimeout(this.searchTimeout);
@@ -24,17 +34,25 @@ class BunkerPlaceSearch {
         this.displayResults([...bunkers, ...places]);
     }
 
-    searchBunkers(query) {
-        const q = query.toUpperCase();
+    async searchBunkers(query) {
+        if (!query || query.length < 2) return [];
 
-        if (!feature) return [];
-
-        const coords = feature.geometry?.coordinates || [];
-        return [{
-            display_name: "Bunkr: " + feature.properties?.name + ' "' + feature.properties?.secret_name.slice(1) + '"' || "",
-            lon: coords[0] || null,
-            lat: coords[1] || null
-        }];
+        try {
+            const response = await fetch(`/api/search?prompt=${encodeURIComponent(query)}`);
+            const data = await response.json();
+            
+            if (data.output) {
+                return data.output.map(item => ({
+                    display_name: `${item.type}: ${item.name}`,
+                    lat: item.lat,
+                    lon: item.lon
+                }));
+            }
+            return [];
+        } catch (error) {
+            console.error("Error searching bunkers:", error);
+            return [];
+        }
     }
 
     async searchPlaces(query) {
@@ -57,6 +75,7 @@ class BunkerPlaceSearch {
 
     displayResults(results) {
         this.resultsDiv.innerHTML = '';
+        const self = this;
         for (const result of results) {
             const lat = parseFloat(result.lat);
             const lon = parseFloat(result.lon);
@@ -65,10 +84,13 @@ class BunkerPlaceSearch {
             button.textContent = result.display_name;
 
             button.onclick = function () {
-                window.exportedMap.setView([lat, lon], 13);
+                window.exportedMap.setView([lat, lon], 17);
 
                 document.getElementById('searchResults').innerHTML = '';
                 document.getElementById('searchInput').value = '';
+                
+                // Collapse search container on mobile after selection
+                self.container.classList.remove('expanded');
             }
 
 
