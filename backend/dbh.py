@@ -32,11 +32,12 @@ def create_connection():
             full_db_init(conn, False)
             new = create_connection()
             try:
-                from .dbupload import ropiky, bunkry
+                from .dbupload import ropiky, bunkry, tvrze
             except ImportError, ValueError:
-                from dbupload import ropiky, bunkry
+                from dbupload import ropiky, bunkry, tvrze
             ropiky(new)
             bunkry(new)
+            tvrze(new)
 
             return new
         print(f"Chyba připojení: {e}")

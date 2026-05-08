@@ -48,13 +48,14 @@ def full_db_init(conn: mariadb.Connection, dbupload: bool = True):
             return
         
         try:
-            from .dbupload import ropiky, bunkry
+            from .dbupload import ropiky, bunkry, tvrze
         except ImportError, ValueError:
-            from dbupload import ropiky, bunkry
+            from dbupload import ropiky, bunkry, tvrze
 
         try:
             ropiky(conn)
             bunkry(conn)
+            tvrze(conn)
             print("Data population complete.")
         except Exception as e:
             print(f"Error during data population: {e}")
