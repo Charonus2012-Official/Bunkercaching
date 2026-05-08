@@ -1,0 +1,439 @@
+[
+    {
+        "id": 743,
+        "name": "Orel",
+        "zkratka": "Or",
+        "link": "http://www.opevneni.cz/?l=8249815480346734017666",
+        "objects": [
+            20,
+            21,
+            22,
+            23,
+            24,
+            25
+        ],
+        "data": {
+            "usek": "ŽSV II. Hlučín",
+            "podusek": "Hlučín",
+            "stav": "Nezadána",
+            "pocet_objektu": 6,
+            "postaveno_objekty": 1,
+            "reseni_vo": "výtahová šachta",
+            "osadka": 405,
+            "jine_nazvy": "U orla, Darkovičky"
+        },
+        "geo": {
+            "lat": 49.9286919,
+            "lng": 18.21702
+        }
+    },
+    {
+        "id": 744,
+        "name": "Smolkov",
+        "zkratka": "Sm",
+        "link": "http://www.opevneni.cz/?l=3730802116126510239983",
+        "objects": [
+            43,
+            44,
+            45,
+            46,
+            47
+        ],
+        "data": {
+            "usek": "ŽSV II. Hlučín",
+            "podusek": "Smolkov",
+            "stav": "Dokončena",
+            "pocet_objektu": 5,
+            "postaveno_objekty": 5,
+            "reseni_vo": "rovná galerie",
+            "osadka": 394,
+            "jine_nazvy": "Hrabyňský vrch (Hrabyner Berg)"
+        },
+        "geo": {
+            "lat": 49.8962021,
+            "lng": 18.0785561
+        }
+    },
+    {
+        "id": 745,
+        "name": "Šibenice",
+        "zkratka": "Š",
+        "link": "http://www.opevneni.cz/?l=4843506425905666451237",
+        "objects": [
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85
+        ],
+        "data": {
+            "usek": "ŽSV IV. Opava",
+            "podusek": "Šibenice",
+            "stav": "Podzemí rozestavěno",
+            "pocet_objektu": 8,
+            "postaveno_objekty": 0,
+            "reseni_vo": "výtahová šachta",
+            "osadka": 615,
+            "jine_nazvy": "Galgenberg"
+        },
+        "geo": {
+            "lat": 49.9535332,
+            "lng": 17.7772045
+        }
+    },
+    {
+        "id": 746,
+        "name": "Milotický vrch",
+        "zkratka": "MV",
+        "link": "http://www.opevneni.cz/?l=7886599627092389436669",
+        "objects": [
+            114,
+            115,
+            116,
+            117,
+            118
+        ],
+        "data": {
+            "usek": "ŽSV IV. Opava",
+            "podusek": "Horní Benešov",
+            "stav": "Zrušena",
+            "pocet_objektu": 5,
+            "postaveno_objekty": 0,
+            "reseni_vo": "?",
+            "osadka": "",
+            "jine_nazvy": "Hohnberg"
+        },
+        "geo": {
+            "lat": 50.0026779,
+            "lng": 17.5586948
+        }
+    },
+    {
+        "id": 747,
+        "name": "Orlík",
+        "zkratka": "",
+        "link": "http://www.opevneni.cz/?l=8017584305760989896691",
+        "objects": [
+            156,
+            157,
+            158,
+            159,
+            160
+        ],
+        "data": {
+            "usek": "Cvičné objekty",
+            "podusek": "Orlík",
+            "stav": "Nezadána",
+            "pocet_objektu": 5,
+            "postaveno_objekty": 0,
+            "reseni_vo": "neměl",
+            "osadka": "",
+            "jine_nazvy": "Střelnice ŘOP Jeseník"
+        },
+        "geo": {
+            "lat": 0.0,
+            "lng": 0.0
+        }
+    },
+    {
+        "id": 748,
+        "name": "Kronfelzov",
+        "zkratka": "Kv",
+        "link": "http://www.opevneni.cz/?l=9321809616230121651167",
+        "objects": [
+            204,
+            203,
+            202,
+            201,
+            200,
+            199,
+            198,
+            197
+        ],
+        "data": {
+            "usek": "ŽSV I. Staré Město pod Sněžníkem",
+            "podusek": "Kronfelzov",
+            "stav": "Zrušena",
+            "pocet_objektu": 8,
+            "postaveno_objekty": 0,
+            "reseni_vo": "svážnice",
+            "osadka": 561,
+            "jine_nazvy": "Kronfelsov"
+        },
+        "geo": {
+            "lat": 50.1755524,
+            "lng": 17.0116692
+        }
+    },
+    {
+        "id": 749,
+        "name": "Hůrka",
+        "zkratka": "Bg",
+        "link": "http://www.opevneni.cz/?l=5954722070230166450155",
+        "objects": [
+            259,
+            260,
+            261,
+            262,
+            263,
+            264
+        ],
+        "data": {
+            "usek": "ŽSV III. Králíky",
+            "podusek": "Hůrka",
+            "stav": "Dokončena",
+            "pocet_objektu": 6,
+            "postaveno_objekty": 6,
+            "reseni_vo": "svážnice",
+            "osadka": 424,
+            "jine_nazvy": "Berghöhe, Horka, Výšina"
+        },
+        "geo": {
+            "lat": 50.0952263,
+            "lng": 16.7681274
+        }
+    },
+    {
+        "id": 750,
+        "name": "Bouda",
+        "zkratka": "Ba",
+        "link": "http://www.opevneni.cz/?l=2485937638761002673438",
+        "objects": [
+            272,
+            273,
+            274,
+            275,
+            276
+        ],
+        "data": {
+            "usek": "ŽSV III. Králíky",
+            "podusek": "Bouda",
+            "stav": "Dokončena",
+            "pocet_objektu": 5,
+            "postaveno_objekty": 5,
+            "reseni_vo": "svážnice",
+            "osadka": 316,
+            "jine_nazvy": "Baudenkoppe"
+        },
+        "geo": {
+            "lat": 50.0717201,
+            "lng": 16.6802692
+        }
+    },
+    {
+        "id": 751,
+        "name": "Adam",
+        "zkratka": "Am",
+        "link": "http://www.opevneni.cz/?l=2763901735344310537659",
+        "objects": [
+            291,
+            292,
+            293,
+            294,
+            295,
+            296,
+            297,
+            298
+        ],
+        "data": {
+            "usek": "ŽSV III. Králíky",
+            "podusek": "Adam",
+            "stav": "Dokončena",
+            "pocet_objektu": 8,
+            "postaveno_objekty": 7,
+            "reseni_vo": "rovná galerie",
+            "osadka": 611,
+            "jine_nazvy": "Adamsberg"
+        },
+        "geo": {
+            "lat": 50.1119308,
+            "lng": 16.6040688
+        }
+    },
+    {
+        "id": 752,
+        "name": "Hanička",
+        "zkratka": "H",
+        "link": "http://www.opevneni.cz/?l=4564721747435656975681",
+        "objects": [
+            330,
+            331,
+            332,
+            333,
+            334,
+            335,
+            347
+        ],
+        "data": {
+            "usek": "ŽSV X. Rokytnice v Orlických horách",
+            "podusek": "Hanička",
+            "stav": "Dokončena",
+            "pocet_objektu": 6,
+            "postaveno_objekty": 6,
+            "reseni_vo": "výtahová šachta",
+            "osadka": 426,
+            "jine_nazvy": "Panské pole (Herrenfeld)"
+        },
+        "geo": {
+            "lat": 50.1970406,
+            "lng": 16.5187111
+        }
+    },
+    {
+        "id": 753,
+        "name": "Skutina",
+        "zkratka": "Sk",
+        "link": "http://www.opevneni.cz/?l=4786156167011202213224",
+        "objects": [
+            400,
+            401,
+            402,
+            403,
+            404,
+            405
+        ],
+        "data": {
+            "usek": "ŽSV V. Náchod",
+            "podusek": "Skutina",
+            "stav": "Rozestavěna",
+            "pocet_objektu": 6,
+            "postaveno_objekty": 2,
+            "reseni_vo": "rovná galerie",
+            "osadka": 484,
+            "jine_nazvy": ""
+        },
+        "geo": {
+            "lat": 50.3528748,
+            "lng": 16.2891636
+        }
+    },
+    {
+        "id": 754,
+        "name": "Dobrošov",
+        "zkratka": "D",
+        "link": "http://www.opevneni.cz/?l=2686897405241221769001",
+        "objects": [
+            427,
+            428,
+            429,
+            430,
+            431,
+            432,
+            433
+        ],
+        "data": {
+            "usek": "ŽSV V. Náchod",
+            "podusek": "Dobrošov",
+            "stav": "Rozestavěna",
+            "pocet_objektu": 7,
+            "postaveno_objekty": 3,
+            "reseni_vo": "svážnice",
+            "osadka": 571,
+            "jine_nazvy": ""
+        },
+        "geo": {
+            "lat": 50.4053497,
+            "lng": 16.2007046
+        }
+    },
+    {
+        "id": 755,
+        "name": "Jírová hora",
+        "zkratka": "JH",
+        "link": "http://www.opevneni.cz/?l=2549355167453210426566",
+        "objects": [
+            459,
+            460,
+            461,
+            462,
+            463,
+            464,
+            465,
+            466,
+            467
+        ],
+        "data": {
+            "usek": "ŽSV V. Náchod",
+            "podusek": "Jírová hora",
+            "stav": "Nezadána",
+            "pocet_objektu": 9,
+            "postaveno_objekty": 0,
+            "reseni_vo": "rovná galerie",
+            "osadka": "asi 650",
+            "jine_nazvy": "Maternice"
+        },
+        "geo": {
+            "lat": 50.4871407,
+            "lng": 16.1756516
+        }
+    },
+    {
+        "id": 756,
+        "name": "Poustka",
+        "zkratka": "Pa",
+        "link": "http://www.opevneni.cz/?l=3732248505915654655716",
+        "objects": [
+            499,
+            500,
+            501,
+            502,
+            503,
+            504,
+            505,
+            506,
+            507,
+            508
+        ],
+        "data": {
+            "usek": "ŽSV VI. Trutnov",
+            "podusek": "Poustka",
+            "stav": "Nezadána",
+            "pocet_objektu": 10,
+            "postaveno_objekty": 0,
+            "reseni_vo": "rovná galerie",
+            "osadka": "asi 700",
+            "jine_nazvy": "Grünwald"
+        },
+        "geo": {
+            "lat": 50.5863457,
+            "lng": 16.002737
+        }
+    },
+    {
+        "id": 757,
+        "name": "Stachelberg",
+        "zkratka": "St",
+        "link": "http://www.opevneni.cz/?l=5605249525653165202371",
+        "objects": [
+            529,
+            530,
+            531,
+            532,
+            533,
+            534,
+            535,
+            536,
+            537,
+            538,
+            539,
+            540
+        ],
+        "data": {
+            "usek": "ŽSV VI. Trutnov",
+            "podusek": "Stachelberg",
+            "stav": "Rozestavěna",
+            "pocet_objektu": 12,
+            "postaveno_objekty": 1,
+            "reseni_vo": "rovná galerie",
+            "osadka": 778,
+            "jine_nazvy": "Babí, Ježová hora"
+        },
+        "geo": {
+            "lat": 50.628643,
+            "lng": 15.9116325
+        }
+    }
+]

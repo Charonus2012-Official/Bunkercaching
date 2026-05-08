@@ -27,7 +27,7 @@ def full_db_init(conn: mariadb.Connection, dbupload: bool = True):
 
     if conn:
         cur = conn.cursor()
-        sql_files = ["users.sql", "ropiky.sql", "bunkry.sql", "logs.sql"]
+        sql_files = ["users.sql", "ropiky.sql", "bunkry.sql", "logs.sql", "tvrze.sql"]
         try:
             cur.execute(f"CREATE DATABASE {os.getenv("DB_NAME", "bunkercaching")}")
             cur.execute("ALTER DATABASE bunkercaching CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")

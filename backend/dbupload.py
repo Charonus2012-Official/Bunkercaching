@@ -5,7 +5,7 @@ import os
 
 def ropiky(conn: mariadb.Connection):
     base_dir = os.path.dirname(__file__)
-    file_path = os.path.join(base_dir, "ropiky.json")
+    file_path = os.path.join(base_dir, "../data/bunker/ropiky.json")
     with open(file_path, "r", encoding="UTF-8") as f:
         ropikygeo = json.load(f)
 
@@ -41,7 +41,7 @@ def ropiky(conn: mariadb.Connection):
                     ),
                 )
             except Exception as e:
-                print(e)
+                print("Error ropiky:", str(e))
         conn.commit()
     else:
         print("Problem")
@@ -49,7 +49,7 @@ def ropiky(conn: mariadb.Connection):
 
 def bunkry(conn: mariadb.Connection):
     base_dir = os.path.dirname(__file__)
-    file_path = os.path.join(base_dir, "bunkers.json")
+    file_path = os.path.join(base_dir, "../data/bunker/bunkers.json")
     with open(file_path, "r", encoding="UTF-8") as f:
         bunks = json.load(f)
     if conn:
@@ -99,9 +99,47 @@ def bunkry(conn: mariadb.Connection):
                                 bunker["geo"]["lng"],
                             ))
             except Exception as e:
-                print("Error: " + str(e))
+                print("Error bunkry: " + str(e))
 
         conn.commit()
+
+
+def tvrze(conn: mariadb.Connection):
+    base_dir = os.path.dirname(__file__)
+    file_path = os.path.join(base_dir, "../data/bunker/tvrze.json")
+    with open(file_path, "r", encoding="UTF-8") as f:
+        tvr = json.load(f)
+    if conn:
+        cur = conn.cursor()
+        for tvrz in tvr:
+            try:
+                cur.execute("""
+                    INSERT INTO tvrze (
+                        opevneni_id, name, zkratka, link, objects,
+                        usek, podusek, stav, pocet_objektu, postaveno_objekty,
+                        reseni_vo, osadka, jine_nazvy, latitude, longitude
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    tvrz["id"],
+                    tvrz["name"],
+                    tvrz.get("zkratka"),
+                    tvrz["link"],
+                    json.dumps(tvrz.get("objects")),
+                    tvrz["data"].get("usek"),
+                    tvrz["data"].get("podusek"),
+                    tvrz["data"].get("stav"),
+                    tvrz["data"].get("pocet_objektu"),
+                    tvrz["data"].get("postaveno_objekty"),
+                    tvrz["data"].get("reseni_vo"),
+                    str(tvrz["data"].get("osadka")),
+                    tvrz["data"].get("jine_nazvy"),
+                    tvrz["geo"].get("lat"),
+                    tvrz["geo"].get("lng"),
+                ))
+            except Exception as e:
+                print("Error tvrze:", str(e))
+        conn.commit()
+
 
 
 if __name__ == "__main__":
@@ -114,5 +152,6 @@ if __name__ == "__main__":
     
     ropiky(conn)
     bunkry(conn)
+    tvrze(conn)
     
     conn.close()
