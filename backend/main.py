@@ -1,4 +1,5 @@
 import hashlib
+import json
 import os
 
 import mariadb
@@ -243,6 +244,23 @@ def get_bunkry(lat_one: float, lng_one: float, lat_two: float, lng_two: float):
             return {"message": e}
     return None
 
+@app.get("/api/tvrze")
+def get_tvrze():
+    conn = create_connection()
+    if conn:
+        cur = conn.cursor()
+        try:
+            cur.execute("SELECT * FROM tvrze;")
+            tvrze: list = []
+            for row in cur:
+                crow = list(row)
+                crow[5] = eval(crow[5])
+                tvrze.append(crow)
+            return {"tvrze": tvrze}
+        except mariadb.Error as e:
+            return {"message": e}
+    return None
+
 
 @app.get("/api/search")
 def search(prompt: str):
@@ -259,17 +277,17 @@ def search(prompt: str):
             if normalized_prompt.lower().startswith("ks") and not normalized_prompt.lower().startswith("k-s"):
                 normalized_prompt = "K-S" + normalized_prompt[2:]
 
-            # Search in bunkry (exact match)
+            # Search in bunkry (prefix search)
             cur.execute(
-                "SELECT name, latitude, longitude, 'to' as type FROM bunkry WHERE name = ?",
-                (normalized_prompt,),
+                "SELECT name, latitude, longitude, 'to' as type FROM bunkry WHERE name LIKE ?",
+                (f"{normalized_prompt}%",),
             )
             bunkry_results = cur.fetchall()
 
-            # Search in ropiky (exact match)
+            # Search in ropiky (prefix search)
             cur.execute(
-                "SELECT name, latitude, longitude, 'lo' as type FROM ropiky WHERE name = ?",
-                (normalized_prompt,),
+                "SELECT name, latitude, longitude, 'lo' as type FROM ropiky WHERE name LIKE ?",
+                (f"{normalized_prompt}%",),
             )
             ropiky_results = cur.fetchall()
 

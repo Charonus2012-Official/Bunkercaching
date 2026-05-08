@@ -3,10 +3,12 @@ const ropikyZoomLevel = 14;
 const bunkryZoomLevel = 10;
 
 const MAPY_COM_API_KEY = "Vtuv43i3ze9T5MzXJC-eWCNRSDYz4ucQnaQGg8PIA0k";
-var markers = [];
+var markers_ropiky = [];
 var markers_bunkry = [];
+var markers_tvrze  = [];
 
 const map = L.map("map", { zoomControl: false }).setView([50.0956928, 16.7678179], 11);
+window.exportedMap = map;
 L.control.zoom({ position: "topleft" }).addTo(map);
 const tileLayers = {
   "Mapy.com": L.tileLayer(
@@ -104,6 +106,13 @@ var bunkrIcon_not = L.icon({
   popupAnchor: [0, -16], // kde se otevře popup
 });
 
+var tvrzIcon = L.icon({
+  iconUrl: "../data/images/tvrz.png",
+  iconSize: [48, 48],
+  iconAnchor: [32, 48],
+  popupAnchor: [0, -16],
+})
+
 async function getRopiky() {
   var bounds = map.getBounds();
   var topLeft = bounds.getNorthWest();
@@ -122,10 +131,10 @@ async function getRopiky() {
     }
     const data = await response.json();
 
-    markers.forEach((r) => {
+    markers_ropiky.forEach((r) => {
       r.remove();
     });
-    markers = [];
+    markers_ropiky = [];
 
     data.ropiky.forEach((r) => {
       const id = r[0];
@@ -168,7 +177,68 @@ async function getRopiky() {
         });
         window.dispatchEvent(ropikyEvent);
       });
-      markers.push(marker);
+      markers_ropiky.push(marker);
+    });
+  } catch (err) {
+    console.error("Fetch error:", err);
+  }
+}
+
+async function getTvrze() {
+  const url = `/api/tvrze`;
+  try {
+    const response = await fetch(url, { method: "GET" });
+    if (!response.ok) {
+      throw new Error("HTTP error " + response.status);
+    }
+    const data = await response.json();
+
+    markers_tvrze.forEach((r) => {
+      r.remove();
+    });
+    markers_tvrze = [];
+
+    data.tvrze.forEach((r) => {
+      const id = r[0];
+      const opevneni_id = r[1];
+      const name = r[2];
+      const shortcut = r[3];
+      const website = r[4];
+      const objects = r[5];
+      const usek = r[6];
+      const podusek = r[7];
+      const stav = r[8];
+      const pocet_objektu = r[9];
+      const postavene_objekty = r[10];
+      const reseni_vo = r[11];
+      const osadka = r[12];
+      const jine_nazvy = r[13];
+      const lat = r[14];
+      const lng = r[15];
+      
+      var marker = L.marker([lat, lng], { icon: tvrzIcon, zIndexOffset: 1000 });
+      marker.addTo(map);
+      marker.on("click", function (e) {
+        const bunkryEvent = new CustomEvent("OnTvrzeClickEvent", {
+          detail: {
+            id: opevneni_id,
+            name: name,
+            shortcut: shortcut,
+            website: website,
+            objects: objects,
+            usek: usek,
+            podusek: podusek,
+            stav: stav,
+            pocet_objektu: pocet_objektu,
+            postavene_objekty: postavene_objekty,
+            reseni_vo: reseni_vo,
+            osadka: osadka,
+            jine_nazvy: jine_nazvy
+          },
+        });
+        window.dispatchEvent(bunkryEvent);
+      });
+      markers_tvrze.push(marker);
     });
   } catch (err) {
     console.error("Fetch error:", err);
@@ -265,6 +335,7 @@ async function detectBunkers() {
 }
 
 detectBunkers();
+getTvrze();
 
 map.on("moveend", function (e) {
   detectBunkers();
@@ -276,6 +347,7 @@ window.addEventListener("map_resize_leaf", function (e) {
   }, 200);
 });
 
-setTimeout(() => {
-  window.exportedMap = map;
-}, 100);
+if (typeof BunkerPlaceSearch !== 'undefined') {
+  const searchControl = new BunkerPlaceSearch({ position: 'topright' });
+  searchControl.addTo(map);
+}
