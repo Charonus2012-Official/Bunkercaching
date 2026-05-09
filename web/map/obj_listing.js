@@ -193,23 +193,39 @@ window.addEventListener("OnTvrzeClickEvent", async (e) => {
     let full = [];
 
     try {
-        const fetchPromises = data.objects.map(async (object) => {
-            const url = `/api/id?id=${object}&type=to`;
-            const response = await fetch(url, { method: "GET" });
-            if (!response.ok) {
-                throw new Error("HTTP error " + response.status);
-            }
-            const result = await response.json();
-            const bunker = result.output;
-            const name = (bunker[3] && bunker[3] !== " ") ? bunker[2] + " — " + bunker[3] : bunker[2];
-            const stav = bunker[5];
-            return { name, stav, raw: bunker };
-        });
+        const objects = Array.isArray(data.objects) ? data.objects : [];
+        const hasRawBunkers = objects.length > 0 && Array.isArray(objects[0]);
 
-        full = await Promise.all(fetchPromises);
+        if (hasRawBunkers) {
+            full = objects.map((bunker) => {
+                const name = (bunker[3] && bunker[3] !== " ") ? bunker[2] + " — " + bunker[3] : bunker[2];
+                const stav = bunker[5];
+                return { name, stav, raw: bunker };
+            });
+        } else {
+            const fetchPromises = objects.map(async (object) => {
+                const url = `/api/id?id=${object}&type=to`;
+                const response = await fetch(url, { method: "GET" });
+                if (!response.ok) {
+                    throw new Error("HTTP error " + response.status);
+                }
+                const result = await response.json();
+                const bunker = result.output;
+                const name = (bunker[3] && bunker[3] !== " ") ? bunker[2] + " — " + bunker[3] : bunker[2];
+                const stav = bunker[5];
+                return { name, stav, raw: bunker };
+            });
+
+            full = await Promise.all(fetchPromises);
+        }
     } catch (err) {
         console.error("Error fetching objects:", err);
-        full = data.objects.map(id => ({ name: id, stav: "unknown", raw: null })); // fallback
+        const objects = Array.isArray(data.objects) ? data.objects : [];
+        full = objects.map((object) => ({
+            name: Array.isArray(object) ? ((object[3] && object[3] !== " ") ? object[2] + " — " + object[3] : object[2]) : object,
+            stav: Array.isArray(object) ? object[5] : "unknown",
+            raw: Array.isArray(object) ? object : null
+        }));
     }
 
     addDetail("Stav", data.stav);

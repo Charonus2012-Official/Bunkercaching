@@ -255,6 +255,12 @@ def get_tvrze():
             for row in cur:
                 crow = list(row)
                 crow[5] = eval(crow[5])
+                cur2 = conn.cursor()
+                bunks = []
+                for obj in crow[5]:
+                    cur2.execute("SELECT * FROM bunkry WHERE id = ?;", (obj,))
+                    bunks.append(cur2.fetchone())
+                crow[5] = bunks
                 tvrze.append(crow)
             return {"tvrze": tvrze}
         except mariadb.Error as e:
