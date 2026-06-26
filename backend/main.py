@@ -1,5 +1,4 @@
 import hashlib
-import json
 import os
 
 import mariadb
@@ -12,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 try:
     from .dbh import create_connection
     from .tokens import create_access_token, get_current_user
-except ImportError, ValueError:
+except (ImportError, ValueError):
     from dbh import create_connection
     from tokens import create_access_token, get_current_user
 
@@ -56,13 +55,13 @@ if cors_allow_origin_regex:
             "allow_origins": [],  # use regex instead
             "allow_origin_regex": cors_allow_origin_regex,  # type: ignore
         }
-    )  # type: ignore
+    )
 else:
     cors_kwargs.update(
         {
             "allow_origins": cors_allow_origins,  # type: ignore
         }
-    )  # type: ignore
+    )
 
 app.add_middleware(CORSMiddleware, **cors_kwargs)  # type: ignore
 
@@ -73,7 +72,7 @@ def hash_password(password: str) -> str:
 
 @app.get("/api", response_class=HTMLResponse)
 def read_root():
-    html_content = """
+    return """
     <html>
         <head>
             <title>Bunkercaching API</title>
@@ -84,106 +83,68 @@ def read_root():
         </body>
     </html>
     """
-    return html_content
 
 
 @app.post("/api/login")
 def login(
-    response: Response,
-    username: str = Form(...),
-    password: str = Form(...),
-    remember: str = Form("false"),
+        response: Response,
+        username: str = Form(...),
+        password: str = Form(...),
+        remember: str = Form("false"),
 ):
     conn = create_connection()
-    if conn:
-        cur = conn.cursor()
-        upwd = ""
-        try:
-            cur.execute("SELECT pwd FROM users WHERE username = ?", (username,))
-            try:
-                for row in cur:
-                    upwd = row[0]
-            except:
-                return {"type": "err", "msg": "Špatné uživatelské jméno nebo heslo"}
-            cur.close()
-            conn.close()
-            if hash_password(password) == upwd:
-                is_remember = remember == "true"
-                token = create_access_token(
-                    {"sub": username}, remember=is_remember
-                )
-                if is_remember:
-                    response.set_cookie(
-                        key="token",
-                        value=token,
-                        httponly=True,
-                        secure=False,
-                        samesite="lax",
-                        max_age=3600 * 24 * 30,  # 30 days
-                    )
-                else:
-                    response.set_cookie(
-                        key="token",
-                        value=token,
-                        httponly=True,
-                        secure=False,
-                        samesite="lax",
-                    )
-                return {"type": "scs", "msg": "success"}
-            else:
-                return {"type": "err", "msg": "Špatné uživatelské jméno nebo heslo"}
-        except mariadb.Error as e:
-            cur.close()
-            conn.close()
-            return {"type": "err", "msg": "Nevim co se stalo"}
-    return {"type": "err", "msg": "Chyba připojení do databáze"}
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT pwd FROM users WHERE username = ?", (username,))
+        row = cur.fetchone()
+        if row is None:
+            return {"type": "err", "msg": "Špatné uživatelské jméno nebo heslo"}
+        upwd = row[0]
+        if hash_password(password) != upwd:
+            return {"type": "err", "msg": "Špatné uživatelské jméno nebo heslo"}
+        is_remember = remember == "true"
+        token = create_access_token({"sub": username}, remember=is_remember)
+        cookie_kwargs = dict(key="token", value=token, httponly=True, secure=False, samesite="lax")
+        if is_remember:
+            cookie_kwargs["max_age"] = 3600 * 24 * 30  # 30 days
+        response.set_cookie(**cookie_kwargs)
+        return {"type": "scs", "msg": "success"}
+    except mariadb.Error:
+        return {"type": "err", "msg": "Nevim co se stalo"}
+    finally:
+        cur.close()
+        conn.close()
 
 
 @app.post("/api/signup")
 def signup(
-    username: str = Form(...),
-    email: str = Form(...),
-    password: str = Form(...),
-    confirm_password: str = Form(...),
+        username: str = Form(...),
+        email: str = Form(...),
+        password: str = Form(...),
+        confirm_password: str = Form(...),
 ):
     if password != confirm_password:
         return {"type": "err", "msg": "Hesla se neshodují"}
     conn = create_connection()
-    if conn:
-        cur = conn.cursor()
-        try:
-            cur.execute("SELECT username FROM users WHERE username = ?", (username,))
-            i = 0
-            for row in cur:
-                i += 1
-            if i != 0:
-                return {"type": "err", "msg": "Uživatelské jméno je používané"}
-            cur.execute("SELECT email FROM users WHERE email = ?", (email,))
-            i = 0
-            for row in cur:
-                i += 1
-            if i != 0:
-                return {"type": "err", "msg": "Email je už používaný"}
-        except mariadb.Error as e:
-            return {"type": "err", "msg": "Nevim co se stalo"}
-        try:
-            cur.execute(
-                "INSERT INTO users SET username = ?, email = ?, pwd = ?",
-                (
-                    username,
-                    email,
-                    hash_password(password),
-                ),
-            )
-            conn.commit()
-        except mariadb.Error as e:
-            cur.close()
-            conn.close()
-            return {"type": "err", "msg": "Nevim co se stalo"}
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT username FROM users WHERE username = ?", (username,))
+        if cur.fetchone() is not None:
+            return {"type": "err", "msg": "Uživatelské jméno je používané"}
+        cur.execute("SELECT email FROM users WHERE email = ?", (email,))
+        if cur.fetchone() is not None:
+            return {"type": "err", "msg": "Email je už používaný"}
+        cur.execute(
+            "INSERT INTO users SET username = ?, email = ?, pwd = ?",
+            (username, email, hash_password(password)),
+        )
+        conn.commit()
+        return {"type": "scs", "msg": "Podařilo se, můžete se přihlásit"}
+    except mariadb.Error:
+        return {"type": "err", "msg": "Nevim co se stalo"}
+    finally:
         cur.close()
         conn.close()
-        return {"type": "scs", "msg": "Podařilo se, můžete se přihlásit"}
-    return {"type": "err", "msg": "Chyba připojení do databáze"}
 
 
 @app.post("/api/me")
@@ -200,185 +161,153 @@ def logout(response: Response):
 @app.get("/api/ropiky")
 def get_ropiky(lat_one: float, lng_one: float, lat_two: float, lng_two: float):
     conn = create_connection()
-    if conn:
-        cur = conn.cursor()
-        try:
-            cur.execute(
-                "SELECT * FROM ropiky WHERE latitude <= ? AND latitude >= ? AND longitude >= ? AND longitude <= ?;",
-                (
-                    lat_one,
-                    lat_two,
-                    lng_one,
-                    lng_two,
-                ),
-            )
-            ropiky: list = []
-            for row in cur:
-                ropiky.append(row)
-            return {"ropiky": ropiky}
-        except mariadb.Error as e:
-            return {"message": e}
-    return None
+    cur = conn.cursor()
+    try:
+        cur.execute(
+            "SELECT * FROM ropiky WHERE latitude <= ? AND latitude >= ? AND longitude >= ? AND longitude <= ?;",
+            (lat_one, lat_two, lng_one, lng_two),
+        )
+        return {"ropiky": cur.fetchall()}
+    except mariadb.Error as e:
+        return {"message": str(e)}
+    finally:
+        cur.close()
+        conn.close()
 
 
 @app.get("/api/bunkry")
 def get_bunkry(lat_one: float, lng_one: float, lat_two: float, lng_two: float):
     conn = create_connection()
-    if conn:
-        cur = conn.cursor()
-        try:
-            cur.execute(
-                "SELECT * FROM bunkry WHERE latitude <= ? AND latitude >= ? AND longitude >= ? AND longitude <= ?;",
-                (
-                    lat_one,
-                    lat_two,
-                    lng_one,
-                    lng_two,
-                ),
-            )
-            ropiky: list = []
-            for row in cur:
-                ropiky.append(row)
-            return {"bunkry": ropiky}
-        except mariadb.Error as e:
-            return {"message": e}
-    return None
+    cur = conn.cursor()
+    try:
+        cur.execute(
+            "SELECT * FROM bunkry WHERE latitude <= ? AND latitude >= ? AND longitude >= ? AND longitude <= ?;",
+            (lat_one, lat_two, lng_one, lng_two),
+        )
+        return {"bunkry": cur.fetchall()}
+    except mariadb.Error as e:
+        return {"message": str(e)}
+    finally:
+        cur.close()
+        conn.close()
+
 
 @app.get("/api/tvrze")
 def get_tvrze():
     conn = create_connection()
-    if conn:
-        cur = conn.cursor()
-        try:
-            cur.execute("SELECT * FROM tvrze;")
-            tvrze: list = []
-            for row in cur:
-                crow = list(row)
-                crow[5] = eval(crow[5])
-                cur2 = conn.cursor()
-                bunks = []
-                for obj in crow[5]:
-                    cur2.execute("SELECT * FROM bunkry WHERE id = ?;", (obj,))
-                    bunks.append(cur2.fetchone())
-                crow[5] = bunks
-                tvrze.append(crow)
-            return {"tvrze": tvrze}
-        except mariadb.Error as e:
-            return {"message": e}
-    return None
+    cur = conn.cursor()
+    cur2 = conn.cursor()
+    try:
+        cur.execute("SELECT * FROM tvrze;")
+        tvrze: list = []
+        for row in cur.fetchall():
+            crow = list(row)
+            crow[5] = eval(crow[5])
+            bunks = []
+            for obj in crow[5]:
+                cur2.execute("SELECT * FROM bunkry WHERE id = ?;", (obj,))
+                bunks.append(cur2.fetchone())
+            crow[5] = bunks
+            tvrze.append(crow)
+        return {"tvrze": tvrze}
+    except mariadb.Error as e:
+        return {"message": str(e)}
+    finally:
+        cur2.close()
+        cur.close()
+        conn.close()
 
 
 @app.get("/api/search")
 def search(prompt: str):
     conn = create_connection()
-    if conn:
-        cur = conn.cursor()
-        try:
-            # Normalize prompt: trim and handle common prefix without hyphen
-            # MariaDB with utf8mb4_unicode_ci is case-insensitive by default for '='
-            normalized_prompt = prompt.strip()
-            
-            # Simple normalization for 'ks' shorthand to 'K-S'
-            # If it starts with 'ks' (case-insensitive) and it's not 'k-s'
-            if normalized_prompt.lower().startswith("ks") and not normalized_prompt.lower().startswith("k-s"):
-                normalized_prompt = "K-S" + normalized_prompt[2:]
+    cur = conn.cursor()
+    try:
+        normalized_prompt = prompt.strip()
+        if normalized_prompt.lower().startswith("ks") and not normalized_prompt.lower().startswith("k-s"):
+            normalized_prompt = "K-S" + normalized_prompt[2:]
 
-            # Search in bunkry (prefix search)
-            cur.execute(
-                "SELECT name, latitude, longitude, 'to' as type FROM bunkry WHERE name LIKE ?",
-                (f"{normalized_prompt}%",),
-            )
-            bunkry_results = cur.fetchall()
+        cur.execute(
+            "SELECT name, latitude, longitude FROM bunkry WHERE name LIKE ?",
+            (f"{normalized_prompt}%",),
+        )
+        bunkry_results = cur.fetchall()
 
-            # Search in ropiky (prefix search)
-            cur.execute(
-                "SELECT name, latitude, longitude, 'lo' as type FROM ropiky WHERE name LIKE ?",
-                (f"{normalized_prompt}%",),
-            )
-            ropiky_results = cur.fetchall()
+        cur.execute(
+            "SELECT name, latitude, longitude FROM ropiky WHERE name LIKE ?",
+            (f"{normalized_prompt}%",),
+        )
+        ropiky_results = cur.fetchall()
 
-            results = []
-            for row in bunkry_results:
-                results.append(
-                    {
-                        "name": row[0],
-                        "lat": float(row[1]),
-                        "lon": float(row[2]),
-                        "type": "Těžké opevnění",
-                    }
-                )
-            for row in ropiky_results:
-                results.append(
-                    {
-                        "name": row[0],
-                        "lat": float(row[1]),
-                        "lon": float(row[2]),
-                        "type": "Lehké opevnění",
-                    }
-                )
+        results = [
+                      {"name": row[0], "lat": float(row[1]), "lon": float(row[2]), "type": "Těžké opevnění"}
+                      for row in bunkry_results
+                  ] + [
+                      {"name": row[0], "lat": float(row[1]), "lon": float(row[2]), "type": "Lehké opevnění"}
+                      for row in ropiky_results
+                  ]
 
-            return {"output": results}
-        except mariadb.Error as e:
-            return {"message": str(e)}
-        finally:
-            cur.close()
-            conn.close()
-    return {"output": []}
+        return {"output": results}
+    except mariadb.Error as e:
+        return {"message": str(e)}
+    finally:
+        cur.close()
+        conn.close()
 
 
 @app.post("/api/log")
 def log(
-    bunker_id: int = Form(...),
-    type: str = Form(...),
-    log_text: str = Form(...),
-    concept: str = Form("false"),
-    user: dict = Depends(get_current_user),
+        bunker_id: int = Form(...),
+        type: str = Form(...),
+        log_text: str = Form(...),
+        concept: str = Form("false"),
+        user: dict = Depends(get_current_user),
 ):
     conn = create_connection()
-    if conn:
-        cur = conn.cursor()
-        try:
-            cur.execute("SELECT id FROM users WHERE username = ?", (user["username"],))
-            user_id = cur.fetchone()[0]
-        except mariadb.Error as e:
-            return {"message": e}
-        try:
-            cur.execute(
-                "INSERT INTO logs SET type = ?, bunker_id = ?, log_text = ?, user_id = ?, is_concept = ?",
-                (type, bunker_id, log_text, user_id, int(concept == "true")),
-            )
-            conn.commit()
-        except mariadb.Error as e:
-            return {"message": e}
-
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT id FROM users WHERE username = ?", (user["username"],))
+        row = cur.fetchone()
+        if row is None:
+            return {"message": "Uživatel nenalezen"}
+        user_id = row[0]
+        cur.execute(
+            "INSERT INTO logs SET type = ?, bunker_id = ?, log_text = ?, user_id = ?, is_concept = ?",
+            (type, bunker_id, log_text, user_id, int(concept == "true")),
+        )
+        conn.commit()
         return {"message": "log put in"}
+    except mariadb.Error as e:
+        return {"message": str(e)}
+    finally:
+        cur.close()
+        conn.close()
 
 
 @app.get("/api/id")
 def get_by_id(id: int, type: str):
     conn = create_connection()
-    if conn:
-        cur = conn.cursor()
+    cur = conn.cursor()
+    try:
         if type == "lo":
-            try:
-                cur.execute("SELECT * FROM ropiky WHERE ropiky_id = ?", (id,))
-                searched: list = []
-                for row in cur.fetchall():
-                    searched.append(row)
-                return {"output": searched[0]}
-            except mariadb.Error as e:
-                return {"message": e}
+            cur.execute("SELECT * FROM ropiky WHERE ropiky_id = ?", (id,))
+            row = cur.fetchone()
+            if row is None:
+                return {"message": "Nenalezeno"}
+            return {"output": row}
         elif type == "to":
-            try:
-                cur.execute("SELECT * FROM bunkry WHERE opevneni_id = ?", (id,))
-                searches: list = []
-                for row in cur.fetchall():
-                    searches.append(row)
-                return {"output": searches[0]}
-            except (mariadb.Error, IndexError) as e:
-                return {"message": str(e)}
+            cur.execute("SELECT * FROM bunkry WHERE opevneni_id = ?", (id,))
+            row = cur.fetchone()
+            if row is None:
+                return {"message": "Nenalezeno"}
+            return {"output": row}
         else:
             return {"message": "Wrong type!"}
+    except mariadb.Error as e:
+        return {"message": str(e)}
+    finally:
+        cur.close()
+        conn.close()
 
 
 try:
