@@ -1,4 +1,4 @@
-window.logging_deactivated = true;
+window.logging_deactivated = false;
 
 window.addEventListener("load", function () {
   const currentPath = window.location.pathname;

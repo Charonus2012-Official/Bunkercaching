@@ -6,10 +6,64 @@
     <title>Bunkercaching — Logy</title>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&family=Staatliches&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="logs.css">
     <link rel="icon" type="image/png" href="../data/logo/bunkercaching_pure_logo.png">
 </head>
 <body>
 <nav id="navbar"></nav>
+
+<main id="logs-page">
+    <div class="logs-wrapper">
+        <header class="logs-header">
+            <h1>Moje logy</h1>
+            <p>Přehled vašich konceptů, posledních návštěv a statistik.</p>
+        </header>
+
+        <section class="summary-grid" aria-label="Souhrn statistik">
+            <article class="summary-card">
+                <h2>Navštívené bunkry</h2>
+                <p id="stat-total" class="summary-value">0</p>
+            </article>
+            <article class="summary-card">
+                <h2>Těžké objekty</h2>
+                <p id="stat-to" class="summary-value">0</p>
+            </article>
+            <article class="summary-card">
+                <h2>Řopíky</h2>
+                <p id="stat-lo" class="summary-value">0</p>
+            </article>
+        </section>
+
+        <section class="logs-columns">
+            <article class="logs-card">
+                <div class="card-header">
+                    <h2>Koncepty</h2>
+                    <span id="concept-count" class="pill">0</span>
+                </div>
+                <ul id="concepts" class="log-list">
+                    <!-- Concepts will be loaded here -->
+                </ul>
+            </article>
+
+            <article class="logs-card">
+                <div class="card-header">
+                    <h2>Všechny logy</h2>
+                    <span id="recent-X" class="pill">0</span>
+                </div>
+                <ul id="recent" class="log-list">
+                    <!-- Logs will be loaded here -->
+                </ul>
+                <div class="pagination">
+                    <button id="prev-page" disabled>Předchozí</button>
+                    <span id="page-info">Strana 1</span>
+                    <button id="next-page">Další</button>
+                </div>
+            </article>
+        </section>
+    </div>
+</main>
+
 <script src="../navbar.js"></script>
+<script src="logs.js"></script>
 </body>
 </html>

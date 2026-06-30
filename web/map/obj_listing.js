@@ -318,16 +318,12 @@ window.addEventListener("OnTvrzeClickEvent", async (e) => {
     const bunker_form_id = document.getElementById("bunker_id");
     const bunker_type = document.getElementById("bunker_type");
 
-    sidebottom.style.display = "block";
+    sidebottom.style.display = "none";
     bunker_form_id.setAttribute("value", data.id);
     bunker_type.setAttribute("value", "tvrz");
 
     const submitBtn = sidebottom.querySelector('input[type="submit"]');
-    if (window.logging_deactivated) {
-        submitBtn.disabled = true;
-    } else {
-        submitBtn.disabled = false;
-    }
+    submitBtn.disabled = true;
 });
 
 function displ(state) {

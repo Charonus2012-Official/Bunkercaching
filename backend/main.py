@@ -1,11 +1,13 @@
 import hashlib
+import json
 import os
 
 import mariadb
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, Form, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 try:
@@ -68,6 +70,21 @@ app.add_middleware(CORSMiddleware, **cors_kwargs)  # type: ignore
 
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
+
+def get_user_id(username: str) -> int:
+    conn = create_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT id FROM users WHERE username = ?", (username,))
+        row = cur.fetchone()
+        if row is None:
+            return -1
+        return row[0]
+    except mariadb.Error:
+        return -2
+    finally:
+        cur.close()
+        conn.close()
 
 
 @app.get("/api", response_class=HTMLResponse)
@@ -283,6 +300,121 @@ def log(
         cur.close()
         conn.close()
 
+@app.post("/api/log/edit")
+def edit_log(
+        log_id: int = Form(...),
+        log_text: str = Form(...),
+        concept: str = Form("false"),
+        user: dict = Depends(get_current_user),
+):
+    user_id = get_user_id(user["username"])
+    conn = create_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT user_id FROM logs WHERE id = ?", (log_id,))
+        row = cur.fetchone()
+        if row is None:
+            return {"message": "Log nenalezen"}
+        if row[0] != user_id:
+            return {"message": "Nemáte oprávnění k úpravě tohoto logu"}
+        cur.execute(
+            "UPDATE logs SET log_text = ?, is_concept = ?, timestamp = current_timestamp(6) WHERE id = ?",
+            (log_text, (concept == "true"), log_id),
+        )
+        conn.commit()
+        return {"message": "log updated"}
+    except mariadb.Error as e:
+        return {"message": str(e)}
+    finally:
+        cur.close()
+        conn.close()
+
+@app.post("/api/log/detail")
+async def get_log_detail(
+        request: Request,
+        user: dict = Depends(get_current_user),
+):
+    user_id = get_user_id(user["username"])
+    try:
+        body = await request.json()
+        log_id = body.get("log_id")
+    except:
+        return JSONResponse({"message": "Neplatný požadavek"}, status_code=400)
+    
+    conn = create_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT id, log_text, bunker_id, type, user_id, is_concept FROM logs WHERE id = ?", (log_id,))
+        row = cur.fetchone()
+        if row is None:
+            return JSONResponse({"message": "Log nenalezen"}, status_code=404)
+        if row[4] != user_id:
+            return JSONResponse({"message": "Nemáte přístup k tomuto logu"}, status_code=403)
+        return {"log_id": row[0], "log_text": row[1], "bunker_id": row[2], "type": row[3], "concept": row[5]}
+    except mariadb.Error as e:
+        return JSONResponse({"message": str(e)}, status_code=500)
+    finally:
+        cur.close()
+        conn.close()
+
+@app.post("/api/logsinfo")
+def logsinfo(limit: int = 10, offset: int = 0, username: dict = Depends(get_current_user)):
+    user_id: int = get_user_id(username["username"])
+    conn = create_connection()
+    cur = conn.cursor()
+    try:
+        # Get stats
+        cur.execute("SELECT COUNT(*) FROM logs WHERE user_id = ? AND is_concept = 0", (user_id,))
+        total_visited = cur.fetchone()[0]
+
+        cur.execute("SELECT COUNT(*) FROM logs WHERE user_id = ? AND is_concept = 0 AND type = 'to'", (user_id,))
+        to_count = cur.fetchone()[0]
+
+        cur.execute("SELECT COUNT(*) FROM logs WHERE user_id = ? AND is_concept = 0 AND type = 'lo'", (user_id,))
+        lo_count = cur.fetchone()[0]
+
+        cur.execute("SELECT COUNT(*) FROM logs WHERE user_id = ? AND is_concept = 1", (user_id,))
+        concept_count = cur.fetchone()[0]
+
+        # Get logs with names
+        query = """
+            SELECT l.id, l.bunker_id, l.type, l.log_text, l.is_concept, l.timestamp, COALESCE(b.name, r.name) as bunker_name
+            FROM logs l
+            LEFT JOIN bunkry b ON l.bunker_id = b.opevneni_id AND l.type = 'to'
+            LEFT JOIN ropiky r ON l.bunker_id = r.ropiky_id AND l.type = 'lo'
+            WHERE l.user_id = ? AND l.is_concept = 0
+            ORDER BY l.timestamp DESC
+            LIMIT ? OFFSET ?
+        """
+        cur.execute(query, (user_id, limit, offset))
+        logs = cur.fetchall()
+
+        # Get concepts
+        cur.execute("""
+            SELECT l.id, l.bunker_id, l.type, l.log_text, l.is_concept, l.timestamp, COALESCE(b.name, r.name) as bunker_name
+            FROM logs l
+            LEFT JOIN bunkry b ON l.bunker_id = b.opevneni_id AND l.type = 'to'
+            LEFT JOIN ropiky r ON l.bunker_id = r.ropiky_id AND l.type = 'lo'
+            WHERE l.user_id = ? AND l.is_concept = 1
+            ORDER BY l.timestamp DESC
+        """, (user_id,))
+        concepts = cur.fetchall()
+
+        return {
+            "stats": {
+                "total_visited": total_visited,
+                "to_count": to_count,
+                "lo_count": lo_count,
+                "concept_count": concept_count
+            },
+            "logs": logs,
+            "concepts": concepts
+        }
+    except mariadb.Error as e:
+        return {"message": str(e)}
+    finally:
+        cur.close()
+        conn.close()
 
 @app.get("/api/id")
 def get_by_id(id: int, type: str):
@@ -293,18 +425,18 @@ def get_by_id(id: int, type: str):
             cur.execute("SELECT * FROM ropiky WHERE ropiky_id = ?", (id,))
             row = cur.fetchone()
             if row is None:
-                return {"message": "Nenalezeno"}
-            return {"output": row}
+                return {"message": "Nenalezeno", "good": False}
+            return {"output": row, "good": True}
         elif type == "to":
             cur.execute("SELECT * FROM bunkry WHERE opevneni_id = ?", (id,))
             row = cur.fetchone()
             if row is None:
-                return {"message": "Nenalezeno"}
-            return {"output": row}
+                return {"message": "Nenalezeno", "good": False}
+            return {"output": row, "good": True}
         else:
-            return {"message": "Wrong type!"}
+            return {"message": "Wrong type!", "good": False}
     except mariadb.Error as e:
-        return {"message": str(e)}
+        return {"message": str(e), "good": False}
     finally:
         cur.close()
         conn.close()

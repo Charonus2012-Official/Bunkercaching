@@ -5,6 +5,7 @@ window.addEventListener("load", function () {
   let bunkerID;
   let bunkerType;
   let bunkerName;
+  let editLogId = urlParams.get('edit');
 
   bunkerID = urlParams.get("bunker_id");
   bunkerType = urlParams.get("type");
@@ -35,10 +36,13 @@ window.addEventListener("load", function () {
   })
     .then((response) => {
       if (response.ok) {
-        return response.json();
+          return response.json();
       }
     })
     .then((data) => {
+      if (!data.good) {
+        window.location.href = "/logs"
+      }
       if (bunkerType === "lo") {
         bunkerName = data["output"][3];
       } else {
@@ -46,18 +50,48 @@ window.addEventListener("load", function () {
       }
       title.textContent = "Bunkercaching — " + bunkerName;
       bi.textContent = bunkerName;
-    });
+    })
 
   document.getElementById("bunker_id").value = bunkerID;
   document.getElementById("type").value = bunkerType;
+
+  if (editLogId) {
+    fetch(`/api/log/detail`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ log_id: parseInt(editLogId) })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.log_text) {
+        document.getElementById("log_text").value = data.log_text;
+      }
+      if (data.concept) {
+        document.getElementById("concept").checked = data.concept;
+      }
+    });
+  }
 });
 
 document.getElementById("logForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const editLogId = urlParams.get('edit');
   const data = new FormData(this);
-  fetch("/api/log", {
-    method: "POST",
+  
+  const endpoint = editLogId ? "/api/log/edit" : "/api/log";
+  const method = editLogId ? "POST" : "POST";
+  
+  if (editLogId) {
+    data.append("log_id", editLogId);
+  }
+
+  fetch(endpoint, {
+    method: method,
     credentials: "include",
     body: data,
   })
@@ -67,7 +101,7 @@ document.getElementById("logForm").addEventListener("submit", function (e) {
       }
     })
     .then((data) => {
-      if (data.message === "log put in") {
+      if (data.message === "log put in" || data.message === "log updated") {
         window.location.href = "/logs/";
       }
     });
