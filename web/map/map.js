@@ -153,6 +153,9 @@ async function getRopiky() {
       const stav_dnes = r[13];
       const lat = r[14];
       const lng = r[15];
+      if (lat === 0 && lng === 0) {
+        return; // Skip this iteration if lat and lng are both 0
+      }
       if (stav_dnes == "dochován") {
         var marker = L.marker([lat, lng], { icon: ropikIcon });
       } else {
@@ -215,7 +218,9 @@ async function getTvrze() {
       const jine_nazvy = r[13];
       const lat = r[14];
       const lng = r[15];
-      
+      if (lat === 0 && lng === 0) {
+        return; // Skip this iteration if lat and lng are both 0
+      }
       var marker = L.marker([lat, lng], { icon: tvrzIcon, zIndexOffset: 1000 });
       marker.addTo(map);
       marker.on("click", function (e) {
@@ -288,7 +293,9 @@ async function getBunkry() {
       const firma = r[26];
       const lat = r[27];
       const lng = r[28];
-
+      if (lat === 0 && lng === 0) {
+        return; // Skip this iteration if lat and lng are both 0
+      }
       if (stav == "Postaven") {
         var marker = L.marker([lat, lng], { icon: bunkrIcon });
       } else {

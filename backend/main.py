@@ -12,7 +12,7 @@ from fastapi.staticfiles import StaticFiles
 
 try:
     from .dbh import create_connection
-    from .tokens import create_access_token, get_current_user
+    from .tokens import create_access_token, get_current_user, get_current_admin
 except (ImportError, ValueError):
     from dbh import create_connection
     from tokens import create_access_token, get_current_user
@@ -166,7 +166,63 @@ def signup(
 
 @app.post("/api/me")
 def me(user: dict = Depends(get_current_user)):
-    return {"username": user["username"]}
+    conn = create_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT role FROM users WHERE username = ?", (user["username"],))
+        row = cur.fetchone()
+        role = row[0] if row else "user"
+        return {"username": user["username"], "role": role}
+    finally:
+        cur.close()
+        conn.close()
+
+
+@app.post("/api/admin/stats")
+def admin_stats(user: dict = Depends(get_current_admin)):
+    conn = create_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT COUNT(*) FROM users")
+        total_users = cur.fetchone()[0]
+
+        cur.execute("SELECT COUNT(*) FROM users WHERE role = 'admin'")
+        admin_users = cur.fetchone()[0]
+
+        cur.execute("SELECT COUNT(*) FROM bunkry")
+        total_bunkry = cur.fetchone()[0]
+
+        cur.execute("SELECT COUNT(*) FROM ropiky")
+        total_ropiky = cur.fetchone()[0]
+
+        cur.execute("SELECT COUNT(*) FROM tvrze")
+        total_tvrze = cur.fetchone()[0]
+
+        cur.execute("SELECT COUNT(*) FROM logs")
+        total_logs = cur.fetchone()[0]
+
+        cur.execute("""
+            SELECT DATE_FORMAT(timestamp, '%Y-%m-%d') as date, COUNT(*) as count
+            FROM logs 
+            WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+            GROUP BY DATE_FORMAT(timestamp, '%Y-%m-%d')
+            ORDER BY date DESC
+            LIMIT 30
+        """)
+        logs_by_date = cur.fetchall()
+
+        return {
+            "total_users": total_users,
+            "admin_users": admin_users,
+            "total_bunkry": total_bunkry,
+            "total_ropiky": total_ropiky,
+            "total_tvrze": total_tvrze,
+            "total_logs": total_logs,
+            "logs_by_date": [{"date": row[0], "count": row[1]} for row in logs_by_date]
+        }
+    finally:
+        cur.close()
+        conn.close()
 
 
 @app.post("/api/logout")

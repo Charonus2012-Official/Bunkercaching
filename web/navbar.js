@@ -15,6 +15,7 @@ window.addEventListener("load", function () {
       </a>
     </div>
     <ul id="menu">
+      <li><a href="/admin" id="nav-admin" class="${currentPath.startsWith("/admin") ? "active" : ""}" style="display:none;">Administrace</a></li>
       <li><a href="/map" class="${currentPath.startsWith("/map") ? "active" : ""}">Mapa</a></li>
       <li>${logsLink}</li>
       <li><a href="/about" class="${currentPath.startsWith("/about") ? "active" : ""}">O projektu</a></li>
@@ -31,6 +32,7 @@ window.addEventListener("load", function () {
   navbar.innerHTML = navbarInner;
 
   const prof = document.getElementById("nav-profile");
+  const adminLink = document.getElementById("nav-admin");
   const toggle = document.getElementById("mobile-toggle");
   const menu = document.getElementById("menu");
 
@@ -48,13 +50,16 @@ window.addEventListener("load", function () {
   })
     .then((response) => {
       if (!response.ok) {
-        return { username: "Přihlášení" };
+        return { username: "Přihlášení", role: "user" };
       }
       return response.json();
     })
     .then((data) => {
       if (data.username) {
         prof.textContent = data.username;
+        if (data.role === "admin") {
+          adminLink.style.display = "block";
+        }
       }
     });
 });

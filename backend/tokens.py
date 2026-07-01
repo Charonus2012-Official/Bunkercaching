@@ -1,10 +1,11 @@
-from fastapi import HTTPException, Cookie
+from fastapi import HTTPException, Cookie, Depends
 from datetime import timedelta
 import datetime
 from jose import jwt, JWTError
 import os
 from dotenv import load_dotenv
 
+from backend.dbh import create_connection
 
 # Load environment variables from .env if present
 env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
@@ -41,6 +42,20 @@ def get_current_user(token: str = Cookie(None)):
         return {"username": username}
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
+
+
+def get_current_admin(user: dict = Depends(get_current_user)):
+    conn = create_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT role FROM users WHERE username = ?", (user["username"],))
+        row = cur.fetchone()
+        if row is None or row[0] != "admin":
+            raise HTTPException(status_code=403, detail="Admin access required")
+        return user
+    finally:
+        cur.close()
+        conn.close()
 
 
 if __name__ == "__main__":

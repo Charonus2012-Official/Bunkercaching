@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunkercaching — Administrace</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" type="image/png" href="../data/logo/bunkercaching_pure_logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&family=Staatliches&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav id="navbar"></nav>
+
+    <div class="admin-container">
+        <h1>Admin Dashboard</h1>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Uživatelé</h3>
+                <p class="stat-value" id="total-users">0</p>
+                <p class="stat-sub">Celkem uživatelů</p>
+            </div>
+            <div class="stat-card">
+                <h3>Administrátoři</h3>
+                <p class="stat-value" id="admin-users">0</p>
+                <p class="stat-sub">Počet adminů</p>
+            </div>
+            <div class="stat-card">
+                <h3>Sruby</h3>
+                <p class="stat-value" id="total-bunkry">0</p>
+                <p class="stat-sub">Celkem objektů</p>
+            </div>
+            <div class="stat-card">
+                <h3>Řopíky</h3>
+                <p class="stat-value" id="total-ropiky">0</p>
+                <p class="stat-sub">Lehké opevnění</p>
+            </div>
+            <div class="stat-card">
+                <h3>Tvrze</h3>
+                <p class="stat-value" id="total-tvrze">0</p>
+                <p class="stat-sub">Celkem tvrzí</p>
+            </div>
+            <div class="stat-card">
+                <h3>Logy</h3>
+                <p class="stat-value" id="total-logs">0</p>
+                <p class="stat-sub">Celkem logů</p>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h2>Logy za posledních 30 dní</h2>
+            <canvas id="logsChart"></canvas>
+        </div>
+    </div>
+
+    <script src="../navbar.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

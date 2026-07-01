@@ -203,6 +203,17 @@ docker exec bunkercaching-db mariadb-dump -u root -pyour_root_password bunkercac
 - `.env` is excluded from the Docker image via `.dockerignore`.
 - Database data is persisted in a named Docker volume (`mariadb_data`).
 
+## Admin Dashboard
+- You can get an admin dashboard, but currently the only way is to change the role of the user form `user` to `admin` in the database. You can do this by running the following SQL command:
+
+```
+UPDATE users SET role='admin' WHERE username='your_username';
+```
+And here is a full docker command
+```
+docker exec bunkercaching-db mariadb -u root -proot_pwd bunkercaching -e "UPDATE users SET role='admin' WHERE username='your_username';"
+```
+
 ## API Overview of the `uvicorn` server
 - `GET /` — Frontend
 - `GET /api/` — simple HTML landing page for the API
