@@ -14,7 +14,19 @@
 
     <div class="admin-container">
         <h1>Admin Dashboard</h1>
-        
+
+        <div class="admin-actions">
+            <div class="actions">
+                <button id="refresh-btn" class="btn">Obnovit</button>
+                <button id="export-csv" class="btn btn-secondary">Export CSV</button>
+                <label for="chart-type" class="visually-hidden">Typ grafu</label>
+                <select id="chart-type" class="btn btn-secondary">
+                    <option value="line">Linka</option>
+                    <option value="bar">Sloupce</option>
+                </select>
+            </div>
+        </div>
+
         <div class="stats-grid">
             <div class="stat-card">
                 <h3>Uživatelé</h3>
@@ -51,6 +63,18 @@
         <div class="chart-container">
             <h2>Logy za posledních 30 dní</h2>
             <canvas id="logsChart"></canvas>
+        </div>
+
+        <div class="table-container">
+            <h2>Logy za posledních 30 dní</h2>
+            <table id="logs-table">
+                <thead>
+                    <tr><th>Datum</th><th>Počet</th></tr>
+                </thead>
+                <tbody>
+                    <!-- rows populated by admin.js -->
+                </tbody>
+            </table>
         </div>
     </div>
 

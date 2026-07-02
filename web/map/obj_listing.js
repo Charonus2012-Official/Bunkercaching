@@ -36,7 +36,8 @@ window.addEventListener("OnRopikyClickEvent", (e) => {
     addDetail("Sbor", data.sbor);
     addDetail("Úsek", data.úsek);
     addDetail("Odolnost", data.odolnost);
-    addDetail("Stav objektu", data.stav_dnes.charAt(0).toUpperCase() + data.stav_dnes.slice(1));
+    addDetail("Nadmořská výška", data.mnm.toString() + " m. n. m.");
+    addDetail("Stav objektu 1938/Dnes", data.stav_1938.charAt(0).toUpperCase() + data.stav_1938.slice(1) + "/" + data.stav_dnes.charAt(0).toUpperCase() + data.stav_dnes.slice(1));
 
     const bunker_site = document.createElement("a");
     bunker_site.className = "center mlink";

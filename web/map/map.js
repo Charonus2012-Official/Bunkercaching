@@ -143,12 +143,12 @@ async function getRopiky() {
       const name = r[3];
       const sbor = r[4];
       const úsek = r[5];
-      const řop = r[6];
+      const rop = r[6];
       const typ = r[7];
       const odolnost = r[8];
       const mnm = r[9];
-      const betonáž = r[10];
-      const krychelná = r[11];
+      const betonaz = r[10];
+      const krychelna = r[11];
       const stav_1938 = r[12];
       const stav_dnes = r[13];
       const lat = r[14];
