@@ -23,3 +23,59 @@
 .search-result:hover {
     background-color: #f5f5f5;
 }
+
+.coords {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.4rem 0.75rem;
+    background: #f4f4f2;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.95rem;
+    color: #222;
+}
+
+.coord .dir {
+    font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+    font-weight: 700;
+    color: #4CAF50; /* or your brand color */
+    margin-right: 0.15rem;
+}
+
+.copy-btn {
+    border: none;
+    background-color: #b1b6b6;
+    cursor: pointer;
+    opacity: 0.6;
+    font-size: 1rem;
+}
+.copy-btn:hover { opacity: 1; }
+
+
+.map-links {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    width: 100%;
+}
+
+.map-link {
+    flex: 1;
+    display: inline-block;
+    padding: 0.4rem 0.75rem;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    color: #1a73e8;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.map-link:hover {
+    background: #f8f9fa;
+    border-color: #1a73e8;
+}

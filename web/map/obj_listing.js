@@ -1,3 +1,108 @@
+function toDMM(decimal, isLat) {
+    const dir = isLat ? (decimal >= 0 ? 'N' : 'S') : (decimal >= 0 ? 'E' : 'W');
+    const abs = Math.abs(decimal);
+    const deg = Math.floor(abs);
+    const min = ((abs - deg) * 60).toFixed(3);
+    const degStr = isLat ? deg : String(deg).padStart(3, '0');
+    return [dir, degStr, min];
+}
+
+function coordsElement(lat, lng) {
+    const coordsDiv = document.createElement('div');
+    coordsDiv.className = 'coords'
+
+    Dlat = toDMM(lat, true)
+    Dlng = toDMM(lng, false)
+
+    coordsDiv.innerHTML = `
+      <span class="coord">
+        <span class="dir">${Dlat[0]}</span> ${Dlat[1]}° ${Dlat[2]}′
+      </span>
+      <span class="coord">
+        <span class="dir">${Dlng[0]}</span> ${Dlng[1]}° ${Dlng[2]}′
+      </span>
+    `;
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-btn';
+    copyBtn.title = 'Kopírovat souřadnice';
+    copyBtn.textContent = '⧉';
+
+    copyBtn.addEventListener('click', () => {
+        const text = `${Dlat[0]} ${Dlat[1]}° ${Dlat[2]}′ ${Dlng[0]} ${Dlng[1]}° ${Dlng[2]}′`;
+        copyToClipboard(text, copyBtn);
+    });
+
+    coordsDiv.appendChild(copyBtn);
+
+
+    return coordsDiv;
+}
+
+function copyToClipboard(text, btnEl) {
+    const showFeedback = () => {
+        const original = btnEl.textContent;
+        btnEl.textContent = '✓';
+        btnEl.classList.add('copied');
+        setTimeout(() => {
+            btnEl.textContent = original;
+            btnEl.classList.remove('copied');
+        }, 1200);
+    };
+
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(showFeedback).catch(() => {
+            fallbackCopy(text, showFeedback);
+        });
+    } else {
+        fallbackCopy(text, showFeedback);
+    }
+}
+
+function fallbackCopy(text, onSuccess) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    try {
+        document.execCommand('copy');
+        onSuccess();
+    } catch (err) {
+        console.error('Copy failed:', err);
+    }
+    document.body.removeChild(textarea);
+}
+
+
+function createMapLinks(lat, lng, fortificationName) {
+    const container = document.createElement('div');
+    container.className = 'map-links';
+
+    // Google Maps link
+    const googleLink = document.createElement('a');
+    googleLink.href = `https://www.google.com/maps/search/${lat},${lng}`;
+    googleLink.textContent = '🗺️ Google Maps';
+    googleLink.target = '_blank';
+    googleLink.rel = 'noopener noreferrer';
+    googleLink.className = 'map-link';
+
+    // Mapy.com link
+    const mapyLink = document.createElement('a');
+    mapyLink.href = `https://mapy.com/fnc/v1/showmap?center=${lng},${lat}&marker=true&zoom=18`;
+    mapyLink.textContent = '📍 Mapy.com';
+    mapyLink.target = '_blank';
+    mapyLink.rel = 'noopener noreferrer';
+    mapyLink.className = 'map-link';
+
+    container.appendChild(mapyLink);
+    container.appendChild(googleLink);
+
+    return container;
+}
+
 window.addEventListener("OnRopikyClickEvent", (e) => {
     const data = e.detail;
     const screenWidth = window.innerWidth;
@@ -38,6 +143,12 @@ window.addEventListener("OnRopikyClickEvent", (e) => {
     addDetail("Odolnost", data.odolnost);
     addDetail("Nadmořská výška", data.mnm.toString() + " m. n. m.");
     addDetail("Stav objektu 1938/Dnes", data.stav_1938.charAt(0).toUpperCase() + data.stav_1938.slice(1) + "/" + data.stav_dnes.charAt(0).toUpperCase() + data.stav_dnes.slice(1));
+    sidetop.appendChild(
+        coordsElement(data.lat, data.lng)
+    );
+    sidetop.appendChild(
+        createMapLinks(data.lat, data.lng, data.name)
+    )
 
     const bunker_site = document.createElement("a");
     bunker_site.className = "center mlink";
@@ -124,6 +235,12 @@ window.addEventListener("OnBunkryClickEvent", (e) => {
     addDetail("Studna", capitalizeFirstLetter(data.studna));
     addDetail("Výkres", data.vykres);
     addDetail("Firma", data.firma);
+    sidetop.appendChild(
+        coordsElement(data.lat, data.lng)
+    );
+    sidetop.appendChild(
+        createMapLinks(data.lat, data.lng, data.name)
+    )
 
     const bunker_site = document.createElement("a");
     bunker_site.className = "center mlink";

@@ -175,9 +175,10 @@ async function getRopiky() {
             mnm: mnm,
             stav_1938: stav_1938,
             stav_dnes: stav_dnes,
+            lat: lat,
+            lng: lng,
             website: "https://ropiky.net/dbase_objekt.php?id=" + ropiky_id,
-          },
-        });
+        }});
         window.dispatchEvent(ropikyEvent);
       });
       markers_ropiky.push(marker);
@@ -321,6 +322,8 @@ async function getBunkry() {
             studna: studna,
             vykres: vykres,
             firma: firma,
+            lat: lat,
+            lng: lng
           },
         });
         window.dispatchEvent(bunkryEvent);
