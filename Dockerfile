@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 # System deps (psycopg2 needs libpq, PostGIS clients optional)
 RUN apt-get update && apt-get install -y --no-install-recommends \
