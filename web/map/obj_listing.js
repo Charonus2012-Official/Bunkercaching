@@ -289,6 +289,9 @@ window.addEventListener("OnTvrzeClickEvent", async (e) => {
 
     const bunker_name = document.createElement("h1");
     bunker_name.textContent = data.name + " — " + data.shortcut;
+    if (data.shortcut === "") {
+        bunker_name.textContent = data.name;
+    }
     sidetop.appendChild(bunker_name);
 
     function addDetail(label, value) {
@@ -394,6 +397,8 @@ window.addEventListener("OnTvrzeClickEvent", async (e) => {
                             studna: bunker[23],
                             vykres: bunker[24],
                             firma: bunker[26],
+                            lat: bunker[27],
+                            lng: bunker[28]
                         }
                     });
                     window.dispatchEvent(event);

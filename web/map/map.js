@@ -44,6 +44,25 @@ tileLayers["Mapy.com"].addTo(map);
 
 L.control.layers(tileLayers, {}, { position: "topright" }).addTo(map);
 
+if (L.control.polylineMeasure) {
+  L.control.polylineMeasure({
+    position: 'topleft',
+    unit: 'kilometres',
+    showBearings: false,
+    clearMeasurementsOnStop: false,
+    showClearControl: true,
+    showUnitControl: true,
+    measureControlTitleOn: 'Zapnout měření vzdálenosti',
+    measureControlTitleOff: 'Vypnout měření vzdálenosti',
+    clearControlTitle: 'Smazat měření',
+    tooltipTextFinish: 'Klikněte pro dokončení čáry',
+    tooltipTextDelete: 'Stiskněte SHIFT a klikněte pro smazání bodu',
+    tooltipTextMove: 'Klikněte a táhněte pro přesun bodu',
+    tooltipTextResume: 'Stiskněte CTRL a klikněte pro pokračování čáry',
+    tooltipTextAdd: 'Stiskněte CTRL a klikněte pro přidání bodu'
+  }).addTo(map);
+}
+
 const LogoControl = L.Control.extend({
   options: {
     position: "bottomleft",

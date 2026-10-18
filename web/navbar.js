@@ -19,7 +19,7 @@ window.addEventListener("load", function () {
       <li><a href="/map" class="${currentPath.startsWith("/map") ? "active" : ""}">Mapa</a></li>
       <li>${logsLink}</li>
       <li><a href="/about" class="${currentPath.startsWith("/about") ? "active" : ""}">O projektu</a></li>
-      <li><a href="/auth" id="nav-profile" class="${currentPath.startsWith("/auth") ? "active" : ""}">Přihlášení</a></li>
+      <li><a href="/auth" id="nav-profile" class="${(currentPath.startsWith("/auth") || currentPath.startsWith("/profile")) ? "active" : ""}">Přihlášení</a></li>
     </ul>
     <div class="menu-toggle" id="mobile-toggle">
       <span></span>
@@ -55,8 +55,9 @@ window.addEventListener("load", function () {
       return response.json();
     })
     .then((data) => {
-      if (data.username) {
+      if (data.username && data.username !== "Přihlášení") {
         prof.textContent = data.username;
+        prof.href = "/profile";
         if (data.role === "admin") {
           adminLink.style.display = "block";
         }
